@@ -4,10 +4,11 @@
 // reinstalls so the workspace links use the new names.
 // The answer is stored in .git/starter-bootstrap-done so the question is asked
 // only once. Skipped when CI is set or no input is available.
+// After a rename the script removes itself, its `prepare` hook and its readme line.
 import { execFileSync, execSync } from "node:child_process"
 import { existsSync } from "node:fs"
-import { readdir, readFile, writeFile } from "node:fs/promises"
-import { basename, join, resolve } from "node:path"
+import { readdir, readFile, rmdir, writeFile } from "node:fs/promises"
+import { basename, dirname, join, resolve } from "node:path"
 import { createInterface } from "node:readline"
 import { rimraf } from "rimraf"
 
@@ -54,6 +55,26 @@ async function rename(name) {
   }
 }
 
+async function removeSelf() {
+  const pkg = await readFile("package.json", "utf8")
+
+  await writeFile(
+    "package.json",
+    pkg.replace("node scripts/bootstrap.mjs && ", ""),
+  )
+
+  const readme = await readFile("README.md", "utf8").catch(() => null)
+
+  if (readme !== null)
+    await writeFile(
+      "README.md",
+      readme.replace(/^.*Repository scripts.*\n/m, ""),
+    )
+
+  await rimraf(self)
+  await rmdir(dirname(self)).catch(() => {})
+}
+
 const answer = await ask(
   "Start your own project? The current git history will be deleted and git will be re-initialized. [y/N] ",
 )
@@ -91,6 +112,7 @@ if (/^y(es)?$/i.test(answer.trim())) {
     `Renamed packages to @${name}/* and initialized a new git repository.`,
   )
   execSync("pnpm install --ignore-scripts", { stdio: "inherit" })
+  await removeSelf()
 } else {
   rl.close()
   await writeFile(marker, new Date().toISOString())
