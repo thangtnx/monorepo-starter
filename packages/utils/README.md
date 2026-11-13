@@ -5,7 +5,9 @@ Utility functions shared across the monorepo.
 ## Usage
 
 ```ts
-import { unique } from "@monorepo/utils"
+import { filterEmpty } from "@monorepo/utils"
+
+filterEmpty([1, null, 2, undefined]) // [1, 2]
 ```
 
 ## Scripts
