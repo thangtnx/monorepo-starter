@@ -246,6 +246,10 @@ importers:
         version: 4.1.12(@types/node@25.9.9)(jsdom@27.4.0)(vite@8.3.8(@types/node@25.9.9)(jiti@2.6.1)(yaml@2.9.1))
 
   packages/utils:
+    dependencies:
+      color2k:
+        specifier: 2.0.4
+        version: 2.0.4
     devDependencies:
       '@monorepo/workspace':
         specifier: workspace:*
@@ -1583,6 +1587,9 @@ packages:
 
   color-name@1.1.4:
     resolution: {integrity: sha512-dOy+3AuW3a2wNbZHIuMZpTcgjGuLU/uBL/ubcZF9OXbDo8ff4O8yVp5Bf0efS8uEoYo5q4Fx7dY9OgQGXgAsQA==}
+
+  color2k@2.0.4:
+    resolution: {integrity: sha512-OXAPGFRNeLFnUfqDtloYdxkwsJoIdXe28+bjbpJiPqyei2HPa3VHmMCWa0Qe62+U4Ftf9Hj7hRssOkxz7WiWbg==}
 
   comment-json@5.0.0:
     resolution: {integrity: sha512-uiqLcOiVDJtBP8WGkZHEP+FZIhTzP1dxvn59EfoYUi9gqupjrBWVQkO2atDrbnKPwLeotFYDsuNb26uBMqB+hw==}
@@ -3843,6 +3850,8 @@ snapshots:
       color-name: 1.1.4
 
   color-name@1.1.4: {}
+
+  color2k@2.0.4: {}
 
   comment-json@5.0.0:
     dependencies:

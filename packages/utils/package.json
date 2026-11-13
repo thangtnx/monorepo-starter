@@ -22,5 +22,8 @@
   "devDependencies": {
     "@monorepo/workspace": "workspace:*",
     "jsdom": "catalog:"
+  },
+  "dependencies": {
+    "color2k": "2.0.4"
   }
 }

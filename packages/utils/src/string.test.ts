@@ -1,0 +1,185 @@
+import {
+  antonym,
+  bem,
+  cx,
+  escape,
+  isSize,
+  toCamelCase,
+  toKebabCase,
+  toPascalCase,
+  toTitleCase,
+  transformSize,
+} from "./string"
+
+describe("String", () => {
+  describe("cx", () => {
+    test("should concatenate class names", () => {
+      const classNames = cx("class1", undefined, "class2")
+      expect(classNames).toBe("class1 class2")
+    })
+
+    test.each([
+      { expected: "b a", values: ["a", "b", "a"] },
+      { expected: "b c a", values: ["a b", "b c", "a"] },
+      { expected: "a b", values: ["a b a b"] },
+      {
+        expected: "custom ui-avatar__group",
+        values: ["ui-avatar__group", "custom ui-avatar__group"],
+      },
+      { expected: "b a", values: ["a", null, "b", undefined, "a"] },
+      { expected: "ab a", values: ["a ab", "a"] },
+    ])("keeps the last occurrence in $values", ({ expected, values }) => {
+      expect(cx(...values)).toBe(expected)
+    })
+
+    test("normalizes whitespace between tokens", () => {
+      expect(cx("  a\tb\n", "a  c \r\f")).toBe("b a c")
+    })
+
+    test.each([
+      { values: [] },
+      { values: [null, undefined, ""] },
+      { values: [" ", "\t\n"] },
+    ])("returns undefined when no tokens remain in $values", ({ values }) => {
+      expect(cx(...values)).toBeUndefined()
+    })
+  })
+
+  describe("escape", () => {
+    test("should replace all spaces with the provided replacement value", () => {
+      const result = escape("hello world", "-")
+      expect(result).toBe("hello-world")
+    })
+
+    test("should remove all spaces if no replacement value is provided", () => {
+      const result = escape("hello world")
+      expect(result).toBe("helloworld")
+    })
+  })
+
+  describe("antonym", () => {
+    test("should return the antonym of the given direction", () => {
+      expect(antonym("top")).toBe("bottom")
+      expect(antonym("bottom")).toBe("top")
+      expect(antonym("left")).toBe("right")
+      expect(antonym("right")).toBe("left")
+      expect(antonym("start")).toBe("end")
+      expect(antonym("end")).toBe("start")
+      expect(antonym("x")).toBe("y")
+      expect(antonym("y")).toBe("x")
+      expect(antonym("enter")).toBe("exit")
+      expect(antonym("exit")).toBe("enter")
+      expect(antonym("vertical")).toBe("horizontal")
+      expect(antonym("horizontal")).toBe("vertical")
+      expect(antonym("up")).toBe("down")
+      expect(antonym("down")).toBe("up")
+      expect(antonym("block")).toBe("inline")
+      expect(antonym("inline")).toBe("block")
+    })
+
+    test("should return the same value if no antonym exists", () => {
+      const nonDirection = "non-direction"
+      expect(antonym(nonDirection)).toBe(nonDirection)
+    })
+  })
+
+  describe("toCamelCase", () => {
+    test("should convert string to CamelCase", () => {
+      expect(toCamelCase("hello-world")).toBe("helloWorld")
+      expect(toCamelCase("another_example")).toBe("anotherExample")
+    })
+  })
+
+  describe("toPascalCase", () => {
+    test("should convert string to PascalCase", () => {
+      expect(toPascalCase("hello-world")).toBe("HelloWorld")
+      expect(toPascalCase("another_example")).toBe("AnotherExample")
+    })
+  })
+
+  describe("toKebabCase", () => {
+    test("should convert string to kebab-case", () => {
+      expect(toKebabCase("HelloWorld")).toBe("hello-world")
+      expect(toKebabCase("AnotherExample")).toBe("another-example")
+    })
+  })
+
+  describe("transformSize", () => {
+    test("should convert size", () => {
+      expect(transformSize("9xs", -1)).toBe("9xs")
+      expect(transformSize("sm", -1)).toBe("xs")
+      expect(transformSize("md", 3)).toBe("2xl")
+      expect(transformSize("lg", 0)).toBe("lg")
+      expect(transformSize("9xl", 1)).toBe("9xl")
+      expect(transformSize("md", 1)).toBe("lg")
+      expect(transformSize("lg", -2)).toBe("sm")
+    })
+
+    test("should return undefined when token is undefined", () => {
+      expect(transformSize(undefined, 1)).toBeUndefined()
+    })
+
+    test("should skip omitted tokens", () => {
+      expect(transformSize("sm", 1, ["md"])).toBe("lg")
+    })
+  })
+
+  describe("isSize", () => {
+    test("should return true for valid size tokens", () => {
+      expect(isSize("xs")).toBeTruthy()
+      expect(isSize("sm")).toBeTruthy()
+      expect(isSize("md")).toBeTruthy()
+      expect(isSize("lg")).toBeTruthy()
+      expect(isSize("xl")).toBeTruthy()
+      expect(isSize("2xl")).toBeTruthy()
+    })
+
+    test("should return false for invalid values", () => {
+      expect(isSize("large")).toBeFalsy()
+      expect(isSize(123)).toBeFalsy()
+      expect(isSize(null)).toBeFalsy()
+    })
+  })
+
+  describe("bem", () => {
+    test("should return block only", () => {
+      expect(bem("button")).toBe("button")
+    })
+
+    test("should return block with element", () => {
+      expect(bem("button", "icon")).toBe("button__icon")
+    })
+
+    test("should return block with modifier", () => {
+      expect(bem("button", undefined, "primary")).toBe("button--primary")
+    })
+
+    test("should return block with element and modifier", () => {
+      expect(bem("button", "icon", "large")).toBe("button__icon--large")
+    })
+  })
+})
+
+describe("toTitleCase", () => {
+  const expected = "Test Variable Name"
+
+  test("should convert kebab-case", () => {
+    const input = "test-variable-name"
+    expect(toTitleCase(input)).toBe(expected)
+  })
+
+  test("should convert snake_case", () => {
+    const input = "test_variable_name"
+    expect(toTitleCase(input)).toBe(expected)
+  })
+
+  test("should convert camelCase", () => {
+    const input = "testVariableName"
+    expect(toTitleCase(input)).toBe(expected)
+  })
+
+  test("should trim space", () => {
+    const input = "testVariableName "
+    expect(toTitleCase(input)).toBe(expected)
+  })
+})
