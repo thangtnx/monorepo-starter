@@ -1,0 +1,40 @@
+{
+  "name": "@monorepo/workspace",
+  "private": true,
+  "type": "module",
+  "version": "0.0.0",
+  "description": "Shared tooling config for the monorepo",
+  "scripts": {
+    "clean": "rimraf node_modules trace",
+    "typecheck": "tsgo",
+    "lint": "oxlint . --max-warnings=0",
+    "format": "pnpm -w format packages/workspace",
+    "quality": "pnpm format && pnpm lint && pnpm typecheck"
+  },
+  "exports": {
+    "./oxlint": "./src/oxlint/index.ts",
+    "./oxfmt": "./src/oxfmt/index.ts",
+    "./oxfmt/*": "./src/oxfmt/*.ts",
+    "./typescript/*": "./src/typescript/*",
+    "./vitest": "./src/vitest/index.ts",
+    "./vitest/*": "./src/vitest/*.ts"
+  },
+  "dependencies": {
+    "@cspell/eslint-plugin": "^10.4.0",
+    "@limegrass/eslint-plugin-import-alias": "^1.6.1",
+    "@stylistic/eslint-plugin": "^5.10.0",
+    "@testing-library/jest-dom": "^6.9.1",
+    "@typescript/native-preview": "catalog:",
+    "eslint-plugin-perfectionist": "^5.13.0",
+    "eslint-plugin-testing-library": "^7.16.2",
+    "eslint-plugin-unused-imports": "catalog:",
+    "oxfmt": "catalog:",
+    "oxlint": "catalog:",
+    "oxlint-tsgolint": "catalog:",
+    "react": "catalog:",
+    "react-dom": "catalog:",
+    "typescript": "catalog:",
+    "vitest": "catalog:",
+    "vitest-axe": "catalog:"
+  }
+}
