@@ -55,7 +55,7 @@ async function rename(name) {
 }
 
 const answer = await ask(
-  "Bạn có muốn bắt đầu dự án riêng? Lịch sử git hiện tại sẽ bị xoá và git được khởi tạo lại. [y/N] ",
+  "Start your own project? The current git history will be deleted and git will be re-initialized. [y/N] ",
 )
 
 // No interactive input: skip without the marker, so the question is asked again next time.
@@ -70,7 +70,7 @@ if (/^y(es)?$/i.test(answer.trim())) {
 
   while (!name) {
     const value = await ask(
-      `Tên dự án (dùng làm tên package và scope @<tên>) [${fallback}]: `,
+      `Project name (used as the package name and the @<name> scope) [${fallback}]: `,
     )
 
     if (value === null) process.exit(0)
@@ -78,7 +78,7 @@ if (/^y(es)?$/i.test(answer.trim())) {
     const candidate = value.trim() || fallback
 
     if (namePattern.test(candidate)) name = candidate
-    else console.log("Tên chỉ gồm chữ thường, số và dấu gạch ngang.")
+    else console.log("Use only lowercase letters, numbers, and hyphens.")
   }
 
   await rename(name)
@@ -87,10 +87,12 @@ if (/^y(es)?$/i.test(answer.trim())) {
   rl.close()
   // The marker must exist before the nested install so its `prepare` run exits early.
   await writeFile(marker, new Date().toISOString())
-  console.log(`Đã đổi tên package thành @${name}/* và khởi tạo git mới.`)
+  console.log(
+    `Renamed packages to @${name}/* and initialized a new git repository.`,
+  )
   execSync("pnpm install --ignore-scripts", { stdio: "inherit" })
 } else {
   rl.close()
   await writeFile(marker, new Date().toISOString())
-  console.log("Giữ nguyên lịch sử git hiện tại.")
+  console.log("Keeping the current git history.")
 }
