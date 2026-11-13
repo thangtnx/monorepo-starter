@@ -1,0 +1,17 @@
+{
+  "$schema": "https://raw.githubusercontent.com/streetsidesoftware/cspell/main/cspell.schema.json",
+  "language": "en",
+  "words": [
+    "oxfmt",
+    "oxlint",
+    "tsdown",
+    "tsgo",
+    "lefthook",
+    "commitlint",
+    "vitest",
+    "turborepo",
+    "velite",
+    "limegrass"
+  ],
+  "ignorePaths": ["node_modules", "dist", "coverage", "pnpm-lock.yaml"]
+}
