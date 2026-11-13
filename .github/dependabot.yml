@@ -1,0 +1,77 @@
+version: 2
+updates:
+  - package-ecosystem: "npm"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    cooldown:
+      default-days: 7
+    labels:
+      - "dependencies"
+    groups:
+      lint:
+        patterns:
+          - "oxlint"
+          - "oxlint-*"
+          - "oxfmt"
+      test:
+        patterns:
+          - "vitest"
+          - "vitest-*"
+          - "@vitest/*"
+          - "jsdom"
+          - "@testing-library/*"
+      react:
+        patterns:
+          - "react"
+          - "react-dom"
+          - "@types/react"
+          - "@types/react-dom"
+      typescript:
+        patterns:
+          - "typescript"
+          - "@typescript/*"
+          - "@types/*"
+      git-hooks:
+        patterns:
+          - "lefthook"
+          - "@commitlint/*"
+      dependencies:
+        patterns:
+          - "*"
+        exclude-patterns:
+          - "oxlint"
+          - "oxlint-*"
+          - "oxfmt"
+          - "vitest"
+          - "vitest-*"
+          - "@vitest/*"
+          - "jsdom"
+          - "@testing-library/*"
+          - "react"
+          - "react-dom"
+          - "@types/react"
+          - "@types/react-dom"
+          - "typescript"
+          - "@typescript/*"
+          - "@types/*"
+          - "lefthook"
+          - "@commitlint/*"
+    ignore:
+      - dependency-name: "*"
+        update-types: ["version-update:semver-major"]
+    open-pull-requests-limit: 10
+
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    cooldown:
+      default-days: 7
+    labels:
+      - "github-actions"
+    groups:
+      actions:
+        patterns:
+          - "*"
+    open-pull-requests-limit: 10
