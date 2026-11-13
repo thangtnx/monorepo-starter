@@ -1,3 +1,5 @@
+Closes # <!-- GitHub issue number here -->
+
 ## Description
 
 <!-- What does this PR change and why? -->
