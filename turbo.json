@@ -1,0 +1,15 @@
+{
+  "$schema": "https://turborepo.dev/schema.v2.json",
+  "tasks": {
+    "test": {
+      "inputs": ["package.json", "**/*.{ts,tsx,mts}"]
+    },
+    "typecheck": {
+      "inputs": ["package.json", "tsconfig.json", "src/**/*.{ts,tsx,mts}"]
+    },
+    "lint": {
+      "inputs": ["package.json", "tsconfig.json", "src/**/*.{ts,tsx,mts}"]
+    }
+  },
+  "globalDependencies": ["tsconfig.json"]
+}

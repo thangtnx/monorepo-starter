@@ -1,0 +1,35 @@
+{
+  "name": "monorepo-starter",
+  "type": "module",
+  "version": "0.0.0",
+  "private": true,
+  "engines": {
+    "node": ">=24.14"
+  },
+  "packageManager": "pnpm@12.14.0",
+  "scripts": {
+    "prepare": "node scripts/bootstrap.mjs && lefthook install",
+    "utils": "pnpm -C packages/utils",
+    "workspace": "pnpm -C packages/workspace",
+    "clean": "pnpm -r --parallel run clean && pnpm rimraf .turbo *.log node_modules",
+    "lint": "turbo run lint --filter=./packages/**",
+    "format": "oxfmt --check",
+    "typecheck": "turbo run typecheck --filter=./packages/**",
+    "test": "turbo run test --filter=./packages/**",
+    "quality": "pnpm format && pnpm lint && pnpm typecheck && pnpm test"
+  },
+  "devDependencies": {
+    "@commitlint/cli": "^20.5.2",
+    "@commitlint/config-conventional": "^20.5.0",
+    "@types/node": "^25.9.9",
+    "@typescript/native-preview": "catalog:",
+    "lefthook": "^2.2.2",
+    "oxfmt": "catalog:",
+    "oxlint": "catalog:",
+    "oxlint-tsgolint": "catalog:",
+    "rimraf": "catalog:",
+    "turbo": "^2.11.10",
+    "typescript": "catalog:",
+    "vitest": "catalog:"
+  }
+}

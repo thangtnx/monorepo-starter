@@ -1,0 +1,35 @@
+# dependencies
+node_modules
+.pnpm-store
+
+# build
+dist
+
+# cache
+.turbo
+
+# testing
+coverage
+
+# typescript
+*.tsbuildinfo
+trace
+
+# logs
+*.log
+logs
+
+# local worktrees and editors
+.worktrees
+.idea
+.vscode
+
+# local environment and secrets
+.env
+.env.*
+!.env.example
+*.local.*
+*.pem
+
+# operating system
+.DS_Store
