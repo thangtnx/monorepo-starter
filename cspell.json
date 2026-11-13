@@ -10,7 +10,21 @@
     "vitest",
     "turborepo",
     "velite",
-    "limegrass"
+    "limegrass",
+    "Adlm",
+    "Booleanish",
+    "booleanish",
+    "contenteditable",
+    "hexa",
+    "Hebr",
+    "Mand",
+    "Nkoo",
+    "Rohg",
+    "Samr",
+    "Syrc",
+    "Thaa",
+    "Yezi",
+    "yxxx"
   ],
   "ignorePaths": ["node_modules", "dist", "coverage", "pnpm-lock.yaml"]
 }
