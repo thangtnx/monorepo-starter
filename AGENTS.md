@@ -22,8 +22,16 @@ setup and the full command list.
 - Add shared dependency versions to the `catalog:` in `pnpm-workspace.yaml`; reference them as `"catalog:"`.
 - Internal dependencies use `workspace:*`.
 - Tests live next to the source as `*.test.ts`.
-- Commit messages use Conventional Commits (`feat:`, `fix:`, `docs:`, `chore:` ...).
-- Branch names use `<type>/<description>`.
+
+## Rules
+
+When performing one of the actions below, read the linked rule first.
+
+- Creating branches: [Branch Rules](.agents/rules/branch.md)
+- Creating commits: [Commit Rules](.agents/rules/commit.md)
+- Creating components: [Component Rules](.agents/rules/component.md)
+- Creating issues: [Issue Rules](.agents/rules/issue.md)
+- Creating PRs: [PR Rules](.agents/rules/pr.md)
 
 ## Do not
 
