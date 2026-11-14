@@ -16,6 +16,12 @@ pnpm quality
 
 `pnpm install` also installs the git hooks (lefthook).
 
+### Bootstrap a new project
+
+From a fresh clone, run `node scripts/bootstrap.mjs` from the repository root.
+If you confirm, it asks for a project name, renames the workspace packages,
+reinitializes Git history, and runs `pnpm install`.
+
 ## Structure
 
 ```text
