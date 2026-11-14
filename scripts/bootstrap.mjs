@@ -1,10 +1,10 @@
-// Runs once after the repository is cloned (through the `prepare` script).
+// Run explicitly with `pnpm bootstrap` after installing dependencies.
 // Offers to turn the clone into a new project: asks for a name, renames the
 // `@monorepo/*` packages and the root package, resets the git history and
 // reinstalls so the workspace links use the new names.
 // The answer is stored in .git/starter-bootstrap-done so the question is asked
-// only once. Skipped when CI is set or no input is available.
-// After a rename the script removes itself, its `prepare` hook and its readme line.
+// only once. Skipped in CI; requires an interactive terminal.
+// After a rename it removes itself, its package script and its README instructions.
 import { execFileSync, execSync } from "node:child_process"
 import { existsSync } from "node:fs"
 import { readdir, readFile, rmdir, writeFile } from "node:fs/promises"
@@ -22,6 +22,11 @@ const skipDirs = new Set([".git", ".turbo", "node_modules", "dist", "coverage"])
 const self = resolve(import.meta.filename)
 
 if (!existsSync(gitDir) || existsSync(marker) || process.env.CI) process.exit(0)
+
+if (!process.stdin.isTTY) {
+  console.error("Run pnpm bootstrap from an interactive terminal.")
+  process.exit(1)
+}
 
 const rl = createInterface({ input: process.stdin })
 const lines = rl[Symbol.asyncIterator]()
@@ -60,7 +65,7 @@ async function removeSelf() {
 
   await writeFile(
     "package.json",
-    pkg.replace("node scripts/bootstrap.mjs && ", ""),
+    pkg.replace(/^.*"bootstrap": "node scripts\/bootstrap\.mjs",\r?\n/m, ""),
   )
 
   const readme = await readFile("README.md", "utf8").catch(() => null)
@@ -68,7 +73,10 @@ async function removeSelf() {
   if (readme !== null)
     await writeFile(
       "README.md",
-      readme.replace(/^.*Repository scripts.*\n/m, ""),
+      readme.replace(
+        /^To start a new project from this starter,[\s\S]*?\r?\n\r?\n/m,
+        "",
+      ),
     )
 
   await rimraf(self)
@@ -106,12 +114,11 @@ if (/^y(es)?$/i.test(answer.trim())) {
   await rimraf(gitDir)
   execFileSync("git", ["init"], { stdio: "inherit" })
   rl.close()
-  // The marker must exist before the nested install so its `prepare` run exits early.
   await writeFile(marker, new Date().toISOString())
   console.log(
     `Renamed packages to @${name}/* and initialized a new git repository.`,
   )
-  execSync("pnpm install --ignore-scripts", { stdio: "inherit" })
+  execSync("pnpm install", { stdio: "inherit" })
   await removeSelf()
 } else {
   rl.close()

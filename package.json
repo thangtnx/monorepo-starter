@@ -8,7 +8,8 @@
   },
   "packageManager": "pnpm@12.14.0",
   "scripts": {
-    "prepare": "node scripts/bootstrap.mjs && lefthook install",
+    "prepare": "lefthook install",
+    "bootstrap": "node scripts/bootstrap.mjs",
     "utils": "pnpm -C packages/utils",
     "workspace": "pnpm -C packages/workspace",
     "clean": "pnpm -r --parallel run clean && pnpm rimraf .turbo *.log node_modules",
