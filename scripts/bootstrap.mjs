@@ -113,16 +113,16 @@ if (/^y(es)?$/i.test(answer.trim())) {
   execFileSync("git", ["config", "--local", "core.autocrlf", "false"], {
     stdio: "inherit",
   })
-  execFileSync("git", ["add", "-A"], { stdio: "inherit" })
-  execFileSync("git", ["commit", "-m", "chore: initial commit"], {
-    stdio: "inherit",
-  })
   rl.close()
   console.log(
     `Renamed packages to @${name}/* and initialized a new git repository.`,
   )
   execSync("pnpm install", { stdio: "inherit" })
   await removeSelf()
+  execFileSync("git", ["add", "-A"], { stdio: "inherit" })
+  execFileSync("git", ["commit", "-m", "chore: initial commit"], {
+    stdio: "inherit",
+  })
 } else {
   rl.close()
   console.log("Keeping the current git history.")
