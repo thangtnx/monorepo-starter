@@ -56,6 +56,9 @@ Shortcuts to run a script inside one package: `pnpm ui <script>`,
 `pnpm utils <script>` and `pnpm workspace <script>`. For example,
 `pnpm ui storybook` opens the component and theme catalog.
 `pnpm ui build` compiles the UI stylesheet into `packages/ui/dist/styles.css`.
+`pnpm ui test:e2e` builds Storybook and runs the Playwright and axe suite against it
+on Chromium, Firefox, WebKit and a mobile viewport. Install the browsers once with
+`pnpm ui exec playwright install --with-deps` (on Linux, `--with-deps` installs system packages and needs sudo).
 
 ## Conventions
 

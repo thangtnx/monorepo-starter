@@ -16,6 +16,7 @@ setup and the full command list.
 - `pnpm ui <script>` / `pnpm utils <script>` / `pnpm workspace <script>` — run a script in a single package.
 - `pnpm ui build` — compile the theme and component styles into `packages/ui/dist/styles.css`.
 - `pnpm ui storybook` — browse components and theme stories with live style updates. `pnpm ui build:storybook` builds the static catalog.
+- `pnpm ui test:e2e` — build Storybook and run the Playwright and axe suite in `packages/ui/e2e` (Chromium, Firefox, WebKit, mobile). One-time browser install: `pnpm ui exec playwright install --with-deps` (on Linux, `--with-deps` needs sudo).
 - Prefer the narrowest check first (for example `pnpm ui test`), then `pnpm quality`.
 
 ## Conventions
