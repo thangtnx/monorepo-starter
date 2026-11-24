@@ -36,6 +36,30 @@ describe("compiled stylesheet", () => {
     expect([...used].filter((name) => !defined.has(name))).toStrictEqual([])
   })
 
+  test("uses units for non-zero lengths in compiled declarations", () => {
+    const lengthDeclaration =
+      /(?:^|(?<=[{;]))\s*(?:(?:padding|margin|inset)(?:-[\w-]+)?|(?:row-|column-)?gap|(?:min-|max-)?(?:width|height|inline-size|block-size)|top|right|bottom|left|border(?:-[\w-]+)?-width|font-size):\s*([^;{}]+);/g
+    const bareNumber = /^[+-]?(?:\d*\.\d+|\d+)(?:e[+-]?\d+)?$/i
+    const declarations = [...css.matchAll(lengthDeclaration)]
+    const invalid: string[] = []
+
+    for (const [declaration, value = ""] of declarations) {
+      let depth = 0
+      const tokens = value
+        .replace(/\s*!\s*important$/i, "")
+        .match(/[()]|[^\s()]+/g)
+
+      for (const token of tokens ?? [])
+        if (token === "(") depth++
+        else if (token === ")") depth--
+        else if (depth === 0 && bareNumber.test(token) && Number(token) !== 0)
+          invalid.push(declaration.trim())
+    }
+
+    expect(declarations.length).toBeGreaterThan(50)
+    expect(invalid).toStrictEqual([])
+  })
+
   test("stays within its size budget", () => {
     expect(Buffer.byteLength(css)).toBeLessThan(64_000)
   })
