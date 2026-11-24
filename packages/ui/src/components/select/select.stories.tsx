@@ -1,47 +1,54 @@
 import type { Meta, StoryObj } from "@storybook/react-vite"
 import { Field } from "../field/field"
-import { Select } from "./select"
+import { Select } from "./index"
+
+const items = [
+  { label: "Email", value: "email" },
+  { label: "Phone", value: "phone" },
+  { disabled: true, label: "Post", value: "post" },
+  { label: "Text message", value: "sms" },
+]
 
 const meta = {
   args: {
     "aria-label": "Contact method",
-    children: (
-      <>
-        <option value="">Choose a method</option>
-        <option value="email">Email</option>
-        <option value="post">Post</option>
-        <option value="phone">Phone</option>
-      </>
-    ),
+    items,
+    placeholder: "Choose a contact method",
   },
-  component: Select,
+  component: Select.Root,
   title: "Components/Select",
-} satisfies Meta<typeof Select>
+} satisfies Meta<typeof Select.Root>
 
 export default meta
 
-type Story = StoryObj<typeof meta>
+type Story = StoryObj<typeof Select.Root>
 
 export const Basic: Story = {}
-
-export const Multiple: Story = {
-  args: {
-    "aria-label": "Contact methods",
-    defaultValue: ["email", "phone"],
-    multiple: true,
-    visibleRows: 4,
-  },
-}
 
 export const Sizes: Story = {
   render: (args) => (
     <div style={{ display: "grid", gap: "0.75rem", maxWidth: "24rem" }}>
       {(["sm", "md", "lg"] as const).map((size) => (
-        <Select
+        <Select.Root
           key={size}
           {...args}
           size={size}
           aria-label={`Contact method (${size})`}
+        />
+      ))}
+    </div>
+  ),
+}
+
+export const Variants: Story = {
+  render: (args) => (
+    <div style={{ display: "grid", gap: "0.75rem", maxWidth: "24rem" }}>
+      {(["outline", "filled", "flushed"] as const).map((variant) => (
+        <Select.Root
+          key={variant}
+          {...args}
+          variant={variant}
+          aria-label={`Contact method (${variant})`}
         />
       ))}
     </div>
@@ -57,7 +64,65 @@ export const ReadOnly: Story = {
 export const Invalid: Story = {
   render: (args) => (
     <Field error="Choose a contact method." label="Contact method" required>
-      <Select {...args} aria-label={undefined} />
+      <Select.Root {...args} aria-label={undefined} />
     </Field>
   ),
+}
+
+export const InField: Story = {
+  render: (args) => (
+    <Field hint="Used for delivery updates." label="Contact method">
+      <Select.Root {...args} aria-label={undefined} />
+    </Field>
+  ),
+}
+
+export const Groups: Story = {
+  render: (args) => (
+    <Select.Root {...args} defaultValue="email" items={undefined}>
+      <Select.Group>
+        <Select.Label>Online</Select.Label>
+        <Select.Option value="email">Email</Select.Option>
+        <Select.Option value="sms">Text message</Select.Option>
+      </Select.Group>
+      <Select.Separator />
+      <Select.Group label="Offline">
+        <Select.Option value="phone">Phone</Select.Option>
+        <Select.Option disabled value="post">
+          Post
+        </Select.Option>
+      </Select.Group>
+    </Select.Root>
+  ),
+}
+
+export const Multiple: Story = {
+  args: {
+    "aria-label": "Contact methods",
+    defaultValue: ["email", "phone"],
+    max: 2,
+    multiple: true,
+    separator: " / ",
+  },
+}
+
+export const Clearable: Story = {
+  args: {
+    clearable: true,
+    defaultValue: "sms",
+    render: ({ label }) => <strong>{label}</strong>,
+  },
+}
+
+export const LongList: Story = {
+  args: {
+    "aria-label": "Time slot",
+    items: Array.from({ length: 48 }, (_, index) => {
+      const hours = String(Math.floor(index / 2)).padStart(2, "0")
+      const minutes = index % 2 === 0 ? "00" : "30"
+      const time = `${hours}:${minutes}`
+      return { label: time, value: time }
+    }),
+    placeholder: "Choose a time slot",
+  },
 }

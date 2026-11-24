@@ -34,6 +34,8 @@ import { noticeStyle } from "./components/notice/notice.style"
 import { progressStyle } from "./components/progress/progress.style"
 import { radioGroupStyle } from "./components/radio/radio-group.style"
 import { radioStyle } from "./components/radio/radio.style"
+import { selectListboxStyle } from "./components/select/select-listbox.style"
+import { selectRootStyle } from "./components/select/select-root.style"
 import { selectStyle } from "./components/select/select.style"
 import { skeletonTextStyle } from "./components/skeleton/skeleton-text.style"
 import { skeletonStyle } from "./components/skeleton/skeleton.style"
@@ -81,6 +83,8 @@ export const componentStyles: { [key: string]: ComponentStyle } = {
   radio: radioStyle,
   "radio-group": radioGroupStyle,
   select: selectStyle,
+  "select-listbox": selectListboxStyle,
+  "select-root": selectRootStyle,
   skeleton: skeletonStyle,
   "skeleton-text": skeletonTextStyle,
   stack: stackStyle,
