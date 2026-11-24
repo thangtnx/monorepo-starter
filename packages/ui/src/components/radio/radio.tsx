@@ -2,45 +2,47 @@
 
 import type { ComponentProps } from "react"
 import type { ComponentStyleProps } from "../../core/define"
-import { dataAttr } from "@monorepo/utils"
+import type { CheckableProps } from "../checkbox/checkbox-control"
 import { use } from "react"
 import { splitStyleProps } from "../../core/split-style-props"
-import { useCheckableProps } from "../checkbox/checkbox-control"
-import { useFieldContext } from "../field/field-context"
+import { CheckableFrame, useCheckable } from "../checkbox/checkbox-control"
 import { RadioGroupContext } from "./radio-group-context"
 import { radioStyle } from "./radio.style"
 
 export interface RadioProps
-  extends
-    Omit<ComponentProps<"input">, "children" | "color" | "size" | "type">,
-    ComponentStyleProps<typeof radioStyle> {
-  /** The radio id. When wrapped in a Field, set the id on Field. */
-  id?: string
+  extends CheckableProps, ComponentStyleProps<typeof radioStyle> {
+  /** Props for the decorative indicator. */
+  indicatorProps?: ComponentProps<"span">
 }
 
-export function Radio({ size, ...props }: RadioProps) {
+export function Radio({ size, indicatorProps, ...props }: RadioProps) {
   const group = use(RadioGroupContext)
-  const field = useFieldContext()
-  const [styleAttributes, rest] = splitStyleProps("radio", radioStyle, {
+  const [attributes, rest] = splitStyleProps("radio", radioStyle, {
+    ...group?.appearance,
     ...props,
-    size: size ?? group?.size ?? field?.size,
   })
-  const input = useCheckableProps(
-    {
-      ...rest,
-      readOnly: group?.readOnly || rest.readOnly,
-      required: group?.required || rest.required,
-    },
-    group,
-  )
+  const value = String(rest.inputProps?.value ?? rest.value ?? "on")
+  const control = useCheckable(rest, {
+    size,
+    defaults: group?.defaults,
+    selection: group?.managed
+      ? {
+          change: (checked) => {
+            if (checked) group.select(value)
+          },
+          checked: group.value === value,
+        }
+      : undefined,
+  })
 
   return (
-    <input
-      {...styleAttributes}
-      {...input}
+    <CheckableFrame
       type="radio"
-      name={group?.name ?? rest.name}
-      data-readonly={dataAttr(input.readOnly)}
+      attributes={attributes}
+      control={control}
+      indicator={
+        <span {...indicatorProps} aria-hidden="true" data-part="indicator" />
+      }
     />
   )
 }

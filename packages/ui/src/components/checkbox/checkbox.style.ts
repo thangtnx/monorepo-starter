@@ -1,37 +1,26 @@
 import { defineComponentStyle } from "../../core/define"
+import { checkableIndicatorVariants } from "./checkable-appearance"
 
 export const checkboxStyle = defineComponentStyle({
   base: {
-    "&[aria-invalid=true]:focus-visible": {
-      boxShadow: "0 0 0 5px {colors.focusRing}",
-    },
-    accentColor: "var(--color-scheme-solid, {colors.primary.solid})",
-    cursor: "pointer",
-    flexShrink: 0,
-    verticalAlign: "middle",
-    _invalid: {
-      outline: "1px dashed {colors.danger.solid}",
-      outlineOffset: "2px",
-    },
-    _readOnly: { cursor: "default" },
-    _disabled: { layerStyle: "disabled" },
-  },
-
-  sizes: {
-    sm: { height: "4", width: "4" },
-    md: { height: "5", width: "5" },
-    lg: {
-      height: "11",
-      // Large labels need a box that can honor the minimum height.
-      "label:has(&), label[for]:has(+ &), & + label[for]": {
-        alignItems: "center",
-        columnGap: "2",
-        display: "inline-flex",
-        minHeight: "11",
+    "& > input + span": { fontSize: "var(--check-icon-size)" },
+    "& input:is(:not(:checked),:indeterminate)+span>:first-child, & input:not(:indeterminate)+span>:last-child":
+      {
+        display: "none",
       },
-      width: "6",
+    "--check-icon-size": "{fontSizes.sm}",
+  },
+  props: {
+    shape: {
+      rounded: {},
+      square: {},
     },
   },
-
-  defaultProps: { size: "md" },
+  sizes: {
+    sm: {},
+    md: {},
+    lg: {},
+  },
+  variants: checkableIndicatorVariants,
+  defaultProps: { size: "md", variant: "solid", shape: "rounded" },
 })

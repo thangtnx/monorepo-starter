@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react-vite"
-import { useId } from "react"
+import { useId, useState } from "react"
 import { Radio } from "./radio"
 import { RadioGroup } from "./radio-group"
 
@@ -40,6 +40,35 @@ export default meta
 type Story = StoryObj<typeof meta>
 
 export const Basic: Story = {}
+
+export const Items: Story = {
+  render: () => (
+    <RadioGroup.Root
+      defaultValue="standard"
+      items={[
+        { label: "Standard", value: "standard" },
+        { label: "Express", value: "express" },
+      ]}
+      legend="Shipping speed"
+    />
+  ),
+}
+
+export const Controlled: Story = {
+  render: function ControlledGroup() {
+    const [value, setValue] = useState("standard")
+    return (
+      <RadioGroup.Root
+        legend="Shipping speed"
+        value={value}
+        onChange={setValue}
+      >
+        <RadioGroup.Item value="standard">Standard</RadioGroup.Item>
+        <RadioGroup.Item value="express">Express</RadioGroup.Item>
+      </RadioGroup.Root>
+    )
+  },
+}
 
 export const Sizes: Story = {
   render: (args) => (

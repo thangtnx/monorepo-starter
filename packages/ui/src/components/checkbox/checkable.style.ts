@@ -1,0 +1,78 @@
+import { defineComponentStyle } from "../../core/define"
+
+export const checkableStyle = defineComponentStyle({
+  base: {
+    "&:has(> input:disabled)": { layerStyle: "disabled" },
+    "&:has(> input[readonly])": { cursor: "default" },
+    "& > input": {
+      cursor: "inherit",
+      height: "100%",
+      inset: 0,
+      opacity: 0,
+      position: "absolute",
+      width: "100%",
+    },
+    "& > input + span": {
+      background: "var(--check-bg)",
+      border: "var(--check-border, 2px) solid var(--check-edge)",
+      borderRadius: "var(--check-radius)",
+      color: "var(--check-mark)",
+      display: "inline-grid",
+      flex: "none",
+      height: "var(--check-height, var(--check-size))",
+      placeItems: "center",
+      width: "var(--check-width, var(--check-size))",
+    },
+    "& > input:focus-visible + span": {
+      outline: "2px solid var(--check-focus)",
+      outlineOffset: "var(--check-offset)",
+    },
+    "& > input:is(:checked,:indeterminate) + span": {
+      background: "var(--check-on)",
+      borderColor: "var(--check-on-edge)",
+    },
+    "& > input[aria-invalid=true] + span": {
+      "--check-edge": "var(--check-error)",
+      "--check-focus": "var(--check-error)",
+      "--check-on-edge": "var(--check-error)",
+    },
+    '&[data-size="lg"]': {
+      fontSize: "lg",
+      "label:has(&), label[for]:has(+ &), & + label[for]": {
+        alignItems: "center",
+        display: "inline-flex",
+        gap: "2",
+        minHeight: "11",
+      },
+      minHeight: "11",
+    },
+    "&[data-size=sm]": { fontSize: "sm" },
+    "--check-bg": "transparent",
+    "--check-edge": "{colors.border.emphasized}",
+    "--check-error": "{colors.danger.solid}",
+    "--check-focus": "var(--color-scheme-outline, {colors.primary.outline})",
+    "--check-mark": "currentColor",
+    "--check-offset": "2px",
+    "--check-on": "var(--check-bg)",
+    "--check-on-edge": "var(--check-edge)",
+    "--check-radius": 0,
+    "--check-size": "{sizes.4}",
+    "@media (forced-colors: active)": {
+      "& > input": {
+        height: "1em",
+        opacity: 1,
+        position: "static",
+        width: "1em",
+      },
+      "& > input + span": { display: "none" },
+    },
+    alignItems: "center",
+    cursor: "pointer",
+    display: "inline-flex",
+    fontSize: "md",
+    gap: "2",
+    position: "relative",
+    userSelect: "none",
+    verticalAlign: "middle",
+  },
+})

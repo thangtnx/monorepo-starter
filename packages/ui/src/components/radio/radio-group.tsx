@@ -2,88 +2,171 @@
 
 import type { ComponentProps, ReactNode } from "react"
 import type { ComponentStyleProps } from "../../core/define"
+import type { RadioProps } from "./radio"
 import { ariaAttr, cx } from "@monorepo/utils"
 import { useId } from "react"
 import { splitStyleProps } from "../../core/split-style-props"
+import { checkableGroupStyle } from "../checkbox/checkable-group.style"
+import { useCheckableGroup } from "../checkbox/checkbox-control"
 import { FieldContext, useFieldContext } from "../field/field-context"
+import { Radio } from "./radio"
 import { RadioGroupContext } from "./radio-group-context"
-import { radioGroupStyle } from "./radio-group.style"
 
-export interface RadioGroupProps
-  extends
-    Omit<ComponentProps<"fieldset">, "color">,
-    ComponentStyleProps<typeof radioGroupStyle> {
-  /** The radio controls and their labels. */
-  children: ReactNode
-  /** The visible label for the group, rendered as its legend. */
-  legend: ReactNode
-  /** The form name shared by all radios. An omitted name is generated. */
-  name?: string
-  /**
-   * Keeps the current choice focusable and prevents changes in the group.
-   *
-   * @default false
-   */
-  readOnly?: boolean
-  /**
-   * Requires a selection before the form can be submitted.
-   *
-   * @default false
-   */
-  required?: boolean
+interface RadioGroupOption<Value extends string> extends Omit<
+  RadioProps,
+  "children" | "value"
+> {
+  /** Text or content that labels this option. */
+  label: ReactNode
+  /** The option's submitted value. */
+  value: Value
 }
 
+export interface RadioGroupRootProps<Value extends string = string>
+  extends
+    Omit<ComponentProps<"fieldset">, "color" | "onChange">,
+    ComponentStyleProps<typeof checkableGroupStyle>,
+    Pick<
+      RadioProps,
+      | "errorBorderColor"
+      | "focusBorderColor"
+      | "invalid"
+      | "readOnly"
+      | "required"
+      | "shape"
+      | "size"
+      | "variant"
+    > {
+  /** The initial selection for an uncontrolled group. */
+  defaultValue?: Value
+  /** Options to render when children are omitted. */
+  items?: readonly RadioGroupOption<Value>[]
+  /** The visible label for the group. */
+  legend?: ReactNode
+  /** The controlled selection. */
+  value?: Value
+  /** Called with the value of the selected radio. */
+  onChange?: (value: Value) => void
+}
+
+export type RadioGroupProps<Value extends string = string> =
+  RadioGroupRootProps<Value>
+
 /** RadioGroup labels itself with its legend. Use it outside Field. */
-export function RadioGroup(props: RadioGroupProps) {
+export function RadioGroupRoot<Value extends string = string>(
+  rootProps: RadioGroupRootProps<Value>,
+) {
+  const {
+    ref,
+    name,
+    colorScheme,
+    size,
+    variant,
+    children,
+    defaultValue,
+    disabled,
+    errorBorderColor,
+    focusBorderColor,
+    invalid,
+    items,
+    legend,
+    readOnly,
+    required,
+    shape,
+    value,
+    onChange,
+    ...props
+  } = rootProps
   const field = useFieldContext()
   const generatedName = useId()
-  const size = props.size ?? field?.size
-  const [styleAttributes, rest] = splitStyleProps(
-    "radio-group",
-    radioGroupStyle,
-    { ...props, size },
+  const controlled = "value" in rootProps
+  const group = useCheckableGroup<undefined | Value>(
+    controlled ? { value } : undefined,
+    defaultValue,
+    (next) => {
+      if (next !== undefined) onChange?.(next)
+    },
+    props.form,
+    ref,
   )
-  const {
-    name = generatedName,
-    "aria-invalid": invalid = ariaAttr(field?.invalid),
-    children,
-    disabled = field?.disabled,
-    legend,
-    readOnly = field?.readOnly,
-    required = field?.required,
-    ...fieldset
-  } = rest
+  // Allow existing children with individual defaultChecked props to use native selection.
+  const managed =
+    controlled ||
+    items !== undefined ||
+    "defaultValue" in rootProps ||
+    onChange !== undefined
+  const [attributes, rest] = splitStyleProps(
+    "checkable-group",
+    checkableGroupStyle,
+    {
+      ...props,
+      className: cx("ui-radio-group", props.className),
+      colorScheme,
+    },
+  )
+  const groupInvalid =
+    invalid ??
+    (rest["aria-invalid"] === true ||
+      rest["aria-invalid"] === "true" ||
+      field?.invalid)
+  const defaults = {
+    form: props.form,
+    name: name ?? generatedName,
+    size: size ?? field?.size,
+    disabled: disabled ?? field?.disabled,
+    invalid: groupInvalid,
+    readOnly: readOnly ?? field?.readOnly,
+    required: required ?? field?.required,
+  }
 
   return (
     <fieldset
-      {...styleAttributes}
-      {...fieldset}
+      {...attributes}
+      {...rest}
       id={field?.id ?? rest.id}
-      name={name}
+      ref={group.fieldsetRef}
+      name={defaults.name}
       aria-describedby={cx(field?.describedBy, rest["aria-describedby"])}
-      aria-invalid={invalid}
-      aria-readonly={ariaAttr(readOnly)}
-      aria-required={ariaAttr(required)}
-      disabled={disabled}
+      aria-invalid={rest["aria-invalid"] ?? ariaAttr(groupInvalid)}
+      aria-readonly={ariaAttr(defaults.readOnly)}
+      aria-required={ariaAttr(defaults.required)}
+      disabled={defaults.disabled}
       role="radiogroup"
     >
-      <legend>
-        {legend}
-        {required ? <span aria-hidden="true">{" *"}</span> : null}
-      </legend>
+      {legend != null ? (
+        <legend>
+          {legend}
+          {defaults.required ? <span aria-hidden="true">{" *"}</span> : null}
+        </legend>
+      ) : null}
       <FieldContext value={undefined}>
         <RadioGroupContext
           value={{
-            name,
-            size,
-            invalid: invalid === true || invalid === "true",
-            readOnly,
-            required,
+            appearance: { variant, errorBorderColor, focusBorderColor, shape },
+            defaults,
+            managed,
+            select(next) {
+              if (group.value !== next) group.change(next as Value)
+            },
+            value: group.value,
           }}
         >
-          {children}
+          {children ??
+            items?.map(({ label, value, ...option }) => (
+              <Radio key={value} {...option} value={value}>
+                {label}
+              </Radio>
+            ))}
         </RadioGroupContext>
       </FieldContext>
     </fieldset>
   )
 }
+
+export { Radio as RadioGroupItem }
+
+/** The callable group also exposes its root and item for composition. */
+export const RadioGroup = Object.assign(RadioGroupRoot, {
+  Item: Radio,
+  Root: RadioGroupRoot,
+})

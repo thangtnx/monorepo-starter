@@ -16,6 +16,31 @@ export const Basic: Story = {}
 
 export const Checked: Story = { args: { defaultChecked: true } }
 
+export const Parts: Story = {
+  args: {
+    "aria-label": undefined,
+    children: "Notifications",
+    icon: { off: "−", on: "✓" },
+    inputProps: { name: "notifications" },
+    labelProps: { title: "Notifications" },
+    thumbProps: { title: "Toggle" },
+    trackProps: { title: "Notification state" },
+  },
+}
+
+export const Variants: Story = {
+  render: () => (
+    <div style={{ display: "flex", gap: "1rem" }}>
+      <Switch variant="thin" defaultChecked shape="rounded">
+        Thin
+      </Switch>
+      <Switch variant="thick" reverse shape="square">
+        Thick
+      </Switch>
+    </div>
+  ),
+}
+
 export const Sizes: Story = {
   render: (args) => (
     <div style={{ alignItems: "center", display: "flex", gap: "0.75rem" }}>

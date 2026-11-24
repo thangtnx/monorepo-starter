@@ -10,6 +10,8 @@ import { cardBodyStyle } from "./components/card/card-body.style"
 import { cardFooterStyle } from "./components/card/card-footer.style"
 import { cardHeaderStyle } from "./components/card/card-header.style"
 import { cardStyle } from "./components/card/card.style"
+import { checkableGroupStyle } from "./components/checkbox/checkable-group.style"
+import { checkableStyle } from "./components/checkbox/checkable.style"
 import { checkboxStyle } from "./components/checkbox/checkbox.style"
 import { circleProgressLabelStyle } from "./components/circle-progress/circle-progress-label.style"
 import { circleProgressStyle } from "./components/circle-progress/circle-progress.style"
@@ -36,7 +38,6 @@ import { noticeItemStyle } from "./components/notice/notice-item.style"
 import { noticeStyle } from "./components/notice/notice.style"
 import { progressPaintStyle } from "./components/progress/progress-paint.style"
 import { progressStyle } from "./components/progress/progress.style"
-import { radioGroupStyle } from "./components/radio/radio-group.style"
 import { radioStyle } from "./components/radio/radio.style"
 import { selectListboxStyle } from "./components/select/select-listbox.style"
 import { selectRootStyle } from "./components/select/select-root.style"
@@ -62,6 +63,8 @@ export const componentStyles: { [key: string]: ComponentStyle } = {
   "card-body": cardBodyStyle,
   "card-footer": cardFooterStyle,
   "card-header": cardHeaderStyle,
+  checkable: checkableStyle,
+  "checkable-group": checkableGroupStyle,
   checkbox: checkboxStyle,
   "circle-progress": circleProgressStyle,
   "circle-progress-label": circleProgressLabelStyle,
@@ -89,7 +92,6 @@ export const componentStyles: { [key: string]: ComponentStyle } = {
   progress: progressStyle,
   "progress-paint": progressPaintStyle,
   radio: radioStyle,
-  "radio-group": radioGroupStyle,
   select: selectStyle,
   "select-listbox": selectListboxStyle,
   "select-root": selectRootStyle,

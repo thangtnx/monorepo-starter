@@ -15,6 +15,94 @@ const options = (
 )
 
 describe("<RadioGroup />", () => {
+  test("selects generated items by value and restores the default after a form reset", async () => {
+    const onChange = vi.fn()
+    const { user } = render(
+      <form aria-label="Order">
+        <RadioGroup.Root
+          name="speed"
+          defaultValue="standard"
+          items={[
+            { label: "Standard", value: "standard" },
+            { label: "Express", value: "express" },
+          ]}
+          legend="Shipping speed"
+          onChange={onChange}
+        />
+        <button type="reset">Reset</button>
+      </form>,
+    )
+    const standard = screen.getByRole("radio", { name: "Standard" })
+    const express = screen.getByRole("radio", { name: "Express" })
+    expect(standard).toBeChecked()
+    await user.tab()
+    await user.keyboard("{ArrowRight}")
+    expect(express).toBeChecked()
+    expect(onChange).toHaveBeenCalledExactlyOnceWith("express")
+    await user.click(screen.getByRole("button", { name: "Reset" }))
+    expect(standard).toBeChecked()
+    expect(express).not.toBeChecked()
+  })
+
+  test("lets the caller control selection and applies item slot props", async () => {
+    const onChange = vi.fn()
+    const group = (value: string | undefined) => (
+      <RadioGroup.Root
+        legend="Shipping speed"
+        value={value}
+        onChange={onChange}
+      >
+        <RadioGroup.Item value="standard">Standard</RadioGroup.Item>
+        <RadioGroup.Item
+          value="express"
+          indicatorProps={{ id: "express-indicator" }}
+          inputProps={{ id: "express-input" }}
+          labelProps={{ id: "express-label" }}
+        >
+          Express
+        </RadioGroup.Item>
+      </RadioGroup.Root>
+    )
+    const { rerender, user } = render(group(undefined))
+    const standard = screen.getByRole("radio", { name: "Standard" })
+    const express = screen.getByRole("radio", { name: "Express" })
+
+    expect(standard).not.toBeChecked()
+    expect(express).not.toBeChecked()
+    expect(express).toHaveAttribute("id", "express-input")
+    expect(express.nextElementSibling).toHaveAttribute(
+      "id",
+      "express-indicator",
+    )
+    expect(screen.getByText("Express")).toHaveAttribute("id", "express-label")
+    await user.click(express)
+    expect(onChange).toHaveBeenCalledExactlyOnceWith("express")
+    expect(express).not.toBeChecked()
+    rerender(group("express"))
+    expect(express).toBeChecked()
+    rerender(group(undefined))
+    expect(express).not.toBeChecked()
+    await a11y(group("standard"))
+  })
+
+  test("manages compound items when only onChange is supplied", async () => {
+    const onChange = vi.fn()
+    const { user } = render(
+      <RadioGroup.Root legend="Shipping speed" onChange={onChange}>
+        <RadioGroup.Item defaultChecked value="standard">
+          Standard
+        </RadioGroup.Item>
+        <RadioGroup.Item value="express">Express</RadioGroup.Item>
+      </RadioGroup.Root>,
+    )
+    const standard = screen.getByRole("radio", { name: "Standard" })
+    const express = screen.getByRole("radio", { name: "Express" })
+    expect(standard).not.toBeChecked()
+    await user.click(express)
+    expect(express).toBeChecked()
+    expect(onChange).toHaveBeenCalledExactlyOnceWith("express")
+  })
+
   test("shares a form name and supports native keyboard selection", async () => {
     const { user } = render(
       <form aria-label="Order">

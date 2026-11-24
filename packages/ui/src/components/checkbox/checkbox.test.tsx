@@ -3,6 +3,39 @@ import { Field } from "../field/field"
 import { Checkbox } from "./checkbox"
 
 describe("<Checkbox />", () => {
+  test("exposes native mixed state and supports custom label and indicator props", async () => {
+    const mixed = (
+      <Checkbox
+        checkedIcon="Checked icon"
+        indeterminate
+        indeterminateIcon="Mixed icon"
+        indicatorProps={{ id: "selection-indicator" }}
+        inputProps={{ name: "selection" }}
+        labelProps={{ id: "selection-label" }}
+      >
+        Select all
+      </Checkbox>
+    )
+    const { rerender, user } = render(mixed)
+    const input = screen.getByRole("checkbox", { name: "Select all" })
+    expect(input).toBePartiallyChecked()
+    expect(input).toHaveAttribute("name", "selection")
+    expect(screen.getByText("Select all")).toHaveAttribute(
+      "id",
+      "selection-label",
+    )
+    expect(screen.getByText("Mixed icon").parentElement).toHaveAttribute(
+      "id",
+      "selection-indicator",
+    )
+    await user.click(input)
+    expect(input).toBePartiallyChecked()
+    rerender(<Checkbox checked> Select all </Checkbox>)
+    expect(input).toBeChecked()
+    expect(input).not.toBePartiallyChecked()
+    await a11y(mixed)
+  })
+
   test("toggles by label and keyboard and submits its checked value", async () => {
     const { user } = render(
       <form aria-label="Preferences">

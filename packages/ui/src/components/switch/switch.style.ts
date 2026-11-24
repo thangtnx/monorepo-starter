@@ -1,46 +1,72 @@
 import { defineComponentStyle } from "../../core/define"
-import { checkboxStyle } from "../checkbox/checkbox.style"
 
 export const switchStyle = defineComponentStyle({
   base: {
-    ...checkboxStyle.base,
-    "&::before": {
-      backgroundColor: "fg.muted",
-      borderRadius: "full",
-      content: '""',
-      height: "calc(var(--switch-height) - 0.375rem)",
-      width: "calc(var(--switch-height) - 0.375rem)",
+    "&:dir(rtl)": { "--slide": "-100%" },
+    "& > input + span": {
+      boxSizing: "content-box",
+      justifyItems: "start",
+      padding: "var(--track-padding)",
+      transition: "background {durations.fast}",
     },
-    "&:checked": {
-      "&::before": {
-        backgroundColor:
-          "var(--color-scheme-contrast, {colors.primary.contrast})",
-        justifySelf: "end",
-      },
-      backgroundColor: "var(--color-scheme-solid, {colors.primary.solid})",
-      borderColor: "transparent",
+    "& > input:checked + span > span": {
+      background: "var(--thumb-on)",
+      color: "var(--thumb-ink)",
+      translate: "var(--slide, 100%)",
     },
-    "@media (forced-colors: active)": {
-      "&::before": { display: "none" },
-      appearance: "auto",
+    "& > input[aria-invalid=true] + span": {
+      boxShadow: "inset 0 0 0 1px var(--check-error)",
     },
-    alignItems: "center",
-    appearance: "none",
-    backgroundColor: "bg.muted",
-    borderColor: "border.emphasized",
-    borderRadius: "full",
-    borderWidth: "1px",
-    display: "inline-grid",
-    paddingInline: "0.125rem",
+    "& [data-part=thumb]": {
+      aspectRatio: 1,
+      background: "{colors.white}",
+      borderRadius: "var(--thumb-radius)",
+      boxShadow: "var(--thumb-shadow)",
+      color: "{colors.black}",
+      display: "inline-grid",
+      fontSize: "calc(var(--thumb) * .75)",
+      placeItems: "center",
+      transition: "background {durations.fast}, translate {durations.fast}",
+      width: "var(--thumb)",
+    },
+    "& input:not(:checked) + span [data-icon=on], & input:checked + span [data-icon=off]":
+      { display: "none" },
+    "--check-bg": "{colors.bg.muted}",
+    "--check-border": 0,
+    "--check-height": "calc(var(--thumb) - var(--track-inset))",
+    "--check-width": "calc(var(--thumb) * 2)",
+    "--thumb": "{sizes.4}",
+    "--thumb-ink": "currentColor",
+    "--thumb-on": "{colors.white}",
+    "--thumb-radius": "var(--check-radius)",
+    "--thumb-shadow": "none",
+    "--track-inset": "0px",
+    "--track-padding": 0,
+    "@media (prefers-reduced-motion: reduce)": {
+      "& > input + span, & [data-part=thumb]": { transition: "none" },
+    },
+  },
+  props: {
+    reverse: { false: {}, true: { flexDirection: "row-reverse" } },
+    shape: {
+      circle: {},
+      rounded: {},
+      square: {},
+    },
   },
   sizes: {
-    sm: { "--switch-height": "{sizes.4}", height: "4", width: "7" },
-    md: { "--switch-height": "{sizes.5}", height: "5", width: "9" },
-    lg: {
-      ...checkboxStyle.sizes.lg,
-      "--switch-height": "{sizes.11}",
-      width: "20",
-    },
+    sm: {},
+    md: {},
+    lg: {},
   },
-  defaultProps: { size: "md" },
+  variants: {
+    thin: {},
+    thick: {},
+  },
+  defaultProps: {
+    size: "md",
+    variant: "thick",
+    reverse: false,
+    shape: "circle",
+  },
 })

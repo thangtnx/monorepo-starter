@@ -16,6 +16,29 @@ export const Basic: Story = {}
 
 export const Checked: Story = { args: { defaultChecked: true } }
 
+export const Mixed: Story = {
+  args: {
+    "aria-label": undefined,
+    children: "Select all",
+    indeterminate: true,
+    indeterminateIcon: "–",
+    indicatorProps: { title: "Some items selected" },
+    labelProps: { title: "Choose all items" },
+  },
+}
+
+export const Variants: Story = {
+  render: () => (
+    <div style={{ display: "flex", gap: "1rem" }}>
+      {(["outline", "solid", "subtle", "surface"] as const).map((variant) => (
+        <Checkbox key={variant} variant={variant} defaultChecked shape="square">
+          {variant}
+        </Checkbox>
+      ))}
+    </div>
+  ),
+}
+
 export const Sizes: Story = {
   render: (args) => (
     <div style={{ alignItems: "center", display: "flex", gap: "0.75rem" }}>

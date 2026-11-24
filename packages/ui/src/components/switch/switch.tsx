@@ -1,37 +1,62 @@
 "use client"
 
-import type { ComponentProps } from "react"
+import type { ComponentProps, ReactNode } from "react"
 import type { ComponentStyleProps } from "../../core/define"
-import { ariaAttr } from "@monorepo/utils"
+import type { CheckableProps } from "../checkbox/checkbox-control"
 import { splitStyleProps } from "../../core/split-style-props"
-import { useCheckableProps } from "../checkbox/checkbox-control"
-import { useFieldContext } from "../field/field-context"
+import { CheckableFrame, useCheckable } from "../checkbox/checkbox-control"
 import { switchStyle } from "./switch.style"
 
 export interface SwitchProps
-  extends
-    Omit<ComponentProps<"input">, "children" | "color" | "size" | "type">,
-    ComponentStyleProps<typeof switchStyle> {
-  /** The switch id. When wrapped in a Field, set the id on Field. */
-  id?: string
+  extends CheckableProps, ComponentStyleProps<typeof switchStyle> {
+  /**
+   * Toggles the switch when Enter is pressed.
+   *
+   * @default true
+   */
+  checkOnEnter?: boolean
+  /** Content in the thumb, or separate content for the off and on states. */
+  icon?: ReactNode | { off: ReactNode; on: ReactNode }
+  /** Props for the decorative thumb. */
+  thumbProps?: ComponentProps<"span">
+  /** Props for the decorative track. */
+  trackProps?: ComponentProps<"span">
 }
 
-export function Switch(props: SwitchProps) {
-  const field = useFieldContext()
-  const [styleAttributes, rest] = splitStyleProps("switch", switchStyle, {
-    ...props,
-    size: props.size ?? field?.size,
-  })
-  const input = useCheckableProps(rest)
+export function Switch({
+  size,
+  checkOnEnter = true,
+  icon,
+  thumbProps,
+  trackProps,
+  ...props
+}: SwitchProps) {
+  const [attributes, rest] = splitStyleProps("switch", switchStyle, props)
+  const control = useCheckable(rest, { size, checkOnEnter })
+  const stateIcons =
+    icon && typeof icon === "object" && "off" in icon && "on" in icon
+      ? icon
+      : undefined
 
   return (
-    <input
-      {...styleAttributes}
-      {...input}
-      type="checkbox"
-      aria-readonly={ariaAttr(input.readOnly)}
-      // oxlint-disable-next-line jsx-a11y/role-has-required-aria-props -- the native checkbox exposes its checked state
-      role="switch"
+    <CheckableFrame
+      type="switch"
+      attributes={attributes}
+      control={control}
+      indicator={
+        <span {...trackProps} aria-hidden="true" data-part="track">
+          <span {...thumbProps} data-part="thumb">
+            {stateIcons ? (
+              <>
+                <span data-icon="off">{stateIcons.off}</span>
+                <span data-icon="on">{stateIcons.on}</span>
+              </>
+            ) : (
+              (icon as ReactNode)
+            )}
+          </span>
+        </span>
+      }
     />
   )
 }
