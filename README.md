@@ -26,6 +26,7 @@ It asks whether to replace the Git history before prompting for a project name.
 ├── .github/              CI workflows, composite actions, issue and PR templates
 ├── packages/
 │   ├── workspace/        Private shared config: tsconfig, oxlint, oxfmt, vitest
+│   ├── ui/               Design system: theme, generated stylesheet, components, Storybook
 │   └── utils/            Utility library tested with vitest
 ├── www/                  Web app
 ├── scripts/              Repository scripts
@@ -51,8 +52,10 @@ Run from the repository root:
 | `pnpm quality`   | Format, lint, typecheck and test in sequence          |
 | `pnpm clean`     | Remove caches and `node_modules`                      |
 
-Shortcuts to run a script inside one package: `pnpm utils <script>` and
-`pnpm workspace <script>`.
+Shortcuts to run a script inside one package: `pnpm ui <script>`,
+`pnpm utils <script>` and `pnpm workspace <script>`. For example,
+`pnpm ui storybook` opens the component catalog and `pnpm ui generate`
+rebuilds the stylesheet.
 
 ## Conventions
 
