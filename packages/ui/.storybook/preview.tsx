@@ -1,9 +1,12 @@
 /// <reference types="vite/client" />
 
 import type { Decorator, Preview } from "@storybook/react-vite"
+import type { ReactNode } from "react"
+import { useLayoutEffect } from "react"
 import { componentStyles } from "../src/component-styles"
 import { createCss } from "../src/core"
 import { theme } from "../src/theme"
+import "./preview.css"
 
 const stylesheet = document.createElement("style")
 stylesheet.textContent = createCss(theme, componentStyles)
@@ -24,19 +27,41 @@ if (import.meta.hot) {
   import.meta.hot.dispose(() => stylesheet.remove())
 }
 
-const withMode: Decorator = (Story, { globals }) => (
-  <div
-    style={{
-      background: "var(--colors-bg)",
-      color: "var(--colors-fg)",
-      fontFamily: "var(--fonts-body)",
-      minHeight: "100vh",
-      padding: "var(--spaces-6)",
-    }}
-    data-mode={globals.mode as string}
+function ModeFrame({
+  children,
+  fullscreen,
+  mode,
+}: {
+  children: ReactNode
+  fullscreen: boolean
+  mode: "dark" | "light"
+}) {
+  useLayoutEffect(() => {
+    document.documentElement.dataset.mode = mode
+  }, [mode])
+
+  return (
+    <div
+      style={{
+        background: "var(--colors-bg)",
+        color: "var(--colors-fg)",
+        fontFamily: "var(--fonts-body)",
+        minHeight: fullscreen ? "100vh" : undefined,
+        padding: "var(--spaces-6)",
+      }}
+    >
+      {children}
+    </div>
+  )
+}
+
+const withMode: Decorator = (Story, { globals, viewMode }) => (
+  <ModeFrame
+    fullscreen={viewMode === "story"}
+    mode={globals.mode === "dark" ? "dark" : "light"}
   >
     <Story />
-  </div>
+  </ModeFrame>
 )
 
 const preview: Preview = {

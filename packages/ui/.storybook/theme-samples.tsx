@@ -94,12 +94,6 @@ export function MotionSample({
 }: MotionSampleProps) {
   return (
     <button type="button" className="theme-motion-sample">
-      <style>{`
-        .theme-motion-sample:hover span,
-        .theme-motion-sample:focus-visible span {
-          transform: translateX(var(--spaces-12));
-        }
-      `}</style>
       Animate
       <span
         style={{
@@ -166,29 +160,31 @@ export function StyleSamples({ names, property }: StyleSamplesProps) {
     .join("\n")
 
   return (
-    <dl
-      style={{ display: "grid", gap: "var(--spaces-2)" }}
-      data-scheme="primary"
-    >
+    <>
       <style>{css}</style>
-      {names.map((name) => (
-        <div key={name}>
-          <dt>
-            <code>{name}</code>
-          </dt>
-          <dd
-            style={{
-              borderColor: name === "outline" ? undefined : "transparent",
-              borderRadius: "var(--radii-md)",
-              borderWidth: "1px",
-              padding: "var(--spaces-2)",
-            }}
-            data-theme-style={name}
-          >
-            Sample text
-          </dd>
-        </div>
-      ))}
-    </dl>
+      <dl
+        style={{ display: "grid", gap: "var(--spaces-2)" }}
+        data-scheme="primary"
+      >
+        {names.map((name) => (
+          <div key={name}>
+            <dt>
+              <code>{name}</code>
+            </dt>
+            <dd
+              style={{
+                borderColor: name === "outline" ? undefined : "transparent",
+                borderRadius: "var(--radii-md)",
+                borderWidth: "1px",
+                padding: "var(--spaces-2)",
+              }}
+              data-theme-style={name}
+            >
+              Sample text
+            </dd>
+          </div>
+        ))}
+      </dl>
+    </>
   )
 }

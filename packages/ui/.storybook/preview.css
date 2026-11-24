@@ -1,0 +1,9 @@
+:root[data-mode] {
+  background: var(--colors-bg);
+  color: var(--colors-fg);
+}
+
+.theme-motion-sample:hover span,
+.theme-motion-sample:focus-visible span {
+  transform: translateX(var(--spaces-12));
+}
