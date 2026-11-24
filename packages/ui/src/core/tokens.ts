@@ -43,7 +43,7 @@ export const getPropertyCategory = (property: string) =>
   categoryPatterns.find(([, pattern]) => pattern.test(property))?.[0]
 
 export const toVarName = (category: string, path: string[]) =>
-  `--${[toKebab(category), ...path.filter((key) => key !== "base")].join("-")}`
+  `--${[category, ...path.filter((key) => key !== "base")].map(toKebab).join("-")}`
 
 const isLeaf = (value: unknown): value is ModeValue | StyleValue =>
   typeof value !== "object" || Array.isArray(value)
@@ -129,12 +129,8 @@ export function resolveValue(
 
   if (!category || withReferences !== value) return withReferences
 
-  return value
-    .split(" ")
-    .map((part) => {
-      const name = vars.get(`${category}.${part}`)
-
-      return name ? `var(${name})` : part
-    })
-    .join(" ")
+  return value.replace(/[^\s,]+/g, (part) => {
+    const name = vars.get(`${category}.${part}`)
+    return name ? `var(${name})` : part
+  })
 }

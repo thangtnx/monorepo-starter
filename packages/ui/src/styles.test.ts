@@ -1,5 +1,3 @@
-import { readdirSync } from "node:fs"
-import { join } from "node:path"
 import { componentStyles } from "./component-styles"
 import { createCss } from "./core"
 import { theme } from "./theme"
@@ -7,21 +5,24 @@ import { theme } from "./theme"
 const css = createCss(theme, componentStyles)
 
 describe("compiled stylesheet", () => {
-  test("registers every component style under its folder name", async () => {
-    const folders = readdirSync(join(import.meta.dirname, "components"), {
-      withFileTypes: true,
-    }).filter((entry) => entry.isDirectory())
-    const found = await Promise.all(
-      folders.map(async ({ name }) => {
-        const exports = (await import(
-          `./components/${name}/${name}.style.ts`
-        )) as { [key: string]: unknown }
-
-        return Object.values(exports).map((style) => [name, style] as const)
-      }),
+  test("registers every component style under its file name", () => {
+    const files = import.meta.glob<{ [key: string]: unknown }>(
+      "./components/**/*.style.ts",
+      { eager: true },
+    )
+    const entries = Object.entries(files).map(
+      ([path, exports]) =>
+        [
+          path.slice(path.lastIndexOf("/") + 1, -".style.ts".length),
+          Object.values(exports),
+        ] as const,
     )
 
-    expect(Object.fromEntries(found.flat())).toStrictEqual(componentStyles)
+    expect(entries.map(([name]) => name).toSorted()).toStrictEqual(
+      Object.keys(componentStyles).toSorted(),
+    )
+    for (const [name, styles] of entries)
+      expect(styles).toStrictEqual([componentStyles[name]])
   })
 
   test("defines every variable it uses", () => {
@@ -29,7 +30,7 @@ describe("compiled stylesheet", () => {
       [...css.matchAll(/(--[\w-]+):/g)].map((match) => match[1]),
     )
     const used = new Set(
-      [...css.matchAll(/var\((--[\w-]+)\)/g)].map((match) => match[1]),
+      [...css.matchAll(/var\(\s*(--[\w-]+)/g)].map((match) => match[1]),
     )
 
     expect([...used].filter((name) => !defined.has(name))).toStrictEqual([])

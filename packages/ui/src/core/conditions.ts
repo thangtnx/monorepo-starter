@@ -1,4 +1,4 @@
-const enabled = ":not(:disabled, [data-disabled], [aria-disabled=true])"
+const enabled = ":where(:not(:disabled, [data-disabled], [aria-disabled=true]))"
 
 /** Shorthand keys usable in style objects, mapped to selectors or at-rules. */
 export const conditions: { [key: string]: string } = {

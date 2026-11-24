@@ -14,16 +14,30 @@ export interface CompileContext {
   vars: TokenVars
 }
 
-/** Splits a selector list on commas that are not inside parentheses. */
+/** Splits a selector list at top-level, unescaped commas. */
 export function splitSelector(selector: string): string[] {
   const parts: string[] = []
   let depth = 0
+  let brackets = 0
+  let quote: string | undefined
   let start = 0
 
   for (let index = 0; index < selector.length; index++) {
     const char = selector[index]
 
-    if (char === "(") {
+    if (char === "\\") {
+      index++
+    } else if (quote) {
+      if (char === quote) quote = undefined
+    } else if (char === '"' || char === "'") {
+      quote = char
+    } else if (char === "[") {
+      brackets++
+    } else if (char === "]") {
+      brackets--
+    } else if (brackets > 0) {
+      continue
+    } else if (char === "(") {
       depth++
     } else if (char === ")") {
       depth--
@@ -98,6 +112,39 @@ function expand(style: StyleObject, context: CompileContext): StyleObject {
   return deepMerge(inherited, rest)
 }
 
+function assertAcyclic(
+  style: StyleObject,
+  theme: Theme,
+  checked: WeakSet<StyleObject>,
+  path: string[] = [],
+) {
+  if (checked.has(style)) return
+
+  const { layerStyle, textStyle, ...rest } = style
+  const checkReference = (
+    styles: StyleSheet | undefined,
+    name: unknown,
+    kind: string,
+  ) => {
+    if (typeof name !== "string") return
+    const target = styles?.[name]
+    if (!target) return
+
+    const reference = `${kind} "${name}"`
+    const next = [...path, reference]
+    if (path.includes(reference))
+      throw new Error(`Circular style reference: ${next.join(" -> ")}`)
+    assertAcyclic(target, theme, checked, next)
+  }
+
+  checkReference(theme.textStyles, textStyle, "text style")
+  checkReference(theme.layerStyles, layerStyle, "layer style")
+  for (const value of Object.values(rest))
+    if (isStyleObject(value)) assertAcyclic(value, theme, checked, path)
+
+  checked.add(style)
+}
+
 function walk(
   selector: string,
   atRules: string[],
@@ -141,6 +188,7 @@ export function compileStyle(
 ): CssRule[] {
   const rules: CssRule[] = []
 
+  assertAcyclic(style, context.theme, new WeakSet())
   walk(selector, [], style, context, rules)
 
   return rules

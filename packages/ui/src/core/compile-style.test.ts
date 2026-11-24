@@ -15,6 +15,8 @@ const theme = defineTheme({
   textStyles: { label: { fontSize: "sm", fontWeight: "bold" } },
   tokens: {
     colors: { red: { 500: "#f00" } },
+    durations: { fast: "100ms", slow: "300ms" },
+    easings: { inOut: "ease-in-out" },
     fontSizes: { sm: "0.875rem" },
     fontWeights: { bold: 700 },
     spaces: { 2: "0.5rem", 4: "1rem" },
@@ -27,6 +29,27 @@ const compile = (style: Parameters<typeof compileStyle>[1]) =>
   compileStyle(".x", style, context)
 
 describe("compileStyle", () => {
+  test("resolves comma-separated bare tokens without changing separators", () => {
+    expect(
+      compile({ transitionDuration: "fast,slow,\t200ms,  fast" })[0]
+        ?.declarations,
+    ).toStrictEqual([
+      "transition-duration: var(--durations-fast),var(--durations-slow),\t200ms,  var(--durations-fast)",
+    ])
+  })
+
+  test("uses kebab-case variables for bare and explicit camel-case tokens", () => {
+    expect(
+      compile({
+        animationTimingFunction: "{easings.inOut}",
+        transitionTimingFunction: "inOut",
+      })[0]?.declarations,
+    ).toStrictEqual([
+      "animation-timing-function: var(--easings-in-out)",
+      "transition-timing-function: var(--easings-in-out)",
+    ])
+  })
+
   test("resolves bare token names by property", () => {
     expect(
       compile({ color: "fg.muted", gap: "2", padding: "2 4", width: "2" }),
@@ -78,7 +101,7 @@ describe("compileStyle", () => {
     ).toStrictEqual([
       ".x",
       ".x + .x",
-      ".x:hover:not(:disabled, [data-disabled], [aria-disabled=true])",
+      ".x:hover:where(:not(:disabled, [data-disabled], [aria-disabled=true]))",
     ])
   })
 
@@ -120,7 +143,7 @@ describe("compileStyle", () => {
         atRules: [],
         declarations: ["opacity: 1"],
         selector:
-          ".x:hover:not(:disabled, [data-disabled], [aria-disabled=true])",
+          ".x:hover:where(:not(:disabled, [data-disabled], [aria-disabled=true]))",
       },
     ])
   })
@@ -133,11 +156,77 @@ describe("compileStyle", () => {
       'Unknown condition "nope"',
     )
   })
+
+  test("reports the path of a circular style reference", () => {
+    const circularTheme = {
+      ...theme,
+      layerStyles: { shared: { textStyle: "shared" } },
+      textStyles: { shared: { layerStyle: "shared" } },
+    }
+
+    expect(() =>
+      compileStyle(
+        ".x",
+        { layerStyle: "shared" },
+        { ...context, theme: circularTheme },
+      ),
+    ).toThrow(
+      'Circular style reference: layer style "shared" -> text style "shared" -> layer style "shared"',
+    )
+  })
+
+  test("rejects cycles through a nested condition", () => {
+    const circularTheme = {
+      ...theme,
+      layerStyles: { nested: { _hover: { layerStyle: "nested" } } },
+    }
+
+    expect(() =>
+      compileStyle(
+        ".x",
+        { layerStyle: "nested" },
+        { ...context, theme: circularTheme },
+      ),
+    ).toThrow(
+      'Circular style reference: layer style "nested" -> layer style "nested"',
+    )
+  })
+
+  test("lets nested overrides replace an unresolved inherited reference", () => {
+    const overrideTheme = {
+      ...theme,
+      layerStyles: { inherited: { _hover: { textStyle: "missing" } } },
+    }
+
+    expect(
+      compileStyle(
+        ".x",
+        { layerStyle: "inherited", _hover: { textStyle: "label" } },
+        { ...context, theme: overrideTheme },
+      )[0]?.declarations,
+    ).toStrictEqual([
+      "font-size: var(--font-sizes-sm)",
+      "font-weight: var(--font-weights-bold)",
+    ])
+  })
 })
 
 describe("splitSelector", () => {
   test("ignores commas inside parentheses", () => {
     expect(splitSelector("a:not(b, c), d")).toStrictEqual(["a:not(b, c)", "d"])
+  })
+
+  test("ignores delimiters in attributes, quotes and escaped characters", () => {
+    const parts = [
+      '&[data-label="a, b"]',
+      "&[title='(']",
+      String.raw`&[data-label="a\", b"]`,
+      String.raw`&[data-label=a\,b]`,
+      String.raw`.a\,b`,
+      "&:active",
+    ]
+
+    expect(splitSelector(parts.join(", "))).toStrictEqual(parts)
   })
 })
 

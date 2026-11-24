@@ -21,18 +21,22 @@ export function compileComponentStyle(
   context: CompileContext,
 ): CssRule[] {
   const root = `.${componentClassName(name)}`
+  const baseRules = base ? compileStyle(root, base, context) : []
+  const isRoot = (rule: CssRule) =>
+    rule.selector === root && rule.atRules.length === 0
   const select = (attribute: string, styles: StyleSheet = {}) =>
     Object.entries(styles).flatMap(([value, style]) =>
       compileStyle(`${root}[data-${attribute}="${value}"]`, style, context),
     )
 
   return [
-    ...(base ? compileStyle(root, base, context) : []),
+    ...baseRules.filter(isRoot),
     ...select("variant", variants),
     ...select("size", sizes),
     ...Object.entries(props ?? {}).flatMap(([prop, values]) =>
       select(toKebab(prop), values),
     ),
+    ...baseRules.filter((rule) => !isRoot(rule)),
   ]
 }
 
