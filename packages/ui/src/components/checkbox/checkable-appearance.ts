@@ -42,9 +42,9 @@ const indicatorSize = {
 }
 
 const checkboxGeometry = {
-  sm: { "--check-icon-size": "var(--font-sizes-xs)" },
-  md: { "--check-icon-size": "var(--font-sizes-sm)" },
-  lg: { "--check-icon-size": "var(--font-sizes-md)" },
+  sm: { "--check-icon-size": "0.625rem" },
+  md: { "--check-icon-size": "var(--font-sizes-xs)" },
+  lg: { "--check-icon-size": "var(--font-sizes-sm)" },
 }
 
 const radioGeometry = {

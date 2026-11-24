@@ -24,6 +24,30 @@ test.describe("Checkbox", () => {
 
   test("the medium checkbox toggles", async ({ openStory, page }) => {
     await openStory("components-checkbox--size")
+
+    for (const label of ["sm", "md", "lg"]) {
+      const root = page.locator('[data-part="root"]').filter({
+        has: page.getByRole("checkbox", { name: label }),
+      })
+      const indicator = root.locator('[data-part="indicator"]')
+      const icon = root.locator('[data-icon="checked"]')
+      const [indicatorBox, iconBox] = await Promise.all([
+        indicator.boundingBox(),
+        icon.boundingBox(),
+      ])
+
+      expect(indicatorBox).not.toBeNull()
+      expect(iconBox).not.toBeNull()
+      expect(iconBox!.x).toBeGreaterThanOrEqual(indicatorBox!.x)
+      expect(iconBox!.y).toBeGreaterThanOrEqual(indicatorBox!.y)
+      expect(iconBox!.x + iconBox!.width).toBeLessThanOrEqual(
+        indicatorBox!.x + indicatorBox!.width + 0.5,
+      )
+      expect(iconBox!.y + iconBox!.height).toBeLessThanOrEqual(
+        indicatorBox!.y + indicatorBox!.height + 0.5,
+      )
+    }
+
     const box = page.getByRole("checkbox", { name: "md" })
 
     await expect(box).toBeChecked()

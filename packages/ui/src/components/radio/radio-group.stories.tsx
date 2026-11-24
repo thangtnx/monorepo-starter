@@ -6,19 +6,12 @@ import { RadioGroup } from "./radio-group"
 import { radioStyle } from "./radio.style"
 
 function ShippingOptions({ selected = true }: { selected?: boolean }) {
-  const id = useId()
-  const standardId = `${id}-standard`
-  const expressId = `${id}-express`
-
   return (
     <>
-      <label htmlFor={standardId}>
-        <Radio id={standardId} defaultChecked={selected} value="standard" />{" "}
+      <Radio defaultChecked={selected} value="standard">
         Standard
-      </label>
-      <label htmlFor={expressId}>
-        <Radio id={expressId} value="express" /> Express
-      </label>
+      </Radio>
+      <Radio value="express">Express</Radio>
     </>
   )
 }

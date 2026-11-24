@@ -87,6 +87,40 @@ describe("<Link />", () => {
     expect(link).toHaveAttribute("rel", "noopener noreferrer")
   })
 
+  test("supports underline, plain, subtle, and none variants", () => {
+    render(
+      <>
+        <Link href="/a">Default</Link>
+        <Link href="/b" variant="plain">
+          Plain
+        </Link>
+        <Link href="/c" variant="subtle">
+          Subtle
+        </Link>
+        <Link href="/d" variant="none">
+          None
+        </Link>
+      </>,
+    )
+
+    expect(screen.getByRole("link", { name: "Default" })).toHaveAttribute(
+      "data-variant",
+      "underline",
+    )
+    expect(screen.getByRole("link", { name: "Plain" })).toHaveAttribute(
+      "data-variant",
+      "plain",
+    )
+    expect(screen.getByRole("link", { name: "Subtle" })).toHaveAttribute(
+      "data-variant",
+      "subtle",
+    )
+    expect(screen.getByRole("link", { name: "None" })).toHaveAttribute(
+      "data-variant",
+      "none",
+    )
+  })
+
   test("has no accessibility violations", async () => {
     await a11y(<Link href="https://example.com">Help</Link>)
   })

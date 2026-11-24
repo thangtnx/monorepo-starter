@@ -21,6 +21,7 @@ import { emptyStateTitleStyle } from "./components/empty-state/empty-state-title
 import { emptyStateStyle } from "./components/empty-state/empty-state.style"
 import { fieldStyle } from "./components/field/field.style"
 import { fieldsetStyle } from "./components/fieldset/fieldset.style"
+import { gridItemStyle } from "./components/grid/grid-item.style"
 import { gridStyle } from "./components/grid/grid.style"
 import { headingStyle } from "./components/heading/heading.style"
 import { iconStyle } from "./components/icon/icon.style"
@@ -74,6 +75,7 @@ export const componentStyles: { [key: string]: ComponentRecipe } = {
   field: fieldStyle,
   fieldset: fieldsetStyle,
   grid: gridStyle,
+  "grid-item": gridItemStyle,
   heading: headingStyle,
   icon: iconStyle,
   input: inputStyle,

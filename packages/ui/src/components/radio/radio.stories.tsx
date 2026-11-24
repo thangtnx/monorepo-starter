@@ -1,8 +1,28 @@
 import type { Meta, StoryObj } from "@storybook/react-vite"
+import type { RadioProps } from "./radio"
+import { useId } from "react"
 import { colorSchemes, keys, PropsTable } from "#storybook"
 import { Field } from "../field/field"
 import { Radio } from "./radio"
 import { radioStyle } from "./radio.style"
+
+function RadioPair({
+  labelPrefix,
+  ...props
+}: RadioProps & { labelPrefix: string }) {
+  const name = useId()
+
+  return (
+    <div style={{ display: "flex", gap: "0.75rem" }}>
+      <Radio {...props} name={name} defaultChecked value="a">
+        {labelPrefix} A
+      </Radio>
+      <Radio {...props} name={name} value="b">
+        {labelPrefix} B
+      </Radio>
+    </div>
+  )
+}
 
 const meta = {
   args: { "aria-label": "Standard shipping" },
@@ -14,13 +34,21 @@ export default meta
 
 type Story = StoryObj<typeof meta>
 
-export const Basic: Story = {}
+export const Basic: Story = {
+  args: { "aria-label": undefined, children: "Standard shipping" },
+}
 
 export const Variant: Story = {
   render: (args) => (
     <PropsTable columns={keys(radioStyle.variants)} rows={colorSchemes}>
       {(row, column) => (
-        <Radio {...args} colorScheme={row} variant={column} defaultChecked />
+        <RadioPair
+          {...args}
+          colorScheme={row}
+          variant={column}
+          aria-label={undefined}
+          labelPrefix={column}
+        />
       )}
     </PropsTable>
   ),
@@ -29,7 +57,14 @@ export const Variant: Story = {
 export const Size: Story = {
   render: (args) => (
     <PropsTable variant="stack" rows={keys(radioStyle.sizes)}>
-      {(row) => <Radio {...args} size={row} aria-label={row} defaultChecked />}
+      {(row) => (
+        <RadioPair
+          {...args}
+          size={row}
+          aria-label={undefined}
+          labelPrefix={row}
+        />
+      )}
     </PropsTable>
   ),
 }
@@ -38,7 +73,12 @@ export const ColorScheme: Story = {
   render: (args) => (
     <PropsTable variant="stack" rows={colorSchemes}>
       {(row) => (
-        <Radio {...args} colorScheme={row} aria-label={row} defaultChecked />
+        <RadioPair
+          {...args}
+          colorScheme={row}
+          aria-label={undefined}
+          labelPrefix={row}
+        />
       )}
     </PropsTable>
   ),
@@ -49,7 +89,14 @@ export const Checked: Story = { args: { defaultChecked: true } }
 export const Shape: Story = {
   render: (args) => (
     <PropsTable variant="stack" rows={keys(radioStyle.props.shape)}>
-      {(row) => <Radio {...args} defaultChecked shape={row} />}
+      {(row) => (
+        <RadioPair
+          {...args}
+          aria-label={undefined}
+          labelPrefix={row}
+          shape={row}
+        />
+      )}
     </PropsTable>
   ),
 }

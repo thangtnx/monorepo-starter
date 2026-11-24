@@ -2,13 +2,18 @@ import { defineComponentStyle } from "../../core/define"
 
 export const selectListboxStyle = defineComponentStyle({
   base: {
-    "& > [role=presentation]": { padding: "1" },
+    "& > [role=presentation]": {
+      display: "flex",
+      flexDirection: "column",
+      gap: "1",
+      padding: "1",
+    },
     "& [data-part=label]": {
       color: "fg.muted",
       fontSize: "sm",
       fontWeight: "semibold",
       paddingBlock: "1",
-      paddingInline: "2",
+      paddingInline: "3",
     },
     "& [data-part=option]": {
       "&[aria-selected=true]": {
@@ -22,8 +27,6 @@ export const selectListboxStyle = defineComponentStyle({
       },
       "&[data-active]": {
         background: "bg.emphasized",
-        outline: "1px solid {colors.focusRing}",
-        outlineOffset: "-1px",
       },
       "& [data-part=check]": { blockSize: "4", flexShrink: 0, inlineSize: "4" },
       alignItems: "center",
@@ -33,8 +36,8 @@ export const selectListboxStyle = defineComponentStyle({
       gap: "2",
       justifyContent: "space-between",
       overflowWrap: "anywhere",
-      paddingBlock: "1",
-      paddingInline: "2",
+      paddingBlock: "2",
+      paddingInline: "3",
       _disabled: { color: "fg.muted", cursor: "not-allowed" },
     },
     "& [data-part=separator]": {
@@ -72,7 +75,6 @@ export const selectListboxStyle = defineComponentStyle({
     overflowY: "auto",
     overscrollBehavior: "contain",
     position: "fixed",
-    scrollbarGutter: "stable",
     top: "var(--select-top)",
     transitionDuration: "fast",
     transitionProperty: "opacity",

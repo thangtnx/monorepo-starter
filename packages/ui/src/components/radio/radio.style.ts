@@ -8,6 +8,7 @@ export const radioStyle = defineComponentStyle({
       backgroundColor: "currentColor",
       borderRadius: "var(--radio-dot-radius)",
       content: '""',
+      height: "var(--radio-dot-size)",
       width: "var(--radio-dot-size)",
     },
     "--radio-dot-radius": 0,

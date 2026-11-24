@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/react-vite"
 import { PropsTable } from "#storybook"
+import { HStack, Stack, VStack } from "."
 import { Button } from "../button/button"
-import { Stack } from "./stack"
 
 const actions = (
   <>
@@ -36,5 +36,19 @@ export const Gap: Story = {
     <PropsTable variant="stack" rows={["2", "4", "8"] as const}>
       {(row) => <Stack {...args} gap={row} />}
     </PropsTable>
+  ),
+}
+
+export const HStackPreset: Story = {
+  name: "HStack",
+  render: () => <HStack gap="4">{actions}</HStack>,
+}
+
+export const VStackPreset: Story = {
+  name: "VStack",
+  render: () => (
+    <VStack align="start" gap="4">
+      {actions}
+    </VStack>
   ),
 }

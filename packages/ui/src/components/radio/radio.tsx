@@ -18,8 +18,13 @@ export interface RadioProps
 export function Radio({ size, indicatorProps, ...props }: RadioProps) {
   const group = use(RadioGroupContext)
   const [attributes, rest] = splitStyleProps("radio", radioStyle, {
-    ...group?.appearance,
     ...props,
+    variant: props.variant ?? group?.appearance.variant,
+    errorBorderColor:
+      props.errorBorderColor ?? group?.appearance.errorBorderColor,
+    focusBorderColor:
+      props.focusBorderColor ?? group?.appearance.focusBorderColor,
+    shape: props.shape ?? group?.appearance.shape,
   })
   const value = String(rest.inputProps?.value ?? rest.value ?? "on")
   const control = useCheckable(rest, {
