@@ -23,6 +23,7 @@ logs
 .worktrees
 .idea
 .vscode
+.wu
 
 # local environment and secrets
 .env
