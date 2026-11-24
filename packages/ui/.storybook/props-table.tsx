@@ -17,7 +17,9 @@ export function PropsTable<Row extends string, Column extends string>(
   props: GridProps<Row, Column> | StackProps<Row>,
 ) {
   return (
-    <div className="sb-props-table">
+    // cspell:ignore noninteractive
+    // oxlint-disable-next-line jsx-a11y/no-noninteractive-tabindex -- scrollable container must be keyboard-focusable
+    <div className="sb-props-table" tabIndex={0}>
       <table
         className={props.variant === "stack" ? "sb-props-stack" : undefined}
       >

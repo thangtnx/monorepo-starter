@@ -1,5 +1,8 @@
 import { expect, test } from "./fixtures"
 
+// The thumb overlaps the center of the native input's hit area.
+const inputCorner = { x: 2, y: 2 }
+
 test.describe("Switch", () => {
   test("is a switch that toggles with Space", async ({ openStory, page }) => {
     await openStory("components-switch--basic")
@@ -22,12 +25,24 @@ test.describe("Switch", () => {
     ).toBeChecked()
   })
 
-  test("a wrapping label toggles it", async ({ openStory, page }) => {
-    await openStory("components-switch--sizes")
+  test("the large switch toggles", async ({ openStory, page }) => {
+    await openStory("components-switch--size")
     const toggle = page.getByRole("switch", { name: "lg" })
 
     await expect(toggle).toBeChecked()
-    await page.getByText("lg", { exact: true }).click()
+    await toggle.click({ position: inputCorner })
+    await expect(toggle).not.toBeChecked()
+  })
+
+  test("a wrapping label toggles it", async ({ openStory, page }) => {
+    await openStory("components-switch--parts")
+    const toggle = page.getByRole("switch", { name: "Notifications" })
+    const label = page.locator("label").filter({ hasText: "Notifications" })
+
+    await expect(toggle).not.toBeChecked()
+    await label.click()
+    await expect(toggle).toBeChecked()
+    await label.click()
     await expect(toggle).not.toBeChecked()
   })
 
@@ -56,7 +71,7 @@ test.describe("Switch", () => {
     await expect(toggle).toHaveAttribute("aria-readonly", "true")
     await page.keyboard.press("Space")
     await expect(toggle).toBeChecked()
-    await toggle.click()
+    await toggle.click({ position: inputCorner })
     await expect(toggle).toBeChecked()
   })
 

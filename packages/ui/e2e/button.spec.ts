@@ -5,7 +5,7 @@ test.describe("Button", () => {
     openStory,
     page,
   }) => {
-    await openStory("components-button--variants")
+    await openStory("components-button--variant")
     const buttons = page.getByRole("button")
 
     expect(await buttons.count()).toBeGreaterThan(1)
@@ -19,7 +19,7 @@ test.describe("Button", () => {
     openStory,
     page,
   }) => {
-    await openStory("components-button--variants")
+    await openStory("components-button--variant")
     const styles = await page.getByRole("button").evaluateAll((els) =>
       els.map((el) => {
         const s = getComputedStyle(el)

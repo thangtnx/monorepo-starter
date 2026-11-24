@@ -349,7 +349,7 @@ test.describe("Select states", () => {
   test("required shows a message after submit and focuses the first invalid", async ({
     page,
   }) => {
-    await visit(page, "components-select--sizes", { args: "required:!true" })
+    await visit(page, "components-select--size", { args: "required:!true" })
     // The stories have no form: move the three selects into one.
     await page.evaluate(() => {
       const form = document.createElement("form")

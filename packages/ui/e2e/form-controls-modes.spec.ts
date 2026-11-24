@@ -21,19 +21,18 @@ const tokenControls = [
   },
   {
     id: "components-checkbox--checked",
-    checks: [["accent-color", "--colors-primary-solid"]],
-    pick: (page: Page) => page.getByRole("checkbox", { name: "Send updates" }),
+    checks: [["background-color", "--colors-primary-solid"]],
+    pick: (page: Page) => page.locator('.ui-checkbox [data-part="indicator"]'),
   },
   {
     id: "components-radio--checked",
-    checks: [["accent-color", "--colors-primary-solid"]],
-    pick: (page: Page) =>
-      page.getByRole("radio", { name: "Standard shipping" }),
+    checks: [["background-color", "--colors-primary-solid"]],
+    pick: (page: Page) => page.locator('.ui-radio [data-part="indicator"]'),
   },
   {
     id: "components-switch--checked",
     checks: [["background-color", "--colors-primary-solid"]],
-    pick: (page: Page) => page.getByRole("switch", { name: "Notifications" }),
+    pick: (page: Page) => page.locator('.ui-switch [data-part="track"]'),
   },
 ] satisfies {
   checks: [string, string][]

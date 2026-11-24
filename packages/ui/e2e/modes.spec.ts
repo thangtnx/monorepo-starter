@@ -27,8 +27,8 @@ const targets = [
   pick: (page: Page) => Locator
 }[]
 const stories = [
-  "components-button--variants",
-  "components-badge--color-schemes",
+  "components-button--variant",
+  "components-badge--color-scheme",
   "components-field--invalid",
 ]
 

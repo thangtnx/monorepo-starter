@@ -10,8 +10,8 @@ test.describe("Badge", () => {
   })
 
   for (const id of [
-    "components-badge--variants",
-    "components-badge--color-schemes",
+    "components-badge--variant",
+    "components-badge--color-scheme",
   ])
     test(`${id} renders several visible, non-empty badges`, async ({
       openStory,
@@ -31,9 +31,12 @@ test.describe("Badge", () => {
     openStory,
     page,
   }) => {
-    await openStory("components-badge--variants")
+    await openStory("components-badge--variant")
+    const row = page.getByRole("row").filter({
+      has: page.getByRole("rowheader", { name: "neutral", exact: true }),
+    })
     const looks = await Promise.all(
-      (await page.locator(badges).all()).map((badge) => paint(badge)),
+      (await row.locator(badges).all()).map((badge) => paint(badge)),
     )
 
     expect(looks.length).toBeGreaterThan(1)
@@ -41,7 +44,7 @@ test.describe("Badge", () => {
   })
 
   test("sizes grow in height", async ({ openStory, page }) => {
-    await openStory("components-badge--sizes")
+    await openStory("components-badge--size")
     const heights = await page
       .locator(badges)
       .evaluateAll((els) => els.map((el) => el.getBoundingClientRect().height))

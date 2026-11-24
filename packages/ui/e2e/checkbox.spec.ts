@@ -22,12 +22,24 @@ test.describe("Checkbox", () => {
     ).toBeChecked()
   })
 
-  test("a wrapping label toggles it", async ({ openStory, page }) => {
-    await openStory("components-checkbox--sizes")
+  test("the medium checkbox toggles", async ({ openStory, page }) => {
+    await openStory("components-checkbox--size")
     const box = page.getByRole("checkbox", { name: "md" })
 
     await expect(box).toBeChecked()
-    await page.getByText("md", { exact: true }).click()
+    await box.click()
+    await expect(box).not.toBeChecked()
+  })
+
+  test("a wrapping label toggles it", async ({ openStory, page }) => {
+    await openStory("components-checkbox--mixed")
+    const box = page.getByRole("checkbox", { name: "Select all" })
+    const label = page.locator("label").filter({ hasText: "Select all" })
+
+    await expect(box).toBeChecked({ indeterminate: true })
+    await label.click()
+    await expect(box).toBeChecked()
+    await label.click()
     await expect(box).not.toBeChecked()
   })
 
