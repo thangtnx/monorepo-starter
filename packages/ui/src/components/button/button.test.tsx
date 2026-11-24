@@ -1,5 +1,8 @@
 import { a11y, render, screen } from "#test"
+import { createCss } from "../../core"
+import { theme } from "../../theme"
 import { Button } from "./button"
+import { buttonStyle } from "./button.style"
 
 describe("<Button />", () => {
   test("renders a non-submitting button with the default style", () => {
@@ -57,6 +60,77 @@ describe("<Button />", () => {
     render(<Button>Save</Button>)
 
     expect(document.querySelectorAll("style")).toHaveLength(0)
+  })
+
+  test("disables a busy button and supports loading text and placement", async () => {
+    const onClick = vi.fn()
+    const { rerender, user } = render(
+      <Button loading onClick={onClick}>
+        Save
+      </Button>,
+    )
+    const button = screen.getByRole("button", { name: "Save" })
+    expect(button).toBeDisabled()
+    expect(button).toHaveAttribute("aria-busy", "true")
+    expect(button.firstElementChild).toHaveClass("ui-button-loading-indicator")
+    expect(button.querySelector(".ui-loading")).toHaveAttribute(
+      "data-indicator",
+      "oval",
+    )
+    await user.click(button)
+    expect(onClick).not.toHaveBeenCalled()
+
+    rerender(
+      <Button loading loadingPlacement="end" loadingText="Saving">
+        Save
+      </Button>,
+    )
+    expect(
+      screen.getByRole("button", { name: "Saving" }).lastElementChild,
+    ).toHaveClass("ui-button-loading-indicator")
+    expect(screen.queryByRole("img")).not.toBeInTheDocument()
+  })
+
+  test("allows built-in indicators to be named and sized", () => {
+    render(
+      <Button
+        loading
+        loadingIcon="dots"
+        loadingProps={{
+          "aria-label": "Saving settings",
+          decorative: false,
+          height: 24,
+          width: 24,
+        }}
+      >
+        Save
+      </Button>,
+    )
+    const indicator = screen.getByRole("img", { name: "Saving settings" })
+    expect(indicator).toHaveAttribute("data-indicator", "dots")
+    expect(indicator).toHaveAttribute("width", "24")
+    expect(indicator).toHaveAttribute("height", "24")
+  })
+
+  test("overlays custom indicators while keeping the original name accessible", async () => {
+    const css = createCss(theme, { button: buttonStyle })
+    expect(css).toMatch(
+      /\.ui-button > \.ui-button-loading-label\s*\{\s*opacity: 0;/,
+    )
+    expect(css).toMatch(
+      /\.ui-button\[data-loading-overlay\] > \.ui-button-loading-indicator\s*\{[^}]*position: absolute;/,
+    )
+    await a11y(
+      <Button loading loadingIcon={<span>Working</span>}>
+        Save
+      </Button>,
+    )
+    const button = screen.getByRole("button", { name: "Save" })
+    expect(button).toHaveAttribute("data-loading-overlay", "true")
+    expect(screen.getByText("Working").parentElement).toHaveAttribute(
+      "aria-hidden",
+      "true",
+    )
   })
 
   test("has no accessibility violations", async () => {

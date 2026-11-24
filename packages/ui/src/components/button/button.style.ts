@@ -2,6 +2,12 @@ import { defineComponentStyle } from "../../core/define"
 
 export const buttonStyle = defineComponentStyle({
   base: {
+    "& > .ui-button-loading-label": { opacity: 0 },
+    "&[data-loading-overlay] > .ui-button-loading-indicator": {
+      left: "50%",
+      position: "absolute",
+      translate: "-50% 0",
+    },
     alignItems: "center",
     appearance: "none",
     borderColor: "transparent",

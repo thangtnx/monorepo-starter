@@ -1,5 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react-vite"
 import { colorSchemes } from "../../theme/semantic-tokens/color-schemes"
+import { Loading as BusyIndicator } from "../loading"
 import { Button } from "./button"
 import { buttonStyle } from "./button.style"
 
@@ -64,3 +65,31 @@ export const ColorSchemes: Story = {
 export const Disabled: Story = { args: { disabled: true } }
 
 export const FullWidth: Story = { args: { fullWidth: true } }
+
+export const Loading: Story = {
+  render: () => (
+    <div style={row}>
+      <Button loading>Save settings</Button>
+      <Button loading loadingText="Saving settings">
+        Save settings
+      </Button>
+      <Button loading loadingPlacement="end" loadingText="Saving settings">
+        Save settings
+      </Button>
+      <Button
+        loading
+        loadingIcon="dots"
+        loadingProps={{ height: 24, width: 24 }}
+      >
+        Save settings
+      </Button>
+      <Button
+        loading
+        loadingIcon={<BusyIndicator.Puff decorative />}
+        loadingText="Saving settings"
+      >
+        Save settings
+      </Button>
+    </div>
+  ),
+}
