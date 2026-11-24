@@ -16,7 +16,7 @@ export const toKebab = (value: string) =>
 const categoryPatterns: [TokenCategory, RegExp][] = [
   [
     "colors",
-    /^(color|background|backgroundColor|border(Top|Right|Bottom|Left|Block|Inline)?Color|outlineColor|fill|stroke|accentColor|caretColor|textDecorationColor)$/,
+    /^(color|background|backgroundColor|border(Top|Right|Bottom|Left|(Block|Inline)(Start|End)?)?Color|outlineColor|fill|stroke|accentColor|caretColor|textDecorationColor)$/,
   ],
   [
     "spaces",

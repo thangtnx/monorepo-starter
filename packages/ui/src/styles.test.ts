@@ -1,5 +1,6 @@
 import { componentStyles } from "./component-styles"
 import { createCss } from "./core"
+import { createTokenVars } from "./core/tokens"
 import { theme } from "./theme"
 
 const css = createCss(theme, componentStyles)
@@ -58,6 +59,43 @@ describe("compiled stylesheet", () => {
 
     expect(declarations.length).toBeGreaterThan(50)
     expect(invalid).toStrictEqual([])
+  })
+
+  test("resolves bare color tokens, including logical border sides", () => {
+    const logicalBorders = createCss(theme, {
+      "logical-borders": {
+        base: {
+          borderBlockEndColor: "border",
+          borderBlockStartColor: "border",
+          borderInlineEndColor: "border",
+          borderInlineStartColor: "border",
+        },
+      },
+    })
+    const vars = createTokenVars(theme)
+    const colorDeclaration =
+      /^\s*(?:[\w-]+-color|color|background|fill|stroke):\s*([^;]+);/gm
+    const unresolved = [...css.matchAll(colorDeclaration)].filter(
+      ([, value = ""]) =>
+        value.split(/[\s,]+/).some((part) => vars.has(`colors.${part}`)),
+    )
+
+    expect(unresolved.map(([rule]) => rule.trim())).toStrictEqual([])
+    for (const side of [
+      "block-start",
+      "block-end",
+      "inline-start",
+      "inline-end",
+    ])
+      expect(logicalBorders).toContain(
+        `border-${side}-color: var(--colors-border);`,
+      )
+  })
+
+  test("compiles the external link indicator as visible inline content", () => {
+    expect(css).toMatch(
+      /\.ui-link > \[data-part=external-indicator\] \{\s*display: inline;\s*margin-inline-start: var\(--spaces-1\);\s*\}/,
+    )
   })
 
   test("stays within its size budget", () => {
