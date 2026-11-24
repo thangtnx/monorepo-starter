@@ -20,6 +20,8 @@
     "storybook": "storybook dev -p 6006",
     "build:storybook": "storybook build -o storybook-static",
     "test": "vitest",
+    "pretest:e2e": "pnpm build:storybook",
+    "test:e2e": "playwright test",
     "test:coverage": "vitest run --coverage",
     "typecheck": "tsgo",
     "lint": "oxlint . --max-warnings=0",
@@ -35,6 +37,8 @@
   },
   "devDependencies": {
     "@monorepo/workspace": "workspace:*",
+    "@axe-core/playwright": "catalog:",
+    "@playwright/test": "catalog:",
     "@storybook/addon-a11y": "catalog:",
     "@storybook/addon-docs": "catalog:",
     "@storybook/react-vite": "catalog:",

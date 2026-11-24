@@ -39,3 +39,7 @@ storybook-static
 
 # local plans and research reports
 plans
+
+# playwright
+test-results
+playwright-report

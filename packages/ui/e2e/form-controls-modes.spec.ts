@@ -1,0 +1,77 @@
+import type { Locator, Page } from "@playwright/test"
+import { expect, expectTokens, modes, paint, test } from "./fixtures"
+
+const tokenControls = [
+  {
+    id: "components-textarea--basic",
+    checks: [
+      ["background-color", "--colors-bg"],
+      ["border-top-color", "--colors-border-emphasized"],
+    ],
+    pick: (page: Page) => page.getByRole("textbox", { name: "Notes" }),
+  },
+  {
+    id: "components-checkbox--checked",
+    checks: [["accent-color", "--colors-primary-solid"]],
+    pick: (page: Page) => page.getByRole("checkbox", { name: "Send updates" }),
+  },
+  {
+    id: "components-radio--checked",
+    checks: [["accent-color", "--colors-primary-solid"]],
+    pick: (page: Page) =>
+      page.getByRole("radio", { name: "Standard shipping" }),
+  },
+  {
+    id: "components-switch--checked",
+    checks: [["background-color", "--colors-primary-solid"]],
+    pick: (page: Page) => page.getByRole("switch", { name: "Notifications" }),
+  },
+] satisfies {
+  checks: [string, string][]
+  id: string
+  pick: (page: Page) => Locator
+}[]
+
+// Properties each control sets itself must equal their token in both modes.
+for (const { id, checks, pick } of tokenControls)
+  test(`${id} takes its colors from the theme in both modes`, async ({
+    openStory,
+    page,
+  }) => {
+    for (const mode of modes) {
+      await openStory(id, mode)
+      await expectTokens(page, pick(page), checks)
+    }
+  })
+
+// Select is rewritten as a custom combobox; this keeps a coarse mode check.
+test("components-select--basic swaps its palette between light and dark", async ({
+  openStory,
+  page,
+}) => {
+  const select = page.getByRole("combobox", { name: "Contact method" })
+  await openStory("components-select--basic", "light")
+  const light = await paint(select)
+  await openStory("components-select--basic", "dark")
+
+  expect(await paint(select)).not.toBe(light)
+})
+
+test("form controls fit a narrow viewport", async ({ openStory, page }) => {
+  await page.setViewportSize({ height: 700, width: 360 })
+  for (const id of [
+    "components-textarea--invalid",
+    "components-select--invalid",
+    "components-checkbox--invalid",
+    "components-radiogroup--invalid",
+    "components-switch--invalid",
+  ]) {
+    await openStory(id)
+    const overflow = await page.evaluate(
+      () =>
+        document.documentElement.scrollWidth -
+        document.documentElement.clientWidth,
+    )
+    expect(overflow, id).toBeLessThanOrEqual(0)
+  }
+})
