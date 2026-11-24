@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react-vite"
-import { colorSchemes } from "../../theme/semantic-tokens"
+import { colorSchemes } from "../../theme/semantic-tokens/color-schemes"
 import { Badge } from "./badge"
 import { badgeStyle } from "./badge.style"
 
