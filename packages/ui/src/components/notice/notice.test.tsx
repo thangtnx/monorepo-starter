@@ -107,7 +107,7 @@ describe("notice", () => {
       error: <span>Offline</span>,
       success: <span>Online</span>,
     }
-    const { container, rerender } = render(
+    const { rerender } = render(
       <Notice.Item
         loadingScheme="rings"
         status="error"
@@ -115,10 +115,12 @@ describe("notice", () => {
         title="Upload pending"
       />,
     )
-    expect(screen.getByRole("alert")).toHaveAttribute("aria-busy", "true")
-    expect(
-      container.querySelector("[data-indicator='rings']"),
-    ).toBeInTheDocument()
+    const alert = screen.getByRole("alert")
+    expect(alert).toHaveAttribute("aria-busy", "true")
+    expect(alert.querySelector("svg.ui-alert-loading")).toHaveAttribute(
+      "viewBox",
+      "0 0 45 45",
+    )
     expect(screen.queryByText("Offline")).not.toBeInTheDocument()
     rerender(
       <Notice.Item

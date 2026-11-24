@@ -2,6 +2,7 @@ import { a11y, render, screen } from "#test"
 import { createCss } from "../../core"
 import { theme } from "../../theme"
 import { Skeleton, SkeletonCircle, SkeletonText } from "./index"
+import { skeletonTextStyle } from "./skeleton-text.style"
 import { skeletonStyle } from "./skeleton.style"
 
 describe("skeleton", () => {
@@ -56,7 +57,7 @@ describe("skeleton", () => {
         data-testid="skeleton"
         endColor="#333"
         height="2rem"
-        startColor="tomato"
+        startColor="danger.solid"
         width={150}
       >
         Profile
@@ -64,10 +65,16 @@ describe("skeleton", () => {
     )
     const skeleton = screen.getByTestId("skeleton")
     expect(skeleton).toHaveAttribute("data-fit-content", "true")
-    expect(skeleton).toHaveAttribute("data-width", "150px")
-    expect(skeleton).toHaveAttribute("data-height", "2rem")
-    expect(skeleton).toHaveAttribute("data-start-color", "tomato")
-    expect(skeleton).toHaveAttribute("data-end-color", "#333")
+    expect(skeleton.style.getPropertyValue("--skeleton-width")).toBe("150px")
+    expect(skeleton.style.getPropertyValue("--skeleton-height")).toBe("2rem")
+    expect(skeleton.style.getPropertyValue("--skeleton-start")).toBe(
+      "var(--colors-danger-solid)",
+    )
+    expect(skeleton.style.getPropertyValue("--skeleton-end")).toBe("#333")
+    const css = createCss(theme, { skeleton: skeletonStyle })
+    expect(css).toContain("var(--skeleton-duration, 1.2s)")
+    expect(css).toContain("var(--skeleton-start, var(--colors-bg-emphasized))")
+    expect(css).toContain("var(--skeleton-width, var(--skeleton-fit, 100%))")
     rerender(
       <Skeleton
         data-testid="skeleton"
@@ -79,9 +86,19 @@ describe("skeleton", () => {
       </Skeleton>,
     )
     expect(skeleton).toHaveAttribute("data-fit-content", "false")
-    expect(skeleton).toHaveAttribute("data-duration", "0.3s")
+    expect(skeleton.style.getPropertyValue("--skeleton-duration")).toBe("0.3s")
     rerender(<Skeleton data-testid="skeleton" />)
     expect(skeleton).toHaveAttribute("data-fit-content", "false")
+  })
+
+  test("sets SkeletonText gap from a space token and retains a CSS fallback", () => {
+    render(<SkeletonText gap="4" rootProps={{ "aria-label": "Placeholder" }} />)
+    const placeholder = screen.getByLabelText("Placeholder")
+    expect(placeholder.style.getPropertyValue("--skeleton-gap")).toBe(
+      "var(--spaces-4)",
+    )
+    const css = createCss(theme, { "skeleton-text": skeletonTextStyle })
+    expect(css).toContain("gap: var(--skeleton-gap, var(--spaces-2))")
   })
 
   test("suppresses pulse, shine and loaded fade when reduced motion is requested", async () => {

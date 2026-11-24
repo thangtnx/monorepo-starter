@@ -2,6 +2,7 @@ import type { ComponentProps } from "react"
 import type { ComponentStyleProps } from "../../core/define"
 import { Children } from "react"
 import { splitStyleProps } from "../../core/split-style-props"
+import { feedbackValue } from "../loading/feedback-style"
 import { skeletonStyle } from "./skeleton.style"
 
 export interface SkeletonProps
@@ -47,19 +48,34 @@ export function Skeleton({
     <div
       {...rest}
       {...attributes}
+      style={{
+        ...rest.style,
+        ...(animationDuration === undefined
+          ? {}
+          : {
+              "--skeleton-duration": feedbackValue(
+                "animationDuration",
+                animationDuration,
+                "s",
+              ),
+            }),
+        ...(endColor === undefined
+          ? {}
+          : { "--skeleton-end": feedbackValue("color", endColor) }),
+        ...(height === undefined
+          ? {}
+          : { "--skeleton-height": feedbackValue("height", height) }),
+        ...(startColor === undefined
+          ? {}
+          : { "--skeleton-start": feedbackValue("color", startColor) }),
+        ...(width === undefined
+          ? {}
+          : { "--skeleton-width": feedbackValue("width", width) }),
+      }}
       aria-hidden={loading ? true : rest["aria-hidden"]}
-      data-duration={
-        typeof animationDuration === "number"
-          ? `${animationDuration}s`
-          : animationDuration
-      }
-      data-end-color={endColor}
       data-fit-content={fitContent}
-      data-height={typeof height === "number" ? `${height}px` : height}
       data-loading={loading}
       data-shape={shape}
-      data-start-color={startColor}
-      data-width={typeof width === "number" ? `${width}px` : width}
       inert={loading || rest.inert}
     >
       <div className="ui-skeleton-content">{children}</div>

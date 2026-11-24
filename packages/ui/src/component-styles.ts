@@ -26,11 +26,15 @@ import { gridStyle } from "./components/grid/grid.style"
 import { headingStyle } from "./components/heading/heading.style"
 import { inputStyle } from "./components/input/input.style"
 import { linkStyle } from "./components/link/link.style"
+import { loadingLayerStyle } from "./components/loading/loading-layer.style"
+import { loadingRegionStyle } from "./components/loading/loading-region.style"
+import { loadingSuspenseStyle } from "./components/loading/loading-suspense.style"
 import { loadingStyle } from "./components/loading/loading.style"
 import { noticeCloseButtonStyle } from "./components/notice/notice-close-button.style"
 import { noticeContentStyle } from "./components/notice/notice-content.style"
 import { noticeItemStyle } from "./components/notice/notice-item.style"
 import { noticeStyle } from "./components/notice/notice.style"
+import { progressPaintStyle } from "./components/progress/progress-paint.style"
 import { progressStyle } from "./components/progress/progress.style"
 import { radioGroupStyle } from "./components/radio/radio-group.style"
 import { radioStyle } from "./components/radio/radio.style"
@@ -75,11 +79,15 @@ export const componentStyles: { [key: string]: ComponentStyle } = {
   input: inputStyle,
   link: linkStyle,
   loading: loadingStyle,
+  "loading-layer": loadingLayerStyle,
+  "loading-region": loadingRegionStyle,
+  "loading-suspense": loadingSuspenseStyle,
   notice: noticeStyle,
   "notice-close-button": noticeCloseButtonStyle,
   "notice-content": noticeContentStyle,
   "notice-item": noticeItemStyle,
   progress: progressStyle,
+  "progress-paint": progressPaintStyle,
   radio: radioStyle,
   "radio-group": radioGroupStyle,
   select: selectStyle,

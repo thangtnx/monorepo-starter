@@ -26,7 +26,7 @@ setup and the full command list.
 - Add shared dependency versions to the `catalog:` in `pnpm-workspace.yaml`; reference them as `"catalog:"`.
 - Internal dependencies use `workspace:*`.
 - Tests live next to the source as `*.test.ts(x)`. Component tests render with `render`/`a11y` from `#test`, query by role and accessible name, and always include an `a11y` check.
-- Applications load static CSS compiled at build time. Storybook compiles CSS live from the TypeScript sources. Components set only `className` and `data-*` attributes through `splitStyleProps`; never inject `<style>` or compute CSS in render. Register each new `*.style.ts` in `packages/ui/src/component-styles.ts`.
+- Applications load static CSS compiled at build time. Storybook compiles CSS live from the TypeScript sources. Components set `className`, `data-*` and CSS custom properties on `style`. Use `splitStyleProps` for classes and attributes, and keep stylesheet rules static. Register each new `*.style.ts` in `packages/ui/src/component-styles.ts`.
 - Use theme tokens in styles. Theme definitions live in `packages/ui/src/theme/{tokens,semantic-tokens,styles}`, with a story beside each definition module.
 - Every component has a story (`<name>.stories.tsx`) covering its variants, sizes and states.
 - Prefer native elements (`<button>`, `<input>`, `<dialog>`, `<select>`, Popover API) for behavior and accessibility. State is never shown by color alone: pair it with text or a symbol.

@@ -30,6 +30,17 @@ describe("progress", () => {
     expect(bar).not.toHaveAttribute("aria-valuenow")
   })
 
+  test("applies a duration token through a custom property and retains a stylesheet fallback", () => {
+    render(<Progress duration="slower" indeterminate />)
+    expect(
+      screen
+        .getByRole("progressbar")
+        .style.getPropertyValue("--progress-duration"),
+    ).toBe("var(--durations-slower)")
+    const css = createCss(theme, { progress: progressStyle })
+    expect(css).toContain("var(--progress-duration, 1s)")
+  })
+
   test("has reduced-motion styles and an accessible name without a caller label", async () => {
     const css = createCss(theme, { progress: progressStyle })
     expect(css).toMatch(

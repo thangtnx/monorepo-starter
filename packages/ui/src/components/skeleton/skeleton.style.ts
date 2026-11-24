@@ -7,7 +7,7 @@ export const skeletonStyle = defineComponentStyle({
       display: "inline-block",
     },
     "&[data-loading='false']": {
-      animation: "ui-skeleton-fade var(--skeleton-duration, 100ms)",
+      animation: "ui-feedback-fade-in var(--skeleton-duration, 100ms)",
     },
     "&[data-loading='true']": {
       "& > .ui-skeleton-content": { visibility: "hidden" },
@@ -24,13 +24,11 @@ export const skeletonStyle = defineComponentStyle({
       inlineSize: "var(--skeleton-height, {sizes.6})",
     },
     "&[data-shape='text']": { "--skeleton-default-height": "{sizes.4}" },
-    "@supports (animation-duration: attr(data-duration type(<time>)))": {
-      "--skeleton-duration": "attr(data-duration type(<time>))",
-      "--skeleton-end": "attr(data-end-color type(<color>))",
-      "--skeleton-height": "attr(data-height type(<length> | <percentage>))",
-      "--skeleton-start": "attr(data-start-color type(<color>))",
-      "--skeleton-width": "attr(data-width type(<length> | <percentage>))",
-    },
+    "--skeleton-duration": "initial",
+    "--skeleton-end": "{colors.bg.muted}",
+    "--skeleton-height": "initial",
+    "--skeleton-start": "{colors.bg.emphasized}",
+    "--skeleton-width": "initial",
     _motionReduce: { animationName: "none !important" },
   },
   variants: {
@@ -44,7 +42,7 @@ export const skeletonStyle = defineComponentStyle({
         "--skeleton-animation":
           "ui-skeleton-shine var(--skeleton-duration, 5s) linear infinite",
         backgroundImage:
-          "linear-gradient(100deg, var(--skeleton-start, {colors.bg.emphasized}) 25%, var(--skeleton-end, {colors.bg.muted}) 50%, var(--skeleton-start, {colors.bg.emphasized}) 75%)",
+          "linear-gradient(100deg, var(--skeleton-start) 25%, var(--skeleton-end) 50%, var(--skeleton-start) 75%)",
         backgroundPosition: "-100% 0",
         backgroundSize: "200% 100%",
       },

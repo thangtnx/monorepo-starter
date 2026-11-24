@@ -1,25 +1,24 @@
-import type { LoadingProps, LoadingScheme } from "../loading/loading"
-import { splitStyleProps } from "../../core/split-style-props"
-import { LoadingIndicator } from "../loading/loading"
-import { alertLoadingStyle } from "./alert-loading.style"
+import type { LoadingProps } from "../loading/loading"
+import type { LoadingScheme } from "../loading/loading-schemes"
+import { cx } from "@monorepo/utils"
+import { loadingSchemes } from "../loading/loading-schemes"
 
 export interface AlertLoadingProps extends LoadingProps {
   /** The loading indicator to display. @default "oval" */
   loadingScheme?: LoadingScheme
 }
 
-export function AlertLoading({ loadingScheme, ...props }: AlertLoadingProps) {
-  const [attributes, rest] = splitStyleProps(
-    "alert-loading",
-    alertLoadingStyle,
-    props,
-  )
+export function AlertLoading({
+  className,
+  loadingScheme = "oval",
+  ...props
+}: AlertLoadingProps) {
+  const Indicator = loadingSchemes[loadingScheme]
   return (
-    <LoadingIndicator
-      {...attributes}
-      {...rest}
+    <Indicator
+      {...props}
+      className={cx("ui-alert-loading", className)}
       decorative
-      scheme={loadingScheme}
     />
   )
 }

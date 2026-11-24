@@ -31,17 +31,28 @@ describe("circle-progress", () => {
     )
     expect(document.getElementById("range")).toHaveAttribute(
       "stroke",
-      "var(--colors-danger-solid, var(--circle-range))",
+      "var(--colors-danger-solid, var(--progress-range))",
     )
     expect(document.getElementById("track")).toHaveAttribute(
       "stroke",
-      "var(--color-scheme-subtle, var(--circle-track))",
+      "var(--color-scheme-subtle, var(--progress-track))",
     )
     expect(document.getElementById("track")).toHaveAttribute(
       "stroke-width",
       "2",
     )
     expect(screen.getByText("50%")).toHaveClass("ui-circle-progress-label")
+  })
+
+  test("applies numeric duration in seconds and retains a stylesheet fallback", () => {
+    render(<CircleProgress.Root duration={2.4} indeterminate />)
+    expect(
+      screen
+        .getByRole("progressbar")
+        .style.getPropertyValue("--circle-duration"),
+    ).toBe("2.4s")
+    const css = createCss(theme, { "circle-progress": circleProgressStyle })
+    expect(css).toContain("var(--circle-duration, 1.5s)")
   })
 
   test("omits the value in indeterminate mode and suppresses motion when requested", async () => {

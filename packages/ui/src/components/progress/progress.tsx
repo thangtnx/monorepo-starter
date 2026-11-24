@@ -1,10 +1,11 @@
 "use client"
 
-import type { ComponentProps } from "react"
+import type { ComponentProps, CSSProperties } from "react"
 import type { ComponentStyleProps } from "../../core/define"
 import type { UseProgressProps } from "./use-progress"
 import { useId } from "react"
 import { splitStyleProps } from "../../core/split-style-props"
+import { feedbackValue } from "../loading/feedback-style"
 import { progressStyle } from "./progress.style"
 import { progressPaint, useProgress } from "./use-progress"
 
@@ -68,9 +69,21 @@ export function Progress({
       {...rest}
       {...attributes}
       {...rootProps}
+      className={`${attributes.className} ui-progress-paint`}
+      style={
+        duration === undefined
+          ? rest.style
+          : ({
+              ...rest.style,
+              "--progress-duration": feedbackValue(
+                "animationDuration",
+                duration,
+                "s",
+              ),
+            } as CSSProperties)
+      }
       aria-label={label ?? (labelledBy ? undefined : rootProps["aria-label"])}
       aria-labelledby={labelledBy}
-      data-duration={typeof duration === "number" ? `${duration}s` : duration}
     >
       <svg aria-hidden="true" focusable="false" height="100%" width="100%">
         {(striped || animated) && (
@@ -94,7 +107,10 @@ export function Progress({
           height="100%"
           width="100%"
         />
-        <g className="ui-progress-fill">
+        <g
+          className="ui-progress-fill"
+          data-animate={progress.indeterminate || undefined}
+        >
           <rect
             fill={progressPaint(rangeColor, "var(--progress-range)")}
             height="100%"
@@ -108,6 +124,9 @@ export function Progress({
             <svg height="100%" overflow="hidden" width={width}>
               <rect
                 className="ui-progress-stripes"
+                data-animate={
+                  (animated && !progress.indeterminate) || undefined
+                }
                 fill={`url(#${id})`}
                 height="100%"
                 width="calc(100% + 12px)"

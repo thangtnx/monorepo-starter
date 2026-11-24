@@ -2,42 +2,27 @@ import type { Meta, StoryObj } from "@storybook/react-vite"
 import { use } from "react"
 import { colorSchemes } from "../../theme/semantic-tokens/color-schemes"
 import { Loading } from "./index"
+
 const meta = {
-  component: Loading.Indicator,
+  component: Loading.Oval,
   title: "Components/Loading",
-} satisfies Meta<typeof Loading.Indicator>
+} satisfies Meta<typeof Loading.Oval>
 
 export default meta
-
 type Story = StoryObj<typeof meta>
 
-export const Indicators: Story = {
-  render: () => (
-    <div
-      style={{
-        display: "flex",
-        flexWrap: "wrap",
-        fontSize: "var(--font-sizes-2xl)",
-        gap: "var(--spaces-4)",
-      }}
-    >
-      {Loading.schemes.map((scheme) => (
-        <Loading.Indicator
-          key={scheme}
-          aria-label={`Loading, ${scheme}`}
-          scheme={scheme}
-        />
-      ))}
-    </div>
-  ),
+export const Audio: Story = { render: (args) => <Loading.Audio {...args} /> }
+export const Circles: Story = {
+  render: (args) => <Loading.Circles {...args} />,
 }
+export const Dots: Story = { render: (args) => <Loading.Dots {...args} /> }
+export const Grid: Story = { render: (args) => <Loading.Grid {...args} /> }
+export const Oval: Story = {}
+export const Puff: Story = { render: (args) => <Loading.Puff {...args} /> }
+export const Rings: Story = { render: (args) => <Loading.Rings {...args} /> }
 
 export const CustomDurationAndPaint: Story = {
-  args: {
-    duration: "2s",
-    scheme: "rings",
-    secondaryColor: "var(--colors-info-solid)",
-  },
+  args: { duration: "2s", secondaryColor: "info.solid" },
 }
 
 export const ColorSchemes: Story = {

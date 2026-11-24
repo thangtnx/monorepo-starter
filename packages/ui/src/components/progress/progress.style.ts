@@ -2,14 +2,7 @@ import { defineComponentStyle } from "../../core/define"
 
 export const progressStyle = defineComponentStyle({
   base: {
-    "& > svg": { display: "block" },
-    "&[data-animated='true'][data-indeterminate='false'] .ui-progress-stripes":
-      {
-        animation:
-          "ui-progress-stripes var(--progress-duration, 1s) linear infinite",
-        _motionReduce: { animationName: "none" },
-      },
-    "&[data-indeterminate='true'] .ui-progress-fill": {
+    "& .ui-progress-fill[data-animate]": {
       animation:
         "ui-linear-progress var(--progress-duration, 1s) ease-in-out infinite",
       transform: "translateX(100%)",
@@ -20,9 +13,12 @@ export const progressStyle = defineComponentStyle({
         transform: "scaleX(4)",
       },
     },
-    "@supports (animation-duration: attr(data-duration type(<time>)))": {
-      "--progress-duration": "attr(data-duration type(<time>), 1s)",
+    "& .ui-progress-stripes[data-animate]": {
+      animation:
+        "ui-progress-stripes var(--progress-duration, 1s) linear infinite",
+      _motionReduce: { animationName: "none" },
     },
+    "--progress-duration": "initial",
     overflow: "hidden",
   },
   props: {
@@ -44,16 +40,7 @@ export const progressStyle = defineComponentStyle({
     lg: { height: "4" },
     xl: { height: "5" },
   },
-  variants: {
-    outline: {
-      "--progress-range": "{colors.colorScheme.solid}",
-      "--progress-track": "{colors.bg.emphasized}",
-    },
-    subtle: {
-      "--progress-range": "{colors.colorScheme.outline}",
-      "--progress-track": "{colors.colorScheme.subtle}",
-    },
-  },
+  variants: { outline: {}, subtle: {} },
   defaultProps: {
     colorScheme: "primary",
     size: "md",

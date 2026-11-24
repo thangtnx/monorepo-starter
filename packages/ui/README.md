@@ -1,7 +1,7 @@
 # @monorepo/ui
 
 A design system: a theme, a stylesheet generated once from it, and React
-components that only set class names and `data-*` attributes. No CSS is built
+components that set `className`, `data-*` and CSS custom properties on `style`. No CSS is built
 or injected at runtime.
 
 ## Usage

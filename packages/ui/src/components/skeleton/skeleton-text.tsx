@@ -1,6 +1,7 @@
-import type { ComponentProps } from "react"
+import type { ComponentProps, CSSProperties } from "react"
 import type { SkeletonProps } from "./skeleton"
 import { splitStyleProps } from "../../core/split-style-props"
+import { feedbackValue } from "../loading/feedback-style"
 import { Skeleton } from "./skeleton"
 import { skeletonTextStyle } from "./skeleton-text.style"
 
@@ -33,7 +34,14 @@ export function SkeletonText({
     <div
       {...rest}
       {...attributes}
-      data-gap={typeof gap === "number" ? `${gap}px` : gap}
+      style={
+        gap === undefined
+          ? rest.style
+          : ({
+              ...rest.style,
+              "--skeleton-gap": feedbackValue("gap", gap),
+            } as CSSProperties)
+      }
     >
       <Skeleton
         {...props}

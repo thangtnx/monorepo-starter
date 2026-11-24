@@ -1,6 +1,15 @@
 import type { StyleSheet } from "../../core/types"
 
 export const globalStyle: StyleSheet = {
+  "16.7%": {
+    "@keyframes ui-loading-ring-center": { transform: "scale(.125)" },
+  },
+  "50%": {
+    "@keyframes ui-loading-pulse": {
+      opacity: "var(--loading-mid-opacity)",
+      transform: "var(--loading-mid-transform)",
+    },
+  },
   "*, *::before, *::after": {
     _motionReduce: {
       animationDuration: "1ms !important",
@@ -21,17 +30,25 @@ export const globalStyle: StyleSheet = {
     lineHeight: "normal",
     WebkitFontSmoothing: "antialiased",
   },
-  // These keyframes use each animated element's own styles as the implicit `to` frame.
+  // The other endpoint uses the element's underlying styles.
   from: {
+    "@keyframes ui-feedback-fade-in": { opacity: 0 },
     "@keyframes ui-feedback-spin": { transform: "rotate(-360deg)" },
     "@keyframes ui-linear-progress": { transform: "translateX(-25%)" },
-    "@keyframes ui-loading-beat": { opacity: 0.45, transform: "scale(0.65)" },
-    "@keyframes ui-loading-puff": { opacity: 0.85, transform: "scale(0.5)" },
     "@keyframes ui-progress-stripes": { transform: "translateX(-12px)" },
-    "@keyframes ui-skeleton-fade": { opacity: 0 },
     "@keyframes ui-skeleton-pulse": {
       backgroundColor: "var(--skeleton-start, {colors.bg.emphasized})",
     },
     "@keyframes ui-skeleton-shine": { backgroundPosition: "100% 0" },
+  },
+  to: {
+    "@keyframes ui-loading-circle-flash": {
+      fillOpacity: "var(--loading-flash-fill)",
+    },
+    "@keyframes ui-loading-ripple": {
+      strokeOpacity: 0,
+      strokeWidth: "var(--loading-end-stroke)",
+      transform: "var(--loading-end-transform)",
+    },
   },
 }

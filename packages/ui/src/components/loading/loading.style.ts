@@ -2,27 +2,36 @@ import { defineComponentStyle } from "../../core/define"
 
 export const loadingStyle = defineComponentStyle({
   base: {
-    "&:not([height])": { height: "1em" },
-    "&:not([width])": { width: "1em" },
-    "& [data-motion='beat']:nth-child(3n)": { animationDelay: "-300ms" },
-    "& [data-motion='beat']:nth-child(3n + 2)": { animationDelay: "-150ms" },
-    "& [data-motion='puff']": { "--loading-motion": "ui-loading-puff" },
-    "& [data-motion='spin']": {
-      "--loading-direction": "normal",
-      "--loading-easing": "linear",
-      "--loading-motion": "ui-feedback-spin",
-    },
-    "& [data-motion]": {
-      animation:
-        "var(--loading-motion, ui-loading-beat) var(--loading-duration, 1s) var(--loading-easing, ease) infinite var(--loading-direction, alternate)",
+    "& .ui-loading-motion": {
+      animation: "var(--loading-animation)",
+      animationDelay: "var(--loading-delay)",
+      animationDuration: "var(--loading-cycle, var(--loading-duration, 1s))",
+      transform: "var(--loading-rest)",
       transformBox: "fill-box",
-      transformOrigin: "center",
-      _motionReduce: { animationName: "none" },
+      transformOrigin: "var(--loading-origin)",
+      _motionReduce: {
+        animationName: "none",
+        transform: "var(--loading-still, var(--loading-rest))",
+      },
+    },
+    "& .ui-loading-oval-track": {
+      stroke:
+        "var(--loading-secondary, color-mix(in srgb, currentColor 50%, transparent))",
     },
     "&[data-scheme]": { color: "colorScheme.fg" },
-    "@supports (animation-duration: attr(data-duration type(<time>)))": {
-      "--loading-duration": "attr(data-duration type(<time>), 1s)",
-    },
+    "--loading-animation": "none",
+    "--loading-cycle": "initial",
+    "--loading-delay": "0s",
+    "--loading-duration": "initial",
+    "--loading-end-stroke": "2px",
+    "--loading-end-transform": "scale(20)",
+    "--loading-flash-fill": 1,
+    "--loading-mid-opacity": 1,
+    "--loading-mid-transform": "none",
+    "--loading-origin": "center",
+    "--loading-rest": "none",
+    "--loading-secondary": "initial",
+    "--loading-still": "initial",
     display: "inline-block",
     flexShrink: 0,
     verticalAlign: "middle",

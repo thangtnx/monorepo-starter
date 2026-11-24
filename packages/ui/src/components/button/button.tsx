@@ -2,7 +2,7 @@ import type { ComponentProps, ReactNode } from "react"
 import type { ComponentStyleProps } from "../../core/define"
 import type { LoadingProps, LoadingScheme } from "../loading"
 import { splitStyleProps } from "../../core/split-style-props"
-import { LoadingIndicator, loadingSchemes } from "../loading"
+import { isLoadingScheme, loadingSchemes } from "../loading/loading-schemes"
 import { buttonStyle } from "./button.style"
 
 export interface ButtonProps
@@ -40,17 +40,15 @@ export function Button({
   ...props
 }: ButtonProps) {
   const [styleAttributes, rest] = splitStyleProps("button", buttonStyle, props)
-  const scheme = loadingSchemes.find((name) => name === loadingIcon)
+  const Indicator = isLoadingScheme(loadingIcon)
+    ? loadingSchemes[loadingIcon]
+    : undefined
   const indicator = loading && loadingIcon != null && (
     <span
       className="ui-button-loading-indicator"
-      aria-hidden={scheme ? undefined : true}
+      aria-hidden={Indicator ? undefined : true}
     >
-      {scheme ? (
-        <LoadingIndicator decorative {...loadingProps} scheme={scheme} />
-      ) : (
-        loadingIcon
-      )}
+      {Indicator ? <Indicator decorative {...loadingProps} /> : loadingIcon}
     </span>
   )
   const keepLabel = loading && loadingText == null

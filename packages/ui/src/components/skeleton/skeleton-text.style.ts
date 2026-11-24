@@ -5,10 +5,8 @@ export const skeletonTextStyle = defineComponentStyle({
     "& > [data-loading='true']:last-child:not(:first-child)": {
       maxWidth: "80%",
     },
-    "@supports (gap: attr(data-gap type(<length>)))": {
-      gap: "attr(data-gap type(<length>), {spaces.2})",
-    },
+    "--skeleton-gap": "initial",
     display: "grid",
-    gap: "2",
+    gap: "var(--skeleton-gap, {spaces.2})",
   },
 })

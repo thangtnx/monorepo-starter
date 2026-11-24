@@ -1,8 +1,9 @@
-import type { ComponentProps } from "react"
+import type { ComponentProps, CSSProperties } from "react"
 import type { ComponentStyleProps } from "../../core/define"
 import type { UseProgressProps } from "../progress/use-progress"
 import { splitStyleProps } from "../../core/split-style-props"
 import { spaces } from "../../theme/tokens/spaces"
+import { feedbackValue } from "../loading/feedback-style"
 import { progressPaint, useProgress } from "../progress/use-progress"
 import { circleProgressStyle } from "./circle-progress.style"
 
@@ -99,9 +100,21 @@ export function CircleProgressRoot({
       {...rest}
       {...attributes}
       {...rootProps}
+      className={`${attributes.className} ui-progress-paint`}
+      style={
+        duration === undefined
+          ? rest.style
+          : ({
+              ...rest.style,
+              "--circle-duration": feedbackValue(
+                "animationDuration",
+                duration,
+                "s",
+              ),
+            } as CSSProperties)
+      }
       aria-label={label ?? (labelledBy ? undefined : rootProps["aria-label"])}
       aria-labelledby={labelledBy}
-      data-duration={typeof duration === "number" ? `${duration}s` : duration}
     >
       <svg
         fill="none"
@@ -114,14 +127,14 @@ export function CircleProgressRoot({
       >
         <circle
           {...geometry}
-          stroke={progressPaint(trackColor, "var(--circle-track)")}
+          stroke={progressPaint(trackColor, "var(--progress-track)")}
           {...trackProps}
         />
         <g transform={`rotate(-90 ${center} ${center})`}>
           <circle
             {...geometry}
             pathLength="100"
-            stroke={progressPaint(rangeColor, "var(--circle-range)")}
+            stroke={progressPaint(rangeColor, "var(--progress-range)")}
             strokeDasharray={percent === 100 ? undefined : `${percent} 100`}
             strokeLinecap={shape === "rounded" ? "round" : "butt"}
             visibility={percent > 0 ? undefined : "hidden"}
@@ -129,6 +142,7 @@ export function CircleProgressRoot({
             className={["ui-circle-progress-range", rangeProps?.className]
               .filter(Boolean)
               .join(" ")}
+            data-spin={progress.indeterminate || undefined}
           />
         </g>
       </svg>

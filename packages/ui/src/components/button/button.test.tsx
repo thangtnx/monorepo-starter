@@ -73,9 +73,9 @@ describe("<Button />", () => {
     expect(button).toBeDisabled()
     expect(button).toHaveAttribute("aria-busy", "true")
     expect(button.firstElementChild).toHaveClass("ui-button-loading-indicator")
-    expect(button.querySelector(".ui-loading")).toHaveAttribute(
-      "data-indicator",
-      "oval",
+    expect(button.querySelector("svg.ui-loading")).toHaveAttribute(
+      "viewBox",
+      "0 0 38 38",
     )
     await user.click(button)
     expect(onClick).not.toHaveBeenCalled()
@@ -107,7 +107,7 @@ describe("<Button />", () => {
       </Button>,
     )
     const indicator = screen.getByRole("img", { name: "Saving settings" })
-    expect(indicator).toHaveAttribute("data-indicator", "dots")
+    expect(indicator).toHaveAttribute("viewBox", "0 0 120 30")
     expect(indicator).toHaveAttribute("width", "24")
     expect(indicator).toHaveAttribute("height", "24")
   })
