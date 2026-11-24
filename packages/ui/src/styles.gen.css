@@ -648,6 +648,78 @@
   .ui-button[data-full-width="true"] {
     width: var(--sizes-full);
   }
+  .ui-field {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spaces-2);
+    width: var(--sizes-full);
+  }
+  .ui-field [data-part=error] {
+    font-size: var(--font-sizes-sm);
+    line-height: var(--line-heights-normal);
+    color: var(--colors-danger-fg);
+  }
+  .ui-field [data-part=hint] {
+    font-size: var(--font-sizes-sm);
+    line-height: var(--line-heights-normal);
+    color: var(--colors-fg-muted);
+  }
+  .ui-field [data-part=label] {
+    font-size: var(--font-sizes-sm);
+    font-weight: var(--font-weights-semibold);
+    line-height: var(--line-heights-shorter);
+    color: var(--colors-fg);
+  }
+  .ui-field [data-part=required] {
+    color: var(--colors-danger-fg);
+  }
+  .ui-input {
+    appearance: none;
+    background: var(--colors-bg);
+    border-color: var(--colors-border-emphasized);
+    border-radius: var(--radii-md);
+    border-width: 1px;
+    color: var(--colors-fg);
+    min-width: 0;
+    transition-duration: var(--durations-fast);
+    transition-property: border-color, box-shadow;
+    transition-timing-function: var(--easings-standard);
+    width: var(--sizes-full);
+  }
+  .ui-input::placeholder {
+    color: var(--colors-fg-muted);
+    opacity: 1;
+  }
+  .ui-input:hover:not(:disabled, [data-disabled], [aria-disabled=true]) {
+    border-color: var(--colors-fg-muted);
+  }
+  .ui-input[aria-invalid=true], .ui-input[data-invalid] {
+    border-color: var(--colors-danger-solid);
+    box-shadow: 0 0 0 1px var(--colors-danger-solid);
+  }
+  .ui-input[readonly], .ui-input[aria-readonly=true], .ui-input[data-readonly] {
+    background: var(--colors-bg-muted);
+  }
+  .ui-input:disabled, .ui-input[data-disabled], .ui-input[aria-disabled=true] {
+    box-shadow: none;
+    cursor: not-allowed;
+    opacity: 0.5;
+  }
+  .ui-input[data-size="sm"] {
+    font-size: var(--font-sizes-sm);
+    height: var(--sizes-8);
+    padding-inline: var(--spaces-2);
+  }
+  .ui-input[data-size="md"] {
+    font-size: var(--font-sizes-md);
+    height: var(--sizes-10);
+    padding-inline: var(--spaces-3);
+  }
+  .ui-input[data-size="lg"] {
+    font-size: var(--font-sizes-md);
+    height: var(--sizes-11);
+    padding-inline: var(--spaces-4);
+  }
   .ui-visually-hidden {
     border: 0;
     clip: rect(0 0 0 0);
