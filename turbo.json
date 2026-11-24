@@ -2,7 +2,7 @@
   "$schema": "https://turborepo.dev/schema.v2.json",
   "tasks": {
     "test": {
-      "inputs": ["package.json", "**/*.{ts,tsx,mts}"]
+      "inputs": ["package.json", "**/*.{ts,tsx,mts,css}"]
     },
     "typecheck": {
       "inputs": ["package.json", "tsconfig.json", "src/**/*.{ts,tsx,mts}"]

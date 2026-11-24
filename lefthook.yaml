@@ -5,6 +5,12 @@ pre-commit:
       group:
         parallel: true
         jobs:
+          - name: ui
+            root: packages/ui/
+            glob: "*.{js,cjs,mjs,jsx,ts,cts,mts,tsx,d.ts}"
+            run: pnpm oxlint {staged_files} --type-check --max-warnings=0 --fix --no-error-on-unmatched-pattern
+            stage_fixed: true
+
           - name: utils
             root: packages/utils/
             glob: "*.{js,cjs,mjs,jsx,ts,cts,mts,tsx,d.ts}"

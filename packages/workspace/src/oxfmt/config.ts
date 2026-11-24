@@ -16,6 +16,7 @@ export default defineConfig({
     "routeTree.gen.ts",
     "next-env.d.ts",
     "CHANGELOG.md",
+    "*.gen.css",
   ],
   jsxSingleQuote: false,
   printWidth: 80,

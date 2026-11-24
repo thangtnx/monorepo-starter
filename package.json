@@ -10,6 +10,7 @@
   "scripts": {
     "prepare": "lefthook install",
     "bootstrap": "node scripts/bootstrap.mjs",
+    "ui": "pnpm -C packages/ui",
     "utils": "pnpm -C packages/utils",
     "workspace": "pnpm -C packages/workspace",
     "clean": "pnpm -r --parallel run clean && pnpm rimraf .turbo *.log node_modules",

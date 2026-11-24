@@ -1,0 +1,46 @@
+{
+  "name": "@monorepo/ui",
+  "type": "module",
+  "version": "0.0.0",
+  "description": "Design system: theme, static stylesheet and React components",
+  "private": true,
+  "sideEffects": [
+    "*.css"
+  ],
+  "exports": {
+    ".": "./src/index.ts",
+    "./styles.css": "./src/styles.gen.css"
+  },
+  "imports": {
+    "#test": "./test/index.ts"
+  },
+  "scripts": {
+    "clean": "rimraf node_modules dist trace coverage .turbo",
+    "generate": "node --import ./scripts/resolve-ts.ts scripts/generate.ts",
+    "test": "vitest",
+    "test:coverage": "vitest run --coverage",
+    "typecheck": "tsgo",
+    "lint": "oxlint . --max-warnings=0",
+    "format": "pnpm -w format packages/ui",
+    "quality": "pnpm format && pnpm lint && pnpm typecheck && pnpm test"
+  },
+  "dependencies": {
+    "@monorepo/utils": "workspace:*"
+  },
+  "peerDependencies": {
+    "react": "catalog:",
+    "react-dom": "catalog:"
+  },
+  "devDependencies": {
+    "@monorepo/workspace": "workspace:*",
+    "@testing-library/jest-dom": "^6.9.1",
+    "@testing-library/react": "catalog:",
+    "@testing-library/user-event": "catalog:",
+    "@types/react": "catalog:",
+    "@types/react-dom": "catalog:",
+    "jsdom": "catalog:",
+    "react": "catalog:",
+    "react-dom": "catalog:",
+    "vitest-axe": "catalog:"
+  }
+}
