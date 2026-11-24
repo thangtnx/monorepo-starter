@@ -37,10 +37,11 @@ export interface RadioGroupProps
 export function RadioGroup(props: RadioGroupProps) {
   const field = useFieldContext()
   const generatedName = useId()
+  const size = props.size ?? field?.size
   const [styleAttributes, rest] = splitStyleProps(
     "radio-group",
     radioGroupStyle,
-    props,
+    { ...props, size },
   )
   const {
     name = generatedName,
@@ -74,7 +75,7 @@ export function RadioGroup(props: RadioGroupProps) {
         <RadioGroupContext
           value={{
             name,
-            size: props.size,
+            size,
             invalid: invalid === true || invalid === "true",
             readOnly,
             required,

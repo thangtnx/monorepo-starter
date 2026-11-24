@@ -3,6 +3,7 @@ import { badgeStyle } from "./components/badge/badge.style"
 import { buttonStyle } from "./components/button/button.style"
 import { checkboxStyle } from "./components/checkbox/checkbox.style"
 import { fieldStyle } from "./components/field/field.style"
+import { fieldsetStyle } from "./components/fieldset/fieldset.style"
 import { inputStyle } from "./components/input/input.style"
 import { radioGroupStyle } from "./components/radio/radio-group.style"
 import { radioStyle } from "./components/radio/radio.style"
@@ -17,6 +18,7 @@ export const componentStyles: { [key: string]: ComponentStyle } = {
   button: buttonStyle,
   checkbox: checkboxStyle,
   field: fieldStyle,
+  fieldset: fieldsetStyle,
   input: inputStyle,
   radio: radioStyle,
   "radio-group": radioGroupStyle,

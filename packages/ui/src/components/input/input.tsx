@@ -18,7 +18,10 @@ export interface InputProps
 /** A single-line text input. Inside a `Field` it takes the field's id and state. */
 export function Input(props: InputProps) {
   const field = useFieldContext()
-  const [styleAttributes, rest] = splitStyleProps("input", inputStyle, props)
+  const [styleAttributes, rest] = splitStyleProps("input", inputStyle, {
+    ...props,
+    size: props.size ?? field?.size,
+  })
 
   return (
     <input

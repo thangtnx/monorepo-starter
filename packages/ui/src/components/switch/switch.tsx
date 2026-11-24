@@ -5,6 +5,7 @@ import type { ComponentStyleProps } from "../../core/define"
 import { ariaAttr } from "@monorepo/utils"
 import { splitStyleProps } from "../../core/split-style-props"
 import { useCheckableProps } from "../checkbox/checkbox-control"
+import { useFieldContext } from "../field/field-context"
 import { switchStyle } from "./switch.style"
 
 export interface SwitchProps
@@ -16,7 +17,11 @@ export interface SwitchProps
 }
 
 export function Switch(props: SwitchProps) {
-  const [styleAttributes, rest] = splitStyleProps("switch", switchStyle, props)
+  const field = useFieldContext()
+  const [styleAttributes, rest] = splitStyleProps("switch", switchStyle, {
+    ...props,
+    size: props.size ?? field?.size,
+  })
   const input = useCheckableProps(rest)
 
   return (

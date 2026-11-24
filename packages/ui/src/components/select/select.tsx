@@ -29,7 +29,10 @@ const readSelection = (select: HTMLSelectElement) =>
 
 export function Select(props: SelectProps) {
   const field = useFieldContext()
-  const [styleAttributes, rest] = splitStyleProps("select", selectStyle, props)
+  const [styleAttributes, rest] = splitStyleProps("select", selectStyle, {
+    ...props,
+    size: props.size ?? field?.size,
+  })
   const {
     ref,
     readOnly = field?.readOnly,

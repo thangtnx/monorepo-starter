@@ -4,6 +4,7 @@ import type { ComponentProps } from "react"
 import type { ComponentStyleProps } from "../../core/define"
 import { ariaAttr } from "@monorepo/utils"
 import { splitStyleProps } from "../../core/split-style-props"
+import { useFieldContext } from "../field/field-context"
 import { useCheckableProps } from "./checkbox-control"
 import { checkboxStyle } from "./checkbox.style"
 
@@ -16,11 +17,11 @@ export interface CheckboxProps
 }
 
 export function Checkbox(props: CheckboxProps) {
-  const [styleAttributes, rest] = splitStyleProps(
-    "checkbox",
-    checkboxStyle,
-    props,
-  )
+  const field = useFieldContext()
+  const [styleAttributes, rest] = splitStyleProps("checkbox", checkboxStyle, {
+    ...props,
+    size: props.size ?? field?.size,
+  })
   const input = useCheckableProps(rest)
 
   return (

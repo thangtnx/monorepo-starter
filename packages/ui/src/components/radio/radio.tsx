@@ -6,6 +6,7 @@ import { dataAttr } from "@monorepo/utils"
 import { use } from "react"
 import { splitStyleProps } from "../../core/split-style-props"
 import { useCheckableProps } from "../checkbox/checkbox-control"
+import { useFieldContext } from "../field/field-context"
 import { RadioGroupContext } from "./radio-group-context"
 import { radioStyle } from "./radio.style"
 
@@ -19,9 +20,10 @@ export interface RadioProps
 
 export function Radio({ size, ...props }: RadioProps) {
   const group = use(RadioGroupContext)
+  const field = useFieldContext()
   const [styleAttributes, rest] = splitStyleProps("radio", radioStyle, {
     ...props,
-    size: size ?? group?.size,
+    size: size ?? group?.size ?? field?.size,
   })
   const input = useCheckableProps(
     {

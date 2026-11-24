@@ -17,11 +17,10 @@ export interface TextareaProps
 
 export function Textarea(props: TextareaProps) {
   const field = useFieldContext()
-  const [styleAttributes, rest] = splitStyleProps(
-    "textarea",
-    textareaStyle,
-    props,
-  )
+  const [styleAttributes, rest] = splitStyleProps("textarea", textareaStyle, {
+    ...props,
+    size: props.size ?? field?.size,
+  })
 
   return (
     <textarea

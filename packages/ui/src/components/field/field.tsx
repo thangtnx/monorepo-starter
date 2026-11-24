@@ -4,7 +4,7 @@ import type { ComponentProps, ReactNode } from "react"
 import { dataAttr } from "@monorepo/utils"
 import { useId, useMemo } from "react"
 import { splitStyleProps } from "../../core/split-style-props"
-import { FieldContext } from "./field-context"
+import { FieldContext, useFieldContext } from "./field-context"
 import { fieldStyle } from "./field.style"
 
 export interface FieldProps extends Omit<ComponentProps<"div">, "id"> {
@@ -65,6 +65,7 @@ export function Field({
   ...props
 }: FieldProps) {
   const generatedId = useId()
+  const size = useFieldContext()?.size
   const controlId = id ?? generatedId
   const invalid = isShown(error)
   const message = invalid ? error : hint
@@ -74,13 +75,23 @@ export function Field({
   const context = useMemo(
     () => ({
       id: controlId,
+      size,
       describedBy: hasMessage ? messageId : undefined,
       disabled,
       invalid,
       readOnly,
       required,
     }),
-    [controlId, disabled, hasMessage, invalid, messageId, readOnly, required],
+    [
+      controlId,
+      disabled,
+      hasMessage,
+      invalid,
+      messageId,
+      readOnly,
+      required,
+      size,
+    ],
   )
 
   return (
