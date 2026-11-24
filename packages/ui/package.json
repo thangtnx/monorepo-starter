@@ -17,9 +17,7 @@
   "scripts": {
     "clean": "rimraf node_modules dist trace coverage .turbo storybook-static",
     "build": "node --import ./scripts/resolve-ts.ts scripts/build.ts",
-    "prestorybook": "pnpm build",
     "storybook": "storybook dev -p 6006",
-    "prebuild:storybook": "pnpm build",
     "build:storybook": "storybook build -o storybook-static",
     "test": "vitest",
     "test:coverage": "vitest run --coverage",
