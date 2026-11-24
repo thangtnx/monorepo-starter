@@ -54,8 +54,8 @@ Run from the repository root:
 
 Shortcuts to run a script inside one package: `pnpm ui <script>`,
 `pnpm utils <script>` and `pnpm workspace <script>`. For example,
-`pnpm ui storybook` opens the component catalog and `pnpm ui generate`
-rebuilds the stylesheet.
+`pnpm ui storybook` opens the component and theme catalog.
+`pnpm ui build` compiles the UI stylesheet into `packages/ui/dist/styles.css`.
 
 ## Conventions
 
