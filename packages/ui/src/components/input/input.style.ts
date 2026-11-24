@@ -30,7 +30,19 @@ export const inputStyle = defineComponentStyle({
     lg: { fontSize: "md", height: "11", paddingInline: "4" },
   },
 
+  variants: {
+    filled: { background: "bg.muted", borderColor: "transparent" },
+    flushed: {
+      background: "transparent",
+      borderColor: "transparent transparent {colors.border.emphasized}",
+      borderRadius: "0",
+      paddingInline: "0",
+    },
+    outline: {},
+  },
+
   defaultProps: {
     size: "md",
+    variant: "outline",
   },
 })

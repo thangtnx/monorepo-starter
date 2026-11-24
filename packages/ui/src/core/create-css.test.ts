@@ -40,28 +40,31 @@ describe("createCss", () => {
   })
 
   test("gives the invalid input border precedence over the hover border", () => {
-    const borderRules = compileComponentStyle(
-      "input",
-      inputStyle,
-      context,
-    ).filter(({ declarations }) =>
+    const rules = compileComponentStyle("input", inputStyle, context)
+    const borderRules = rules.filter(({ declarations }) =>
       declarations.some((value) => value.startsWith("border-color:")),
     )
 
-    expect(borderRules.slice(1)).toMatchObject([
+    expect(borderRules.slice(-2)).toMatchObject([
       {
         declarations: ["border-color: var(--colors-fg-muted)"],
         selector:
           ".ui-input:hover:where(:not(:disabled, [data-disabled], [aria-disabled=true]))",
       },
       {
-        declarations: [
-          "border-color: var(--colors-danger-solid)",
-          "box-shadow: 0 0 0 1px var(--colors-danger-solid)",
-        ],
+        declarations: ["border-color: var(--colors-danger-solid)"],
         selector: ".ui-input[aria-invalid=true], .ui-input[data-invalid]",
       },
     ])
+    expect(
+      rules.find(
+        ({ layer, selector }) =>
+          layer === "base" &&
+          selector === ".ui-input[aria-invalid=true], .ui-input[data-invalid]",
+      ),
+    ).toMatchObject({
+      declarations: ["box-shadow: 0 0 0 1px var(--colors-danger-solid)"],
+    })
   })
 
   test("emits ordered layers, mode overrides and color scheme aliases", () => {

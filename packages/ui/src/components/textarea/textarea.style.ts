@@ -14,5 +14,16 @@ export const textareaStyle = defineComponentStyle({
     lg: { fontSize: "md", minHeight: "24", padding: "4" },
   },
 
-  defaultProps: { size: "md" },
+  variants: {
+    filled: { background: "bg.muted", borderColor: "transparent" },
+    flushed: {
+      background: "transparent",
+      borderColor: "transparent transparent {colors.border.emphasized}",
+      borderRadius: "0",
+      paddingInline: "0",
+    },
+    outline: {},
+  },
+
+  defaultProps: { size: "md", variant: "outline" },
 })

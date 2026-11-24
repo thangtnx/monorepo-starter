@@ -15,6 +15,21 @@ type Story = StoryObj<typeof meta>
 
 export const Basic: Story = {}
 
+export const Variant: Story = {
+  render: (args) => (
+    <PropsTable variant="stack" rows={keys(inputStyle.variants)}>
+      {(row) => (
+        <Input
+          {...args}
+          variant={row}
+          aria-label={"Variant " + row}
+          placeholder={row}
+        />
+      )}
+    </PropsTable>
+  ),
+}
+
 export const Size: Story = {
   render: (args) => (
     <PropsTable variant="stack" rows={keys(inputStyle.sizes)}>

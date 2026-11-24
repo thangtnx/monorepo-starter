@@ -11,7 +11,26 @@ describe("<Input />", () => {
     expect(input).toHaveClass("ui-input")
     expect(input).toHaveAttribute("id", "search")
     expect(input).toHaveAttribute("data-size", "md")
+    expect(input).toHaveAttribute("data-variant", "outline")
     expect(input).not.toHaveAttribute("aria-describedby")
+  })
+
+  test("maps outline, filled, and flushed variants", () => {
+    render(
+      <>
+        <Input variant="filled" aria-label="Filled" />
+        <Input variant="flushed" aria-label="Flushed" />
+      </>,
+    )
+
+    expect(screen.getByRole("textbox", { name: "Filled" })).toHaveAttribute(
+      "data-variant",
+      "filled",
+    )
+    expect(screen.getByRole("textbox", { name: "Flushed" })).toHaveAttribute(
+      "data-variant",
+      "flushed",
+    )
   })
 
   test("accepts typed text", async () => {

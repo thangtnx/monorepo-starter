@@ -21,12 +21,17 @@ export const badgeStyle = defineComponentStyle({
       color: "colorScheme.contrast",
     },
     subtle: { background: "colorScheme.subtle", color: "colorScheme.fg" },
+    surface: {
+      background: "colorScheme.subtle",
+      borderColor: "colorScheme.muted",
+      color: "colorScheme.fg",
+    },
   },
 
   sizes: {
-    sm: { fontSize: "xs", paddingInline: "1" },
-    md: { fontSize: "sm", paddingInline: "2" },
-    lg: { fontSize: "md", paddingBlock: "1", paddingInline: "3" },
+    sm: { fontSize: "xs", minHeight: "5", paddingInline: "2" },
+    md: { fontSize: "sm", minHeight: "6", paddingInline: "2" },
+    lg: { fontSize: "md", minHeight: "7", paddingInline: "3" },
   },
 
   defaultProps: {

@@ -65,14 +65,16 @@ export const buttonStyle = defineComponentStyle({
     outline: { layerStyle: "outline" },
     solid: { layerStyle: "solid" },
     subtle: { layerStyle: "subtle" },
+    surface: { layerStyle: "surface" },
   },
 
   sizes: {
-    sm: { fontSize: "sm", height: "8", minWidth: "8", paddingInline: "3" },
+    xs: { fontSize: "xs", height: "8", minWidth: "8", paddingInline: "2" },
+    sm: { fontSize: "sm", height: "9", minWidth: "9", paddingInline: "3" },
     md: { fontSize: "md", height: "10", minWidth: "10", paddingInline: "4" },
     // 44px: the minimum touch target on phones.
-    lg: { fontSize: "md", height: "11", minWidth: "11", paddingInline: "5" },
-    xl: { fontSize: "lg", height: "12", minWidth: "12", paddingInline: "6" },
+    lg: { fontSize: "lg", height: "11", minWidth: "11", paddingInline: "5" },
+    xl: { fontSize: "xl", height: "12", minWidth: "12", paddingInline: "6" },
   },
 
   defaultProps: {

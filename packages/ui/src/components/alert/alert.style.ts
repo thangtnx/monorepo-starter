@@ -11,7 +11,8 @@ export const alertStyle = defineComponentStyle({
     display: "flex",
     flexWrap: "wrap",
     gap: "2",
-    padding: "4",
+    paddingBlock: "3",
+    paddingInline: "4",
     position: "relative",
   },
   variants: {
@@ -29,7 +30,7 @@ export const alertStyle = defineComponentStyle({
     },
     solid: {
       "--alert-accent": "currentColor",
-      background: "colorScheme.emphasized",
+      background: "colorScheme.solid",
       color: "colorScheme.contrast",
     },
     subtle: {

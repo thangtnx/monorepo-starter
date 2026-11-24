@@ -16,6 +16,21 @@ type Story = StoryObj<typeof meta>
 
 export const Basic: Story = {}
 
+export const Variant: Story = {
+  render: (args) => (
+    <PropsTable variant="stack" rows={keys(textareaStyle.variants)}>
+      {(row) => (
+        <Textarea
+          {...args}
+          variant={row}
+          aria-label={"Notes (" + row + ")"}
+          placeholder={row}
+        />
+      )}
+    </PropsTable>
+  ),
+}
+
 export const Size: Story = {
   render: (args) => (
     <PropsTable variant="stack" rows={keys(textareaStyle.sizes)}>

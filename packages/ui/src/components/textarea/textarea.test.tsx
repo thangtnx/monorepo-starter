@@ -14,7 +14,26 @@ describe("<Textarea />", () => {
     expect(textarea).toHaveValue("First line\nSecond line")
     expect(textarea).toHaveAttribute("rows", "4")
     expect(textarea).toHaveAttribute("data-size", "lg")
+    expect(textarea).toHaveAttribute("data-variant", "outline")
     expect(textarea).toHaveClass("ui-textarea")
+  })
+
+  test("maps outline, filled, and flushed variants", () => {
+    render(
+      <>
+        <Textarea variant="filled" aria-label="Filled" />
+        <Textarea variant="flushed" aria-label="Flushed" />
+      </>,
+    )
+
+    expect(screen.getByRole("textbox", { name: "Filled" })).toHaveAttribute(
+      "data-variant",
+      "filled",
+    )
+    expect(screen.getByRole("textbox", { name: "Flushed" })).toHaveAttribute(
+      "data-variant",
+      "flushed",
+    )
   })
 
   test("uses the Field id, descriptions and native states", () => {

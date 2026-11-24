@@ -27,4 +27,10 @@ export const layerStyles: StyleSheet = {
     color: "colorScheme.fg",
     _hover: { background: "colorScheme.muted" },
   },
+  surface: {
+    background: "colorScheme.subtle",
+    borderColor: "colorScheme.muted",
+    color: "colorScheme.fg",
+    _hover: { background: "colorScheme.muted" },
+  },
 }
