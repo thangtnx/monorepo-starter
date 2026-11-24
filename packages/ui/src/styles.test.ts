@@ -98,6 +98,17 @@ describe("compiled stylesheet", () => {
     )
   })
 
+  test("keeps select state overrides after its variant rules in the same layer", () => {
+    const variant = css.split("@layer variant {")[1]?.split("@layer props {")[0]
+
+    expect(variant).toMatch(
+      /\.ui-select\[data-variant="flushed"\][\s\S]*?\.ui-select\[aria-invalid=true\], \.ui-select\[data-invalid\] \{\s*border-color: var\(--colors-danger-solid\);/,
+    )
+    expect(variant).toMatch(
+      /\.ui-select\[data-variant="flushed"\][\s\S]*?\.ui-select\[readonly\][^{]*\{\s*background: var\(--colors-bg-muted\);/,
+    )
+  })
+
   test("stays within its size budget", () => {
     expect(Buffer.byteLength(css)).toBeLessThan(64_000)
   })

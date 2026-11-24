@@ -1,44 +1,23 @@
 import type { CompileContext, CssRule } from "./compile-style"
-import type { ComponentStyle, ModeValue, StyleSheet, Theme } from "./types"
-import { compileStyle, serializeRule } from "./compile-style"
+import type { ComponentRecipe, ModeValue, StyleSheet, Theme } from "./types"
+import {
+  compileComponentStyle,
+  compileStyle,
+  recipeLayers,
+  serializeRule,
+} from "./compile-style"
 import {
   colorSchemeVar,
   createTokenVars,
   flattenTokens,
   resolveValue,
-  toKebab,
   toVarName,
 } from "./tokens"
 
-export const componentClassName = (name: string) => `ui-${name}`
+export { compileComponentStyle } from "./compile-style"
+export { componentClassName } from "./style-attributes"
 
 const isModeValue = (value: unknown): value is ModeValue => Array.isArray(value)
-
-/** Compiles one component style into rules keyed on `data-*` attributes. */
-export function compileComponentStyle(
-  name: string,
-  { base, props, sizes, variants }: ComponentStyle,
-  context: CompileContext,
-): CssRule[] {
-  const root = `.${componentClassName(name)}`
-  const baseRules = base ? compileStyle(root, base, context) : []
-  const isRoot = (rule: CssRule) =>
-    rule.selector === root && rule.atRules.length === 0
-  const select = (attribute: string, styles: StyleSheet = {}) =>
-    Object.entries(styles).flatMap(([value, style]) =>
-      compileStyle(`${root}[data-${attribute}="${value}"]`, style, context),
-    )
-
-  return [
-    ...baseRules.filter(isRoot),
-    ...select("variant", variants),
-    ...select("size", sizes),
-    ...Object.entries(props ?? {}).flatMap(([prop, values]) =>
-      select(toKebab(prop), values),
-    ),
-    ...baseRules.filter((rule) => !isRoot(rule)),
-  ]
-}
 
 function compileTokens({ theme, vars }: CompileContext): CssRule[] {
   const declare = (name: string, value: number | string) =>
@@ -86,10 +65,10 @@ function compileTokens({ theme, vars }: CompileContext): CssRule[] {
   ]
 }
 
-const layer = (name: string, rules: CssRule[]) =>
+const layer = (name: string, rules: CssRule[], depth = 1) =>
   [
     `@layer ${name} {`,
-    ...rules.map((rule) => serializeRule(rule, 1)),
+    ...rules.map((rule) => serializeRule(rule, depth)),
     "}",
   ].join("\n")
 
@@ -100,24 +79,27 @@ const layer = (name: string, rules: CssRule[]) =>
  */
 export function createCss(
   theme: Theme,
-  components: { [key: string]: ComponentStyle },
+  components: { [key: string]: ComponentRecipe },
 ): string {
   const context: CompileContext = { theme, vars: createTokenVars(theme) }
   const sheet = (styles: StyleSheet = {}) =>
     Object.entries(styles).flatMap(([selector, style]) =>
       compileStyle(selector, style, context),
     )
+  const rules = Object.entries(components).flatMap(([name, style]) =>
+    compileComponentStyle(name, style, context),
+  )
 
   return `${[
-    "@layer reset, tokens, global, components;",
+    `@layer reset, tokens, global, ${recipeLayers.join(", ")};`,
     layer("reset", sheet(theme.resetStyle)),
-    layer("tokens", compileTokens(context)),
+    layer("tokens", compileTokens(context), 0),
     layer("global", sheet(theme.globalStyle)),
-    layer(
-      "components",
-      Object.entries(components).flatMap(([name, style]) =>
-        compileComponentStyle(name, style, context),
+    ...recipeLayers.map((name) =>
+      layer(
+        name,
+        rules.filter((rule) => rule.layer === name),
       ),
     ),
-  ].join("\n\n")}\n`
+  ].join("\n")}\n`
 }

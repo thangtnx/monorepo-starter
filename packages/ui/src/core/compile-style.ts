@@ -1,6 +1,18 @@
 import type { TokenVars } from "./tokens"
-import type { StyleObject, StyleSheet, Theme } from "./types"
+import type {
+  ComponentCompound,
+  ComponentRecipe,
+  CompoundValue,
+  StyleObject,
+  StyleSheet,
+  Theme,
+} from "./types"
 import { conditions } from "./conditions"
+import {
+  componentClassName,
+  slotClassName,
+  styleAttributeName,
+} from "./style-attributes"
 import { resolveValue, toKebab } from "./tokens"
 
 export interface CssRule {
@@ -9,9 +21,168 @@ export interface CssRule {
   selector: string
 }
 
+export const recipeLayers = [
+  "base",
+  "size",
+  "variant",
+  "props",
+  "compounds",
+] as const
+
+interface RecipeRule extends CssRule {
+  layer: (typeof recipeLayers)[number]
+}
+
 export interface CompileContext {
   theme: Theme
   vars: TokenVars
+}
+
+function attributeSelector(prop: string, value: CompoundValue) {
+  const escaped = Array.from(String(value), (char) => {
+    const code = char.charCodeAt(0)
+    if (code < 32 || code === 127 || char === '"' || char === "\\")
+      return `\\${code.toString(16)} `
+    return char
+  }).join("")
+  return `[${styleAttributeName(prop)}="${escaped}"]`
+}
+
+function compoundAttributeSelector(prop: string, value: unknown) {
+  if (
+    typeof value !== "string" &&
+    typeof value !== "number" &&
+    typeof value !== "boolean"
+  )
+    throw new Error(`Invalid compound condition "${prop}"`)
+
+  return attributeSelector(prop, value)
+}
+
+function compoundSelector<S>(
+  root: string,
+  conditions: Omit<ComponentCompound<S>, "css">,
+) {
+  let selector = root
+  for (const [prop, value] of Object.entries(conditions)) {
+    if (value === undefined) continue
+    if (Array.isArray(value)) {
+      if (value.length === 0) return undefined
+      const options = Array.from(value, (option) =>
+        compoundAttributeSelector(prop, option),
+      )
+      selector += `:is(${options.join(", ")})`
+    } else {
+      selector += compoundAttributeSelector(prop, value)
+    }
+  }
+  return selector
+}
+
+type RecipeStyles<S> = {
+  base?: S
+  compounds?: readonly ComponentCompound<S>[]
+  props?: { [key: string]: { [key: string]: S } }
+  sizes?: { [key: string]: S }
+  variants?: { [key: string]: S }
+}
+
+function compileRecipe<S>(
+  { base, compounds, props, sizes, variants }: RecipeStyles<S>,
+  compile: (
+    style: S,
+    select: (root: string) => string | undefined,
+  ) => CssRule[],
+  orderBase?: (rule: CssRule) => boolean,
+): RecipeRule[] {
+  const rules = (
+    layer: RecipeRule["layer"],
+    style: S,
+    select: (root: string) => string | undefined,
+  ) => compile(style, select).map((rule) => ({ ...rule, layer }))
+  const modifier = (
+    layer: RecipeRule["layer"],
+    prop: string,
+    styles: { [key: string]: S } = {},
+  ) =>
+    Object.entries(styles).flatMap(([value, style]) =>
+      rules(layer, style, (root) => root + attributeSelector(prop, value)),
+    )
+
+  const baseRules = base ? rules("base", base, (root) => root) : []
+  const sizeRules = modifier("size", "size", sizes)
+  const variantRules = modifier("variant", "variant", variants)
+  const propRules = Object.entries(props ?? {}).flatMap(([prop, styles]) =>
+    modifier("props", prop, styles),
+  )
+  return [
+    ...(orderBase ? baseRules.filter(orderBase) : baseRules),
+    ...(orderBase
+      ? [...variantRules, ...sizeRules]
+      : [...sizeRules, ...variantRules]),
+    ...propRules,
+    ...(orderBase
+      ? layerFlatConditions(
+          baseRules.filter((rule) => !orderBase(rule)),
+          [sizeRules, variantRules, propRules],
+        )
+      : []),
+    ...(compounds ?? []).flatMap(({ css, ...conditions }) =>
+      rules("compounds", css, (root) => compoundSelector(root, conditions)),
+    ),
+  ]
+}
+
+function layerFlatConditions(
+  conditions: RecipeRule[],
+  modifiers: RecipeRule[][],
+) {
+  const property = (declaration: string) =>
+    declaration.slice(0, declaration.indexOf(":"))
+  const layers = new Map<string, RecipeRule["layer"]>()
+  for (const rules of modifiers)
+    for (const rule of rules)
+      for (const declaration of rule.declarations)
+        layers.set(property(declaration), rule.layer)
+
+  // Legacy state and media rules used to compete with modifiers by specificity
+  // and source order. Keep overlapping declarations in the modifier's layer.
+  return conditions.flatMap((rule) => {
+    const declarations = Map.groupBy(
+      rule.declarations,
+      (declaration) => layers.get(property(declaration)) ?? rule.layer,
+    )
+    return [...declarations].map(([layer, values]) => ({
+      ...rule,
+      declarations: values,
+      layer,
+    }))
+  })
+}
+
+/** Compiles a recipe's styles onto the elements carrying its classes. */
+export function compileComponentStyle(
+  name: string,
+  recipe: ComponentRecipe,
+  context: CompileContext,
+): RecipeRule[] {
+  if ("kind" in recipe)
+    return compileRecipe(recipe, (styles, select) =>
+      Object.entries(styles).flatMap(([slot, style]) => {
+        const selector = select(`.${slotClassName(name, slot)}`)
+        return selector && style ? compileStyle(selector, style, context) : []
+      }),
+    )
+
+  const root = `.${componentClassName(name)}`
+  return compileRecipe(
+    recipe,
+    (style, select) => {
+      const selector = select(root)
+      return selector ? compileStyle(selector, style, context) : []
+    },
+    (rule) => rule.selector === root && rule.atRules.length === 0,
+  )
 }
 
 /** Splits a selector list at top-level, unescaped commas. */

@@ -1,4 +1,4 @@
-import type { ComponentStyle } from "./core/types"
+import type { ComponentRecipe } from "./core/types"
 import { alertDescriptionStyle } from "./components/alert/alert-description.style"
 import { alertIconStyle } from "./components/alert/alert-icon.style"
 import { alertLoadingStyle } from "./components/alert/alert-loading.style"
@@ -52,7 +52,7 @@ import { textareaStyle } from "./components/textarea/textarea.style"
 import { visuallyHiddenStyle } from "./components/visually-hidden/visually-hidden.style"
 
 /** Every component style compiled into the stylesheet, keyed by folder name. */
-export const componentStyles: { [key: string]: ComponentStyle } = {
+export const componentStyles: { [key: string]: ComponentRecipe } = {
   alert: alertStyle,
   "alert-description": alertDescriptionStyle,
   "alert-icon": alertIconStyle,
