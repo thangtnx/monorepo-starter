@@ -1,5 +1,5 @@
 import type { Locator, Page } from "@playwright/test"
-import { expect, expectTokens, modes, paint, test } from "./fixtures"
+import { expect, expectTokens, modes, test } from "./fixtures"
 
 const tokenControls = [
   {
@@ -9,6 +9,15 @@ const tokenControls = [
       ["border-top-color", "--colors-border-emphasized"],
     ],
     pick: (page: Page) => page.getByRole("textbox", { name: "Notes" }),
+  },
+  {
+    id: "components-select--basic",
+    checks: [
+      ["background-color", "--colors-bg"],
+      ["border-top-color", "--colors-border-emphasized"],
+    ],
+    pick: (page: Page) =>
+      page.getByRole("combobox", { name: "Contact method" }),
   },
   {
     id: "components-checkbox--checked",
@@ -43,19 +52,6 @@ for (const { id, checks, pick } of tokenControls)
       await expectTokens(page, pick(page), checks)
     }
   })
-
-// Select is rewritten as a custom combobox; this keeps a coarse mode check.
-test("components-select--basic swaps its palette between light and dark", async ({
-  openStory,
-  page,
-}) => {
-  const select = page.getByRole("combobox", { name: "Contact method" })
-  await openStory("components-select--basic", "light")
-  const light = await paint(select)
-  await openStory("components-select--basic", "dark")
-
-  expect(await paint(select)).not.toBe(light)
-})
 
 test("form controls fit a narrow viewport", async ({ openStory, page }) => {
   await page.setViewportSize({ height: 700, width: 360 })
