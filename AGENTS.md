@@ -38,9 +38,11 @@ When performing one of the actions below, read the linked rule first.
 
 - Creating branches: [Branch Rules](.agents/rules/branch.md)
 - Creating commits: [Commit Rules](.agents/rules/commit.md)
+- Running or troubleshooting Git hooks — [Pre-commit Hooks](.agents/references/pre-commit-hooks.md)
 - Creating components: [Component Rules](.agents/rules/component.md)
 - Creating issues: [Issue Rules](.agents/rules/issue.md)
 - Creating PRs: [PR Rules](.agents/rules/pr.md)
+- Reviewing PRs — [PR Review Guidelines](.agents/references/pr-review-guidelines.md)
 
 ## Do not
 
