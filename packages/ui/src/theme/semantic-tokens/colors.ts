@@ -17,7 +17,7 @@ export const colors = {
   danger: schemeColors.danger,
   fg: {
     base: ["{colors.gray.950}", "{colors.gray.50}"],
-    muted: ["{colors.gray.600}", "{colors.gray.400}"],
+    muted: ["{colors.gray.600}", "{colors.gray.300}"],
   },
   focusRing: ["{colors.blue.600}", "{colors.blue.400}"],
   info: schemeColors.info,

@@ -71,6 +71,8 @@ const textPairs: [string, string][] = [
   ["fg", "bg.panel"],
   ["fg", "bg.muted"],
   ["fg.muted", "bg"],
+  ["fg.muted", "bg.muted"],
+  ["fg.muted", "bg.panel"],
   ["fg.muted", "bg.subtle"],
   ...theme.colorSchemes.flatMap((scheme): [string, string][] => [
     [`${scheme}.contrast`, `${scheme}.solid`],
