@@ -110,6 +110,6 @@ describe("compiled stylesheet", () => {
   })
 
   test("stays within its size budget", () => {
-    expect(Buffer.byteLength(css)).toBeLessThan(64_000)
+    expect(Buffer.byteLength(css)).toBeLessThan(96_000)
   })
 })

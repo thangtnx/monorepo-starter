@@ -44,6 +44,7 @@ import { skeletonTextStyle } from "./components/skeleton/skeleton-text.style"
 import { skeletonStyle } from "./components/skeleton/skeleton.style"
 import { stackStyle } from "./components/stack/stack.style"
 import { switchStyle } from "./components/switch/switch.style"
+import { tabsStyle } from "./components/tabs/tabs.style"
 import { textStyle } from "./components/text/text.style"
 import { textareaStyle } from "./components/textarea/textarea.style"
 import { visuallyHiddenStyle } from "./components/visually-hidden/visually-hidden.style"
@@ -95,6 +96,7 @@ export const componentStyles: { [key: string]: ComponentRecipe } = {
   "skeleton-text": skeletonTextStyle,
   stack: stackStyle,
   switch: switchStyle,
+  tabs: tabsStyle,
   text: textStyle,
   textarea: textareaStyle,
   "visually-hidden": visuallyHiddenStyle,
