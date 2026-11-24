@@ -18,7 +18,9 @@ export const progressStyle = defineComponentStyle({
         "ui-progress-stripes var(--progress-duration, 1s) linear infinite",
       _motionReduce: { animationName: "none" },
     },
+    "& > *": { gridArea: "1 / 1" },
     "--progress-duration": "initial",
+    display: "grid",
     overflow: "hidden",
   },
   props: {

@@ -94,7 +94,10 @@ describe("compiled stylesheet", () => {
 
   test("compiles the external link indicator as visible inline content", () => {
     expect(css).toMatch(
-      /\.ui-link > \[data-part=external-indicator\] \{\s*display: inline;\s*margin-inline-start: var\(--spaces-1\);\s*\}/,
+      /\.ui-link > \[data-part=external-indicator\] \{\s*display: inline;\s*margin-inline-start: var\(--spaces-1\);\s*white-space: nowrap;\s*\}/,
+    )
+    expect(css).toMatch(
+      /\.ui-link > \[data-part=external-indicator\] \{\s*text-decoration: none;\s*\}/,
     )
   })
 
@@ -107,6 +110,15 @@ describe("compiled stylesheet", () => {
     expect(variant).toMatch(
       /\.ui-select\[data-variant="flushed"\][\s\S]*?\.ui-select\[readonly\][^{]*\{\s*background: var\(--colors-bg-muted\);/,
     )
+  })
+
+  test("emits unique global keyframe names", () => {
+    const names = Array.from(
+      css.matchAll(/@keyframes\s+([^\s{]+)/g),
+      ([, name]) => name,
+    )
+    expect(names.length).toBeGreaterThan(0)
+    expect(new Set(names).size).toBe(names.length)
   })
 
   test("stays within its size budget", () => {

@@ -1,6 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/react-vite"
 import { colorSchemes, keys, PropsTable } from "#storybook"
 import { Field } from "../field/field"
+import { Check, Icon, X } from "../icon"
 import { Switch } from "./switch"
 import { switchStyle } from "./switch.style"
 
@@ -50,7 +51,7 @@ export const Parts: Story = {
   args: {
     "aria-label": undefined,
     children: "Notifications",
-    icon: { off: "−", on: "✓" },
+    icon: { off: <Icon as={X} />, on: <Icon as={Check} /> },
     inputProps: { name: "notifications" },
     labelProps: { title: "Notifications" },
     thumbProps: { title: "Toggle" },

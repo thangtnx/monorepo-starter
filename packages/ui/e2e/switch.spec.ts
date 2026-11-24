@@ -88,4 +88,52 @@ test.describe("Switch", () => {
     await page.locator("label").getByText("Notifications").click()
     await expect(toggle).toBeChecked()
   })
+
+  test("thin and thick switches center the thumb vertically on the track", async ({
+    openStory,
+    page,
+  }) => {
+    await openStory("components-switch--variant")
+    const diffs = await page
+      .locator('.ui-switch:is([data-variant="thin"], [data-variant="thick"])')
+      .evaluateAll((switches) =>
+        switches.slice(0, 6).map((sw) => {
+          const track = sw
+            .querySelector('[data-part="track"]')!
+            .getBoundingClientRect()
+          const thumb = sw
+            .querySelector('[data-part="thumb"]')!
+            .getBoundingClientRect()
+          return Math.abs(
+            (thumb.top + thumb.bottom) / 2 - (track.top + track.bottom) / 2,
+          )
+        }),
+      )
+
+    for (const diff of diffs) expect(diff).toBeLessThanOrEqual(1)
+  })
+
+  test("parts switch keeps a square thumb and centers state icons", async ({
+    openStory,
+    page,
+  }) => {
+    await openStory("components-switch--parts")
+    const geometry = await page.locator(".ui-switch").evaluate((sw) => {
+      const thumb = sw
+        .querySelector('[data-part="thumb"]')!
+        .getBoundingClientRect()
+      const offIcon = sw
+        .querySelector('[data-icon="off"] svg, [data-icon="off"]')!
+        .getBoundingClientRect()
+      return {
+        aspectDiff: Math.abs(thumb.width - thumb.height),
+        centerDiffY: Math.abs(
+          (offIcon.top + offIcon.bottom) / 2 - (thumb.top + thumb.bottom) / 2,
+        ),
+      }
+    })
+
+    expect(geometry.aspectDiff).toBeLessThanOrEqual(1)
+    expect(geometry.centerDiffY).toBeLessThanOrEqual(1)
+  })
 })

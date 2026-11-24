@@ -31,6 +31,7 @@ import { loadingLayerStyle } from "./components/loading/loading-layer.style"
 import { loadingRegionStyle } from "./components/loading/loading-region.style"
 import { loadingSuspenseStyle } from "./components/loading/loading-suspense.style"
 import { loadingStyle } from "./components/loading/loading.style"
+import { motionStyle } from "./components/motion/motion.style"
 import { noticeCloseButtonStyle } from "./components/notice/notice-close-button.style"
 import { noticeContentStyle } from "./components/notice/notice-content.style"
 import { noticeItemStyle } from "./components/notice/notice-item.style"
@@ -38,6 +39,7 @@ import { noticeStyle } from "./components/notice/notice.style"
 import { progressPaintStyle } from "./components/progress/progress-paint.style"
 import { progressStyle } from "./components/progress/progress.style"
 import { radioStyle } from "./components/radio/radio.style"
+import { rippleStyle } from "./components/ripple/ripple.style"
 import { selectListboxStyle } from "./components/select/select-listbox.style"
 import { selectRootStyle } from "./components/select/select-root.style"
 import { selectStyle } from "./components/select/select.style"
@@ -84,6 +86,7 @@ export const componentStyles: { [key: string]: ComponentRecipe } = {
   "loading-layer": loadingLayerStyle,
   "loading-region": loadingRegionStyle,
   "loading-suspense": loadingSuspenseStyle,
+  motion: motionStyle,
   notice: noticeStyle,
   "notice-close-button": noticeCloseButtonStyle,
   "notice-content": noticeContentStyle,
@@ -91,6 +94,7 @@ export const componentStyles: { [key: string]: ComponentRecipe } = {
   progress: progressStyle,
   "progress-paint": progressPaintStyle,
   radio: radioStyle,
+  ripple: rippleStyle,
   select: selectStyle,
   "select-listbox": selectListboxStyle,
   "select-root": selectRootStyle,

@@ -28,6 +28,7 @@ export const alertStyle = defineComponentStyle({
       borderColor: "border",
     },
     solid: {
+      "--alert-accent": "currentColor",
       background: "colorScheme.emphasized",
       color: "colorScheme.contrast",
     },

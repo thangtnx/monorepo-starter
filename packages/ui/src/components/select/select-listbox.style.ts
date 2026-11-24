@@ -16,6 +16,11 @@ export const selectListboxStyle = defineComponentStyle({
       paddingInline: "3",
     },
     "& [data-part=option]": {
+      "& > span:first-child": {
+        alignItems: "center",
+        display: "inline-flex",
+        gap: "2",
+      },
       "&[aria-selected=true]": {
         color: "colorScheme.fg",
         fontWeight: "medium",

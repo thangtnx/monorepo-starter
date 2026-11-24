@@ -1,3 +1,4 @@
+import { act, fireEvent } from "@testing-library/react"
 import { a11y, render, screen } from "#test"
 import { createCss } from "../../core"
 import { theme } from "../../theme"
@@ -185,6 +186,54 @@ describe("<Button />", () => {
     expect(start).not.toBeInTheDocument()
     expect(end).not.toBeInTheDocument()
     expect(screen.getByRole("button", { name: "Editing" })).toBe(button)
+  })
+
+  test("triggers a ripple wave on pointerDown and clears stale waves when loading", () => {
+    vi.useFakeTimers()
+    try {
+      const { rerender } = render(<Button>Save</Button>)
+      const button = screen.getByRole("button", { name: "Save" })
+
+      fireEvent.pointerDown(button, { button: 0, clientX: 10, clientY: 10 })
+      const wave = button.querySelector('.ui-ripple [data-part="wave"]')
+      expect(wave).toHaveAttribute("data-state", "active")
+
+      act(() => {
+        vi.advanceTimersByTime(230)
+      })
+      fireEvent.pointerUp(window)
+      expect(wave).toHaveAttribute("data-state", "released")
+
+      fireEvent.transitionEnd(wave!)
+      expect(button.querySelector(".ui-ripple")).not.toBeInTheDocument()
+
+      fireEvent.pointerDown(button, { button: 0, clientX: 10, clientY: 10 })
+      expect(
+        button.querySelector('.ui-ripple [data-part="wave"]'),
+      ).toBeInTheDocument()
+
+      rerender(<Button loading>Save</Button>)
+      expect(button.querySelector(".ui-ripple")).not.toBeInTheDocument()
+      rerender(<Button loading={false}>Save</Button>)
+      expect(button.querySelector(".ui-ripple")).not.toBeInTheDocument()
+
+      rerender(<Button disableRipple>Save</Button>)
+      fireEvent.pointerDown(button, { button: 0, clientX: 10, clientY: 10 })
+      expect(button.querySelector(".ui-ripple")).not.toBeInTheDocument()
+    } finally {
+      vi.useRealTimers()
+    }
+  })
+
+  test("keeps the button label visible when loadingIcon is null without loadingText", () => {
+    render(
+      <Button loading loadingIcon={null}>
+        Save
+      </Button>,
+    )
+    const button = screen.getByRole("button", { name: "Save" })
+    expect(button).not.toHaveAttribute("data-loading-overlay")
+    expect(button).toHaveTextContent("Save")
   })
 
   test("has no accessibility violations", async () => {

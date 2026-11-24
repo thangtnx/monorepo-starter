@@ -1,15 +1,24 @@
+"use client"
+
 import type { ComponentProps, ReactNode } from "react"
 import type { ComponentStyleProps } from "../../core/define"
 import type { LoadingProps, LoadingScheme } from "../loading"
 import { splitStyleProps } from "../../core/split-style-props"
 import { IconSpinner } from "../icon/icon-spinner"
 import { isLoadingScheme, loadingSchemes } from "../loading/loading-schemes"
+import { Ripple, useRipple } from "../ripple"
 import { buttonStyle } from "./button.style"
 
 export interface ButtonProps
   extends
     Omit<ComponentProps<"button">, "color">,
     ComponentStyleProps<typeof buttonStyle> {
+  /**
+   * If `true`, disables the pointer-down ripple animation.
+   *
+   * @default false
+   */
+  disableRipple?: boolean
   /** Decorative icon after the label. */
   endIcon?: ReactNode
   /** Disable interaction and display a loading indicator. @default false */
@@ -37,6 +46,7 @@ export function Button({
   type = "button",
   children,
   disabled,
+  disableRipple = false,
   endIcon,
   loading = false,
   loadingIcon,
@@ -47,6 +57,14 @@ export function Button({
   ...props
 }: ButtonProps) {
   const [styleAttributes, rest] = splitStyleProps("button", buttonStyle, props)
+  const rippleDisabled = Boolean(disabled || loading || disableRipple)
+  const { ripples, onBlur, onClear, onPointerDown, onPointerLeave } =
+    useRipple<HTMLButtonElement>({
+      disabled: rippleDisabled,
+      onBlur: rest.onBlur,
+      onPointerDown: rest.onPointerDown,
+      onPointerLeave: rest.onPointerLeave,
+    })
   const Indicator =
     loadingIcon === undefined
       ? IconSpinner
@@ -61,7 +79,7 @@ export function Button({
       {Indicator ? <Indicator decorative {...loadingProps} /> : loadingIcon}
     </span>
   )
-  const keepLabel = loading && loadingText == null
+  const keepLabel = loading && loadingText == null && loadingIcon !== null
 
   // oxlint-disable-next-line react/button-has-type -- the prop is typed to valid values
   return (
@@ -73,9 +91,12 @@ export function Button({
       data-loading-overlay={keepLabel || undefined}
       data-loading-placement={loading ? loadingPlacement : undefined}
       disabled={disabled || loading}
+      onBlur={onBlur}
+      onPointerDown={onPointerDown}
+      onPointerLeave={onPointerLeave}
     >
       {loadingPlacement === "start" && indicator}
-      {loading && !keepLabel ? (
+      {loading && loadingText != null ? (
         loadingText
       ) : (
         <span className="ui-button-loading-label">
@@ -93,6 +114,7 @@ export function Button({
         </span>
       )}
       {loadingPlacement === "end" && indicator}
+      <Ripple disabled={rippleDisabled} ripples={ripples} onClear={onClear} />
     </button>
   )
 }

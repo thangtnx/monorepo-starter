@@ -5,6 +5,8 @@ export const linkStyle = defineComponentStyle({
     "& > [data-part=external-indicator]": {
       display: "inline",
       marginInlineStart: "1",
+      textDecoration: "none",
+      whiteSpace: "nowrap",
     },
     color: "colorScheme.fg",
   },

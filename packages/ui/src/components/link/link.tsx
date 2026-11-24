@@ -73,7 +73,7 @@ export function Link({
       {external && (
         <>
           <span aria-hidden="true" data-part="external-indicator">
-            ↗
+            {"↗\uFE0E"}
           </span>
           <span id={externalDescriptionId} hidden>
             {externalLabel}

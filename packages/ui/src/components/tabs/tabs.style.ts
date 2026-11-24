@@ -37,6 +37,7 @@ export const tabsStyle = defineComponentSlotStyle({
       transitionTimingFunction: "standard",
       userSelect: "none",
       whiteSpace: "nowrap",
+      _icon: { flexShrink: 0, height: "1em", width: "1em" },
       _hover: { color: "fg" },
       _disabled: { layerStyle: "disabled" },
     },

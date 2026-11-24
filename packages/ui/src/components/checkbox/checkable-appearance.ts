@@ -62,10 +62,10 @@ const switchGeometry = {
 const switchPaint = {
   thin: {
     "--check-offset": "4px",
-    "--check-on": muted,
+    "--check-on": `color-mix(in srgb, ${solid} 38%, var(--colors-bg))`,
     "--thumb-ink": contrast,
     "--thumb-on": solid,
-    "--thumb-shadow": "var(--shadows-lg)",
+    "--thumb-shadow": "var(--shadows-sm)",
     "--track-inset": "var(--sizes-1)",
   },
   thick: {

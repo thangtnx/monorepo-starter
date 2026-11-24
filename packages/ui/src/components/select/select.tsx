@@ -7,6 +7,7 @@ import { ariaAttr, cx } from "@monorepo/utils"
 import {
   Fragment,
   useCallback,
+  useEffect,
   useId,
   useLayoutEffect,
   useRef,
@@ -199,6 +200,7 @@ export function SelectRoot<Multiple extends boolean = false>(
   const pressing = useRef(false)
   const triggerRef = useRef<HTMLButtonElement>(null)
   const panelRef = useRef<HTMLDivElement>(null)
+  const releasePointerCleanup = useRef<(() => void) | null>(null)
   const [localValue, setLocalValue] = useState(() => toValues(defaultValue))
   const [open, setOpen] = useState(false)
   const [nativeLabel, setNativeLabel] = useState("")
@@ -244,6 +246,8 @@ export function SelectRoot<Multiple extends boolean = false>(
     },
     [ref],
   )
+
+  useEffect(() => () => releasePointerCleanup.current?.(), [])
 
   const close = useCallback(() => {
     setOpen(false)
@@ -492,9 +496,16 @@ export function SelectRoot<Multiple extends boolean = false>(
         onPointerDown={(event) => {
           onPointerDown?.(event)
           if (event.button !== 0) return
+          releasePointerCleanup.current?.()
           pressing.current = true
           const document = event.currentTarget.ownerDocument
           const trigger = event.currentTarget
+          const cleanup = () => {
+            document.removeEventListener("pointerup", release, true)
+            document.removeEventListener("pointercancel", release, true)
+            if (releasePointerCleanup.current === cleanup)
+              releasePointerCleanup.current = null
+          }
           const release = (up: Event) => {
             pressing.current = false
             // Released elsewhere: no click follows, so apply the skipped close.
@@ -503,9 +514,9 @@ export function SelectRoot<Multiple extends boolean = false>(
               document.activeElement !== trigger
             )
               close()
-            document.removeEventListener("pointerup", release, true)
-            document.removeEventListener("pointercancel", release, true)
+            cleanup()
           }
+          releasePointerCleanup.current = cleanup
           document.addEventListener("pointerup", release, true)
           document.addEventListener("pointercancel", release, true)
         }}

@@ -11,6 +11,7 @@ export const badgeStyle = defineComponentStyle({
     gap: "1",
     lineHeight: "shorter",
     whiteSpace: "nowrap",
+    _icon: { flexShrink: 0, height: "1em", width: "1em" },
   },
 
   variants: {

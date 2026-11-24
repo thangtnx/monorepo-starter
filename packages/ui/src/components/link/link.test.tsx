@@ -24,8 +24,8 @@ describe("<Link />", () => {
       expect(link).toHaveAccessibleDescription("External link")
       expect(link).toHaveAttribute("rel", "nofollow noopener noreferrer")
       expect(link).not.toHaveAttribute("target")
-      expect(screen.getByText("↗")).toHaveAttribute("aria-hidden", "true")
-      expect(screen.getByText("↗")).toHaveAttribute(
+      expect(screen.getByText(/↗/)).toHaveAttribute("aria-hidden", "true")
+      expect(screen.getByText(/↗/)).toHaveAttribute(
         "data-part",
         "external-indicator",
       )

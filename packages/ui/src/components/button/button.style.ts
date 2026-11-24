@@ -2,7 +2,22 @@ import { defineComponentStyle } from "../../core/define"
 
 export const buttonStyle = defineComponentStyle({
   base: {
-    "& .ui-button-icon": { alignItems: "center", display: "inline-flex" },
+    "& .ui-button-icon": {
+      alignItems: "center",
+      display: "inline-flex",
+      justifyContent: "center",
+    },
+    "& .ui-button-icon svg": { flexShrink: 0, height: "1em", width: "1em" },
+    "& > .ui-button-loading-indicator": {
+      alignItems: "center",
+      display: "inline-flex",
+      justifyContent: "center",
+    },
+    "& > .ui-button-loading-indicator > .ui-loading-icon-spinner": {
+      flexShrink: 0,
+      height: "1em",
+      width: "1em",
+    },
     "& > .ui-button-loading-label": { display: "contents" },
     "&[data-loading-overlay] > .ui-button-loading-indicator": {
       left: "50%",
@@ -31,7 +46,6 @@ export const buttonStyle = defineComponentStyle({
     transitionTimingFunction: "standard",
     userSelect: "none",
     whiteSpace: "nowrap",
-    _icon: { flexShrink: 0, height: "1em", width: "1em" },
     _disabled: { layerStyle: "disabled" },
   },
 

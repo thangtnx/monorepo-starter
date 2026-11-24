@@ -36,6 +36,7 @@ export const globalStyle: StyleSheet = {
     "@keyframes ui-feedback-spin": { transform: "rotate(-360deg)" },
     "@keyframes ui-linear-progress": { transform: "translateX(-25%)" },
     "@keyframes ui-progress-stripes": { transform: "translateX(-12px)" },
+    "@keyframes ui-ripple-grow": { transform: "scale(0.2)" },
     "@keyframes ui-skeleton-pulse": {
       backgroundColor: "var(--skeleton-start, {colors.bg.emphasized})",
     },
