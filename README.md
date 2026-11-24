@@ -14,7 +14,7 @@ pnpm install
 pnpm quality
 ```
 
-`pnpm install` also installs the git hooks (lefthook).
+`pnpm install` also installs the Git hooks (lefthook).
 
 To start a new project from this starter, run `pnpm bootstrap` after installing.
 It asks whether to replace the Git history before prompting for a project name.

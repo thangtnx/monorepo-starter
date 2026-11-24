@@ -12,7 +12,7 @@ export const Samples: StoryObj<typeof meta> = {
     >
       <article>
         <h2>Heading and paragraph</h2>
-        <p>The reset removes their default margins.</p>
+        <p>The reset removes the default margins of headings and paragraphs.</p>
       </article>
       <ul>
         <li>The reset removes default list bullets.</li>

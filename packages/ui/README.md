@@ -27,7 +27,7 @@ export function ConsultForm() {
 
 Set `data-mode="light"` or `data-mode="dark"` on `<html>` (or any section) to
 force a color mode; without it the system preference applies. `colorScheme`
-sets `data-scheme`, which children inherit.
+sets `data-scheme`, which descendants inherit.
 
 ## How styles work
 
