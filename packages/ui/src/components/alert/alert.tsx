@@ -1,24 +1,17 @@
-import type { ComponentProps, ReactNode } from "react"
+"use client"
+
+import type { ComponentProps } from "react"
 import type { ComponentStyleProps } from "../../core/define"
-import type { ColorScheme } from "../../theme"
 import type { AlertIconProps } from "./alert-icon"
+import type { AlertStatus, AlertStatusIcons } from "./alert-status"
 import { Children, isValidElement } from "react"
 import { splitStyleProps } from "../../core/split-style-props"
 import { AlertIcon } from "./alert-icon"
+import { AlertLoading } from "./alert-loading"
+import { AlertStatusContext, alertStatuses } from "./alert-status"
 import { alertStyle } from "./alert.style"
 
-const statusSchemes = {
-  danger: "danger",
-  error: "danger",
-  info: "info",
-  success: "success",
-  warning: "warning",
-} satisfies { [status: string]: ColorScheme }
-
-export type AlertStatus = keyof typeof statusSchemes
-export type AlertStatusIcons = { [Status in AlertStatus]?: ReactNode }
-
-const defaultStatusIcons: AlertStatusIcons = {}
+export type { AlertStatus, AlertStatusIcons } from "./alert-status"
 
 export interface AlertRootProps
   extends
@@ -36,7 +29,7 @@ export interface AlertRootProps
 
 export function AlertRoot({
   status = "info",
-  colorScheme = statusSchemes[status],
+  colorScheme = alertStatuses[status].colorScheme,
   children,
   statusIcons,
   withIcon = true,
@@ -47,23 +40,25 @@ export function AlertRoot({
     ...props,
     colorScheme,
   })
-  const icon =
-    iconProps?.children ?? statusIcons?.[status] ?? defaultStatusIcons[status]
   const showIcon =
     withIcon &&
-    icon != null &&
     !Children.toArray(children).some(
-      (child) => isValidElement(child) && child.type === AlertIcon,
+      (child) =>
+        isValidElement(child) &&
+        (child.type === AlertIcon || child.type === AlertLoading),
     )
   return (
     <div
       {...rest}
       {...attributes}
+      aria-busy={rest["aria-busy"] ?? (status === "loading" || undefined)}
       data-status={status}
       role={status === "error" || status === "danger" ? "alert" : "status"}
     >
-      {showIcon && <AlertIcon {...iconProps}>{icon}</AlertIcon>}
-      {children}
+      <AlertStatusContext value={{ status, statusIcons }}>
+        {showIcon && <AlertIcon {...iconProps} />}
+        {children}
+      </AlertStatusContext>
     </div>
   )
 }

@@ -1,5 +1,6 @@
 import type { ComponentProps } from "react"
 import { splitStyleProps } from "../../core/split-style-props"
+import { Icon, X } from "../icon"
 import { noticeCloseButtonStyle } from "./notice-close-button.style"
 import { noticeDefaults } from "./notice-config"
 
@@ -11,7 +12,7 @@ export interface NoticeCloseButtonProps extends Omit<
 export function NoticeCloseButton({
   "aria-label": label,
   "aria-labelledby": labelledBy,
-  children = noticeDefaults.closeText,
+  children = <Icon as={X} />,
   ...props
 }: NoticeCloseButtonProps) {
   const [attributes, rest] = splitStyleProps(

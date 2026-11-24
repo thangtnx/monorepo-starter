@@ -14,9 +14,9 @@ export interface NoticeItemProps extends Omit<
   Alert.RootProps,
   "onClose" | "title"
 > {
-  /** Allow dismissal through the selected strategies. @default false */
+  /** Show a close button and enable the selected dismissal strategies. @default false */
   closable?: boolean
-  /** Presentation supports button and click. Toast owns drag dismissal. @default ["button", "click", "drag"] */
+  /** Additional dismissal strategies. Toast owns drag dismissal. @default ["button", "click", "drag"] */
   closeStrategies?: readonly NoticeCloseStrategy[]
   /** Notification description. */
   description?: ReactNode
@@ -67,7 +67,6 @@ export function NoticeItem({
     className,
   })
   const closeOnClick = closable && closeStrategies.includes("click")
-  const showCloseButton = closable && closeStrategies.includes("button")
 
   function handleClick(event: MouseEvent<HTMLDivElement>) {
     onClick?.(event)
@@ -102,7 +101,7 @@ export function NoticeItem({
         )}
         {children}
       </NoticeContent>
-      {showCloseButton && (
+      {closable && (
         <NoticeCloseButton
           {...closeButtonProps}
           onClick={

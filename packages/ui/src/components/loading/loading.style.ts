@@ -2,12 +2,12 @@ import { defineComponentStyle } from "../../core/define"
 
 export const loadingStyle = defineComponentStyle({
   base: {
-    "& .ui-loading-motion": {
+    "&.ui-loading-motion, & .ui-loading-motion": {
       animation: "var(--loading-animation)",
       animationDelay: "var(--loading-delay)",
       animationDuration: "var(--loading-cycle, var(--loading-duration, 1s))",
       transform: "var(--loading-rest)",
-      transformBox: "fill-box",
+      transformBox: "var(--loading-box)",
       transformOrigin: "var(--loading-origin)",
       _motionReduce: {
         animationName: "none",
@@ -20,6 +20,7 @@ export const loadingStyle = defineComponentStyle({
     },
     "&[data-scheme]": { color: "colorScheme.fg" },
     "--loading-animation": "none",
+    "--loading-box": "fill-box",
     "--loading-cycle": "initial",
     "--loading-delay": "0s",
     "--loading-duration": "initial",

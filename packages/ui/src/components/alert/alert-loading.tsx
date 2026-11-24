@@ -10,6 +10,7 @@ export interface AlertLoadingProps extends LoadingProps {
 
 export function AlertLoading({
   className,
+  decorative = false,
   loadingScheme = "oval",
   ...props
 }: AlertLoadingProps) {
@@ -18,7 +19,7 @@ export function AlertLoading({
     <Indicator
       {...props}
       className={cx("ui-alert-loading", className)}
-      decorative
+      decorative={decorative}
     />
   )
 }

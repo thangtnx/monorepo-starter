@@ -1,4 +1,13 @@
 import type { Meta, StoryObj } from "@storybook/react-vite"
+import {
+  Check,
+  CircleAlert,
+  Info,
+  LoaderCircle,
+  Icon as SvgIcon,
+  TriangleAlert,
+  X,
+} from "../icon"
 import { Alert } from "./index"
 const meta = {
   component: Alert.Root,
@@ -10,7 +19,14 @@ export default meta
 type Story = StoryObj<typeof meta>
 
 const variants = ["island", "plain", "solid", "subtle", "surface"] as const
-const statuses = ["info", "success", "warning", "error", "danger"] as const
+const statuses = [
+  "info",
+  "success",
+  "warning",
+  "error",
+  "danger",
+  "loading",
+] as const
 
 export const VariantsAndStatuses: Story = {
   render: () => (
@@ -36,9 +52,7 @@ export const VariantsAndStatuses: Story = {
 export const Icon: Story = {
   render: () => (
     <Alert.Root variant="surface" status="info">
-      <Alert.Icon>
-        <span>Info</span>
-      </Alert.Icon>
+      <Alert.Icon as={Info} />
       <Alert.Title>Information</Alert.Title>
       <Alert.Description>Check your sync settings.</Alert.Description>
     </Alert.Root>
@@ -48,11 +62,12 @@ export const Icon: Story = {
 export const StatusIcons: Story = {
   render: () => {
     const statusIcons = {
-      danger: <span>!!</span>,
-      error: <span>×</span>,
-      info: <span>i</span>,
-      success: <span>✓</span>,
-      warning: <span>!</span>,
+      danger: <SvgIcon as={CircleAlert} aria-label="Danger" />,
+      error: <SvgIcon as={X} aria-label="Error" />,
+      info: <SvgIcon as={Info} aria-label="Information" />,
+      loading: <SvgIcon as={LoaderCircle} aria-label="Loading" />,
+      success: <SvgIcon as={Check} aria-label="Success" />,
+      warning: <SvgIcon as={TriangleAlert} aria-label="Warning" />,
     }
 
     return (

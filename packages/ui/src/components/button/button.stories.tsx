@@ -1,5 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react-vite"
 import { colorSchemes } from "../../theme/semantic-tokens/color-schemes"
+import { Check, ChevronDown, Icon } from "../icon"
 import { Loading as BusyIndicator } from "../loading"
 import { Button } from "./button"
 import { buttonStyle } from "./button.style"
@@ -66,10 +67,20 @@ export const Disabled: Story = { args: { disabled: true } }
 
 export const FullWidth: Story = { args: { fullWidth: true } }
 
+export const WithIcons: Story = {
+  args: {
+    children: "Confirm",
+    endIcon: <Icon as={ChevronDown} />,
+    startIcon: <Icon as={Check} />,
+  },
+}
+
 export const Loading: Story = {
   render: () => (
     <div style={row}>
-      <Button loading>Save settings</Button>
+      <Button {...WithIcons.args} loading>
+        Confirm
+      </Button>
       <Button loading loadingText="Saving settings">
         Save settings
       </Button>

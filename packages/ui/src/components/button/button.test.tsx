@@ -1,6 +1,7 @@
 import { a11y, render, screen } from "#test"
 import { createCss } from "../../core"
 import { theme } from "../../theme"
+import { ChevronDown, Icon, X } from "../icon"
 import { Button } from "./button"
 import { buttonStyle } from "./button.style"
 
@@ -73,10 +74,10 @@ describe("<Button />", () => {
     expect(button).toBeDisabled()
     expect(button).toHaveAttribute("aria-busy", "true")
     expect(button.firstElementChild).toHaveClass("ui-button-loading-indicator")
-    expect(button.querySelector("svg.ui-loading")).toHaveAttribute(
-      "viewBox",
-      "0 0 38 38",
-    )
+    const spinner = button.querySelector("svg.ui-loading.lucide")
+    expect(spinner).toHaveClass("ui-loading-icon-spinner", "ui-loading-motion")
+    expect(spinner).toHaveAttribute("viewBox", "0 0 24 24")
+    expect(button.querySelector("svg svg")).not.toBeInTheDocument()
     await user.click(button)
     expect(onClick).not.toHaveBeenCalled()
 
@@ -112,10 +113,30 @@ describe("<Button />", () => {
     expect(indicator).toHaveAttribute("height", "24")
   })
 
+  test("places decorative start and end icons around the label", async () => {
+    await a11y(
+      <Button endIcon={<Icon as={ChevronDown} />} startIcon={<Icon as={X} />}>
+        Edit
+      </Button>,
+    )
+    const button = screen.getByRole("button", { name: "Edit" })
+    const label = button.querySelector(".ui-button-loading-label")
+    expect(
+      label?.firstElementChild?.querySelector(".lucide-x"),
+    ).toBeInTheDocument()
+    expect(
+      label?.lastElementChild?.querySelector(".lucide-chevron-down"),
+    ).toBeInTheDocument()
+    expect(screen.queryByRole("img")).not.toBeInTheDocument()
+  })
+
   test("overlays custom indicators while keeping the original name accessible", async () => {
     const css = createCss(theme, { button: buttonStyle })
     expect(css).toMatch(
-      /\.ui-button > \.ui-button-loading-label\s*\{\s*opacity: 0;/,
+      /\.ui-button\[data-loading-overlay\] > \.ui-button-loading-label\s*\{[^}]*align-items: center;[^}]*display: inline-flex;[^}]*gap: inherit;[^}]*opacity: 0;/,
+    )
+    expect(css).toMatch(
+      /\.ui-button \.ui-button-icon\s*\{[^}]*display: inline-flex;/,
     )
     expect(css).toMatch(
       /\.ui-button\[data-loading-overlay\] > \.ui-button-loading-indicator\s*\{[^}]*position: absolute;/,
@@ -131,6 +152,39 @@ describe("<Button />", () => {
       "aria-hidden",
       "true",
     )
+  })
+
+  test("keeps both icon slots mounted in overlay mode and removes them for loading text", () => {
+    const icons = {
+      endIcon: <Icon as={ChevronDown} aria-label="Expand" />,
+      startIcon: <Icon as={X} aria-label="Cancel" />,
+    }
+    const { rerender } = render(<Button {...icons}>Edit</Button>)
+    const button = screen.getByRole("button", { name: "Edit" })
+    const start = button.querySelector<SVGSVGElement>(".lucide-x")
+    const end = button.querySelector<SVGSVGElement>(".lucide-chevron-down")
+
+    rerender(
+      <Button {...icons} loading>
+        Edit
+      </Button>,
+    )
+    const label = button.querySelector(".ui-button-loading-label")
+    expect(start).toBeInTheDocument()
+    expect(end).toBeInTheDocument()
+    expect(label).toContainElement(start)
+    expect(label).toContainElement(end)
+    expect(screen.getByRole("button", { name: "Edit" })).toBe(button)
+    expect(screen.queryByRole("img")).not.toBeInTheDocument()
+
+    rerender(
+      <Button {...icons} loading loadingText="Editing">
+        Edit
+      </Button>,
+    )
+    expect(start).not.toBeInTheDocument()
+    expect(end).not.toBeInTheDocument()
+    expect(screen.getByRole("button", { name: "Editing" })).toBe(button)
   })
 
   test("has no accessibility violations", async () => {

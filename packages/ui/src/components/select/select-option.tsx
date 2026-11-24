@@ -3,6 +3,7 @@
 import type { ComponentProps, ReactNode } from "react"
 import type { SelectOptionEntry } from "./select-options"
 import { createContext, use } from "react"
+import { Check, Icon } from "../icon"
 
 interface SelectContextValue {
   active: string | undefined
@@ -67,18 +68,7 @@ export function SelectOption({
       }}
     >
       <span>{children}</span>
-      {selected && (
-        <svg
-          aria-hidden="true"
-          data-part="check"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="1.5"
-          viewBox="0 0 16 16"
-        >
-          <path d="m3.5 8.5 3 3 6-7" />
-        </svg>
-      )}
+      {selected && <Icon as={Check} data-part="check" strokeWidth="1.5" />}
     </div>
   )
 }

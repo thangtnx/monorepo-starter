@@ -2,11 +2,18 @@ import { defineComponentStyle } from "../../core/define"
 
 export const buttonStyle = defineComponentStyle({
   base: {
-    "& > .ui-button-loading-label": { opacity: 0 },
+    "& .ui-button-icon": { alignItems: "center", display: "inline-flex" },
+    "& > .ui-button-loading-label": { display: "contents" },
     "&[data-loading-overlay] > .ui-button-loading-indicator": {
       left: "50%",
       position: "absolute",
       translate: "-50% 0",
+    },
+    "&[data-loading-overlay] > .ui-button-loading-label": {
+      alignItems: "center",
+      display: "inline-flex",
+      gap: "inherit",
+      opacity: 0,
     },
     alignItems: "center",
     appearance: "none",

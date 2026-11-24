@@ -15,6 +15,7 @@ import {
 import { flushSync } from "react-dom"
 import { splitStyleProps } from "../../core/split-style-props"
 import { useFieldContext } from "../field/field-context"
+import { ChevronDown, Icon, X } from "../icon"
 import { selectCopy, typeaheadTimeout } from "./select-config"
 import { selectListboxStyle } from "./select-listbox.style"
 import { SelectContext, SelectOption } from "./select-option"
@@ -530,16 +531,7 @@ export function SelectRoot<Multiple extends boolean = false>(
               })
             : placeholder}
         </span>
-        <svg
-          aria-hidden="true"
-          data-part="chevron"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="1.5"
-          viewBox="0 0 16 16"
-        >
-          <path d="m4 6 4 4 4-4" />
-        </svg>
+        <Icon as={ChevronDown} data-part="chevron" strokeWidth="1.5" />
       </button>
       {canClear && (
         <button
@@ -552,15 +544,7 @@ export function SelectRoot<Multiple extends boolean = false>(
             triggerRef.current?.focus()
           }}
         >
-          <svg
-            aria-hidden="true"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="1.5"
-            viewBox="0 0 16 16"
-          >
-            <path d="m4 4 8 8m0-8-8 8" />
-          </svg>
+          <Icon as={X} strokeWidth="1.5" />
         </button>
       )}
       {showMessage && (

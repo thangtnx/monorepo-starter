@@ -1,6 +1,11 @@
 "use client"
 
-import type { ComponentProps, CSSProperties, ReactNode } from "react"
+import type {
+  ComponentProps,
+  ComponentType,
+  CSSProperties,
+  ReactNode,
+} from "react"
 import type { ComponentStyleProps } from "../../core/define"
 import { createContext, use } from "react"
 import { splitStyleProps } from "../../core/split-style-props"
@@ -35,20 +40,25 @@ export function motionStyle(variables: MotionVariables): CSSProperties {
 }
 
 interface LoadingDrawing {
-  drawing: ReactNode
   name: string
   viewBox: string
+  as?: ComponentType<ComponentProps<"svg">>
+  className?: string
+  drawing?: ReactNode
   fill?: string
   motion?: CSSProperties
   stroke?: string
 }
 
 export function createLoading({
+  as,
   name,
+  className,
   drawing,
   motion,
   ...svg
 }: LoadingDrawing) {
+  const Component = as ?? "svg"
   function LoadingVariant(props: LoadingProps) {
     const defaults = useLoadingPropsContext()
     const customDuration =
@@ -68,7 +78,12 @@ export function createLoading({
     } = { ...defaults, ...props }
     const [attributes, element] = splitStyleProps("loading", loadingStyle, {
       ...rest,
-      className: [`ui-loading-${name}`, defaults.className, props.className]
+      className: [
+        `ui-loading-${name}`,
+        className,
+        defaults.className,
+        props.className,
+      ]
         .filter(Boolean)
         .join(" "),
     })
@@ -93,7 +108,7 @@ export function createLoading({
     } as CSSProperties
 
     return (
-      <svg
+      <Component
         height="1em"
         width="1em"
         {...svg}
@@ -111,7 +126,7 @@ export function createLoading({
       >
         {drawing}
         {children}
-      </svg>
+      </Component>
     )
   }
 

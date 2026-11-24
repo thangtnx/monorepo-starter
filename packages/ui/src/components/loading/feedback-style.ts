@@ -1,7 +1,12 @@
+import type { TokenVars } from "../../core/tokens"
 import { createTokenVars, resolveValue } from "../../core/tokens"
 import { theme } from "../../theme"
 
-const tokenVars = createTokenVars(theme)
+let tokenVars: TokenVars | undefined
+
+export function resolveFeedbackToken(property: string, value: string) {
+  return resolveValue(property, value, (tokenVars ??= createTokenVars(theme)))
+}
 
 export function feedbackValue(
   property: string,
@@ -11,5 +16,5 @@ export function feedbackValue(
   if (value === undefined) return
   return typeof value === "number"
     ? `${value}${unit}`
-    : resolveValue(property, value, tokenVars)
+    : resolveFeedbackToken(property, value)
 }

@@ -9,6 +9,7 @@
   ],
   "exports": {
     ".": "./src/index.ts",
+    "./icon": "./src/components/icon/index.ts",
     "./styles.css": "./dist/styles.css"
   },
   "imports": {
@@ -29,7 +30,8 @@
     "quality": "pnpm format && pnpm lint && pnpm typecheck && pnpm test"
   },
   "dependencies": {
-    "@monorepo/utils": "workspace:*"
+    "@monorepo/utils": "workspace:*",
+    "lucide-react": "catalog:"
   },
   "peerDependencies": {
     "react": "catalog:",

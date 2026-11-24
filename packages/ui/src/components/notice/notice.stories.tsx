@@ -58,6 +58,14 @@ export const ClickToDismiss: Story = {
 export const Loading: Story = {
   args: {
     description: "The export will be ready shortly.",
+    status: "loading",
+    title: "Exporting files",
+  },
+}
+
+export const CustomLoading: Story = {
+  args: {
+    description: "The export will be ready shortly.",
     loadingScheme: "rings",
     title: "Exporting files",
   },

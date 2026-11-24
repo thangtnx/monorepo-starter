@@ -26,6 +26,7 @@ import { fieldStyle } from "./components/field/field.style"
 import { fieldsetStyle } from "./components/fieldset/fieldset.style"
 import { gridStyle } from "./components/grid/grid.style"
 import { headingStyle } from "./components/heading/heading.style"
+import { iconStyle } from "./components/icon/icon.style"
 import { inputStyle } from "./components/input/input.style"
 import { linkStyle } from "./components/link/link.style"
 import { loadingLayerStyle } from "./components/loading/loading-layer.style"
@@ -79,6 +80,7 @@ export const componentStyles: { [key: string]: ComponentStyle } = {
   fieldset: fieldsetStyle,
   grid: gridStyle,
   heading: headingStyle,
+  icon: iconStyle,
   input: inputStyle,
   link: linkStyle,
   loading: loadingStyle,

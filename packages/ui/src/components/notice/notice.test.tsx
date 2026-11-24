@@ -1,7 +1,24 @@
+import { within } from "@testing-library/react"
 import { a11y, render, screen } from "#test"
+import { CircleAlert, Icon } from "../icon"
 import { Notice } from "./index"
 
 describe("notice", () => {
+  test("announces a custom icon once inside the notice", async () => {
+    await a11y(
+      <Notice.Item
+        icon={<Icon as={CircleAlert} aria-label="Network error" />}
+        status="error"
+        title="Upload failed"
+      />,
+    )
+    const alert = within(screen.getByRole("alert"))
+    expect(
+      alert.getByRole("img", { name: "Network error" }),
+    ).toBeInTheDocument()
+    expect(alert.getAllByRole("img")).toHaveLength(1)
+  })
+
   test.each(["{Enter}", "[Space]"])(
     "dismisses a closable item with %s using the default close button",
     async (key) => {
@@ -39,6 +56,10 @@ describe("notice", () => {
     })
     expect(region).toContainElement(status)
     expect(status).toContainElement(close)
+    expect(
+      within(status).getByRole("img", { name: "Success" }),
+    ).toBeInTheDocument()
+    expect(close.querySelector(".lucide")).toBeInTheDocument()
     await a11y(container)
     await user.click(close)
     expect(onClose).toHaveBeenCalledOnce()
@@ -60,7 +81,11 @@ describe("notice", () => {
         <button type="button">View details</button>
       </Notice.Item>,
     )
-    expect(screen.getAllByRole("button")).toHaveLength(1)
+    await user.tab()
+    await user.tab()
+    expect(
+      screen.getByRole("button", { name: "Dismiss notification" }),
+    ).toHaveFocus()
     await user.click(screen.getByRole("button", { name: "View details" }))
     expect(onClose).not.toHaveBeenCalled()
     await user.click(screen.getByText("Sync complete"))
@@ -117,6 +142,9 @@ describe("notice", () => {
     )
     const alert = screen.getByRole("alert")
     expect(alert).toHaveAttribute("aria-busy", "true")
+    expect(
+      within(alert).getByRole("img", { name: "Loading" }),
+    ).toBeInTheDocument()
     expect(alert.querySelector("svg.ui-alert-loading")).toHaveAttribute(
       "viewBox",
       "0 0 45 45",

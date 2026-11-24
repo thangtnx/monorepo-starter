@@ -886,6 +886,31 @@ describe("<Select />", () => {
   })
 
   describe("accessibility", () => {
+    test("shows decorative control icons without changing accessible names", async () => {
+      const { container, user } = render(
+        <Select.Root
+          aria-label="Contact method"
+          clearable
+          defaultValue="email"
+          items={items}
+        />,
+      )
+      const chevron = trigger().querySelector(".lucide-chevron-down")
+      const clear = screen
+        .getByRole("button", { name: "Clear selection" })
+        .querySelector(".lucide-x")
+      await user.click(trigger())
+      const check = screen
+        .getByRole("option", { name: "Email", selected: true })
+        .querySelector(".lucide-check")
+      for (const icon of [chevron, clear, check]) {
+        expect(icon).toHaveAttribute("aria-hidden", "true")
+        expect(icon).toHaveAttribute("focusable", "false")
+        expect(icon).toHaveAttribute("data-icon", "")
+      }
+      await a11y(container)
+    })
+
     test("has no violations when closed or when multiple is open", async () => {
       const { container, user } = render(
         <Field label="Contact method">
