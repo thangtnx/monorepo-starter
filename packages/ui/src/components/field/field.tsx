@@ -28,7 +28,7 @@ export interface FieldProps extends Omit<ComponentProps<"div">, "id"> {
    */
   hint?: ReactNode
   /**
-   * The id of the control. Generated when omitted.
+   * The id assigned to the control. An omitted id is generated.
    */
   id?: string
   /**
@@ -103,7 +103,12 @@ export function Field({
         ) : null}
         {children}
         {hasMessage ? (
-          <span id={messageId} data-part={invalid ? "error" : "hint"}>
+          <span
+            id={messageId}
+            key={invalid ? "error" : "hint"}
+            data-part={invalid ? "error" : "hint"}
+            role={invalid ? "alert" : undefined}
+          >
             {invalid ? <span aria-hidden="true">{"✕ "}</span> : null}
             {message}
           </span>

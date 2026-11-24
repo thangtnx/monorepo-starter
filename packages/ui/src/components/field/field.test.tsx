@@ -16,8 +16,15 @@ describe("<Field />", () => {
     expect(input).not.toHaveAttribute("aria-invalid")
   })
 
-  test("replaces the hint with the error and marks the control invalid", () => {
-    render(
+  test("announces a validation error and replaces the hint", () => {
+    const { rerender } = render(
+      <Field hint="Your mobile number." label="Phone">
+        <Input type="tel" />
+      </Field>,
+    )
+
+    expect(screen.queryByRole("alert")).not.toBeInTheDocument()
+    rerender(
       <Field error="Enter 10 digits." hint="Your mobile number." label="Phone">
         <Input type="tel" />
       </Field>,
@@ -26,8 +33,37 @@ describe("<Field />", () => {
     const input = screen.getByRole("textbox", { name: "Phone" })
 
     expect(input).toBeInvalid()
+    expect(screen.getByRole("alert")).toHaveTextContent("Enter 10 digits.")
     expect(input).toHaveAccessibleDescription("Enter 10 digits.")
     expect(screen.queryByText("Your mobile number.")).not.toBeInTheDocument()
+  })
+
+  test("uses the field id for the control, label and hint", () => {
+    render(
+      <Field id="phone" hint="Include the area code." label="Phone">
+        <Input id="custom-phone" type="tel" />
+      </Field>,
+    )
+
+    const input = screen.getByRole("textbox", { name: "Phone" })
+    expect(input).toHaveAttribute("id", "phone")
+    expect(input).toHaveAttribute("aria-describedby", "phone-message")
+    expect(input).toHaveAccessibleDescription("Include the area code.")
+  })
+
+  test("labels a wrapped control without reusing the wrapper id", () => {
+    const { container } = render(
+      <Field label="Phone">
+        <div id="row">
+          <Input type="tel" />
+        </div>
+      </Field>,
+    )
+
+    const input = screen.getByRole("textbox", { name: "Phone" })
+    expect(input).toHaveAttribute("id")
+    expect(input.id).not.toBe("row")
+    expect(container.querySelectorAll('[id="row"]')).toHaveLength(1)
   })
 
   test("passes required, disabled and read-only to the control", () => {

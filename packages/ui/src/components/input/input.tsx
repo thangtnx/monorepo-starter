@@ -10,7 +10,10 @@ import { inputStyle } from "./input.style"
 export interface InputProps
   extends
     Omit<ComponentProps<"input">, "color" | "size">,
-    ComponentStyleProps<typeof inputStyle> {}
+    ComponentStyleProps<typeof inputStyle> {
+  /** The input id. When wrapped in a `Field`, set the id on `Field`. */
+  id?: string
+}
 
 /** A single-line text input. Inside a `Field` it takes the field's id and state. */
 export function Input(props: InputProps) {
@@ -19,13 +22,13 @@ export function Input(props: InputProps) {
 
   return (
     <input
-      id={field?.id}
       aria-invalid={ariaAttr(field?.invalid)}
       disabled={field?.disabled}
       readOnly={field?.readOnly}
       required={field?.required}
       {...styleAttributes}
       {...rest}
+      id={field?.id ?? rest.id}
       aria-describedby={cx(field?.describedBy, rest["aria-describedby"])}
     />
   )
