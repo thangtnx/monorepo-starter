@@ -15,8 +15,10 @@
     "#test": "./test/index.ts"
   },
   "scripts": {
-    "clean": "rimraf node_modules dist trace coverage .turbo",
+    "clean": "rimraf node_modules dist trace coverage .turbo storybook-static",
     "generate": "node --import ./scripts/resolve-ts.ts scripts/generate.ts",
+    "storybook": "storybook dev -p 6006",
+    "build:storybook": "storybook build -o storybook-static",
     "test": "vitest",
     "test:coverage": "vitest run --coverage",
     "typecheck": "tsgo",
@@ -33,6 +35,9 @@
   },
   "devDependencies": {
     "@monorepo/workspace": "workspace:*",
+    "@storybook/addon-a11y": "catalog:",
+    "@storybook/addon-docs": "catalog:",
+    "@storybook/react-vite": "catalog:",
     "@testing-library/jest-dom": "^6.9.1",
     "@testing-library/react": "catalog:",
     "@testing-library/user-event": "catalog:",
@@ -41,6 +46,8 @@
     "jsdom": "catalog:",
     "react": "catalog:",
     "react-dom": "catalog:",
+    "storybook": "catalog:",
+    "vite": "catalog:",
     "vitest-axe": "catalog:"
   }
 }

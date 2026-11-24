@@ -33,3 +33,6 @@ logs
 
 # operating system
 .DS_Store
+
+# storybook
+storybook-static

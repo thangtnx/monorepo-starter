@@ -7,5 +7,5 @@ import {
 
 export default defineConfig({
   extends: [sharedConfig, reactConfig, createNoRestrictedImportConfig()],
-  ignorePatterns: ["dist", "coverage"],
+  ignorePatterns: ["dist", "coverage", "storybook-static"],
 })

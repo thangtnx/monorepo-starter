@@ -1,5 +1,12 @@
 {
   "extends": "@monorepo/workspace/typescript/tsconfig.json",
-  "include": ["**/*.ts", "**/*.tsx", "**/*.mts", "**/*.cts"],
+  "include": [
+    "**/*.ts",
+    "**/*.tsx",
+    "**/*.mts",
+    "**/*.cts",
+    ".storybook/*.ts",
+    ".storybook/*.tsx"
+  ],
   "exclude": ["node_modules", "dist", "coverage", "trace"]
 }
