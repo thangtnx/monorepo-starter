@@ -8,11 +8,15 @@
     "test": {
       "inputs": ["package.json", "**/*.{ts,tsx,mts,css}"]
     },
+    "@monorepo/ui#test": {
+      "dependsOn": ["build"],
+      "inputs": ["package.json", "**/*.{ts,tsx,mts,css}"]
+    },
     "typecheck": {
-      "inputs": ["package.json", "tsconfig.json", "src/**/*.{ts,tsx,mts}"]
+      "inputs": ["$TURBO_DEFAULT$"]
     },
     "lint": {
-      "inputs": ["package.json", "tsconfig.json", "src/**/*.{ts,tsx,mts}"]
+      "inputs": ["$TURBO_DEFAULT$"]
     }
   },
   "globalDependencies": ["tsconfig.json"]
