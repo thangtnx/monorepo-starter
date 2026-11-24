@@ -166,24 +166,34 @@ export function StyleSamples({ names, property }: StyleSamplesProps) {
         style={{ display: "grid", gap: "var(--spaces-2)" }}
         data-scheme="primary"
       >
-        {names.map((name) => (
-          <div key={name}>
-            <dt>
-              <code>{name}</code>
-            </dt>
-            <dd
-              style={{
-                borderColor: name === "outline" ? undefined : "transparent",
-                borderRadius: "var(--radii-md)",
-                borderWidth: "1px",
-                padding: "var(--spaces-2)",
-              }}
-              data-theme-style={name}
-            >
-              Sample text
-            </dd>
-          </div>
-        ))}
+        {names.map((name) => {
+          const sampleProps = {
+            style: {
+              borderColor: name === "outline" ? undefined : "transparent",
+              borderRadius: "var(--radii-md)",
+              borderWidth: "1px",
+              padding: "var(--spaces-2)",
+            },
+            "data-theme-style": name,
+          }
+
+          return (
+            <div key={name}>
+              <dt>
+                <code>{name}</code>
+              </dt>
+              {property === "layerStyle" && name === "disabled" ? (
+                <dd>
+                  <button type="button" disabled {...sampleProps}>
+                    Sample text
+                  </button>
+                </dd>
+              ) : (
+                <dd {...sampleProps}>Sample text</dd>
+              )}
+            </div>
+          )
+        })}
       </dl>
     </>
   )
