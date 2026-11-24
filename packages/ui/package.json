@@ -13,6 +13,7 @@
     "./styles.css": "./dist/styles.css"
   },
   "imports": {
+    "#storybook": "./.storybook/index.ts",
     "#test": "./test/index.ts"
   },
   "scripts": {

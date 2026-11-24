@@ -1,8 +1,10 @@
 import type { Meta, StoryObj } from "@storybook/react-vite"
+import { colorSchemes, PropsTable } from "#storybook"
 import { Progress } from "./progress"
 const meta = {
+  args: { "aria-label": "Upload progress", value: 65 },
   component: Progress,
-  title: "Components/Progress",
+  title: "Components / Progress",
 } satisfies Meta<typeof Progress>
 
 export default meta
@@ -12,34 +14,39 @@ type Story = StoryObj<typeof meta>
 const sizes = ["xs", "sm", "md", "lg", "xl"] as const
 const shapes = ["circle", "rounded", "square"] as const
 
-export const Sizes: Story = {
-  render: () => (
-    <div style={{ display: "grid", gap: "var(--spaces-3)" }}>
-      {sizes.map((size) => (
-        <Progress
-          key={size}
-          size={size}
-          aria-label={`Upload, ${size}`}
-          value={65}
-        />
-      ))}
-    </div>
+export const Basic: Story = {}
+
+export const Variant: Story = {
+  render: (args) => (
+    <PropsTable columns={["outline", "subtle"] as const} rows={colorSchemes}>
+      {(row, column) => (
+        <Progress {...args} colorScheme={row} variant={column} />
+      )}
+    </PropsTable>
   ),
 }
 
-export const ShapesAndVariants: Story = {
-  render: () => (
-    <div style={{ display: "grid", gap: "var(--spaces-3)" }}>
-      {shapes.map((shape) => (
-        <Progress
-          key={shape}
-          variant="subtle"
-          aria-label={`Upload, ${shape}`}
-          shape={shape}
-          value={65}
-        />
-      ))}
-    </div>
+export const Size: Story = {
+  render: (args) => (
+    <PropsTable variant="stack" rows={sizes}>
+      {(row) => <Progress {...args} size={row} />}
+    </PropsTable>
+  ),
+}
+
+export const ColorScheme: Story = {
+  render: (args) => (
+    <PropsTable variant="stack" rows={colorSchemes}>
+      {(row) => <Progress {...args} colorScheme={row} />}
+    </PropsTable>
+  ),
+}
+
+export const Shape: Story = {
+  render: (args) => (
+    <PropsTable variant="stack" rows={shapes}>
+      {(row) => <Progress {...args} shape={row} />}
+    </PropsTable>
   ),
 }
 

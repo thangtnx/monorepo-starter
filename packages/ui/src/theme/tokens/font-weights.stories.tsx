@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from "@storybook/react-vite"
 import { TokenTable } from "../../../.storybook/theme-samples"
 import { fontWeights } from "./font-weights"
 
-const meta = { title: "Theme/Tokens/Font weights" } satisfies Meta
+const meta = { title: "Theme / Tokens / Font weights" } satisfies Meta
 
 export default meta
 

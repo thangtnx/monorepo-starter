@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from "@storybook/react-vite"
 import { Swatch, TokenTable } from "../../../.storybook/theme-samples"
 import { shadows } from "./shadows"
 
-const meta = { title: "Theme/Semantic tokens/Shadows" } satisfies Meta
+const meta = { title: "Theme / Semantic tokens / Shadows" } satisfies Meta
 
 export default meta
 

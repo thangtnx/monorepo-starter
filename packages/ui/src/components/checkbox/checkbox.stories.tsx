@@ -1,11 +1,13 @@
 import type { Meta, StoryObj } from "@storybook/react-vite"
+import { colorSchemes, keys, PropsTable } from "#storybook"
 import { Field } from "../field/field"
 import { Checkbox } from "./checkbox"
+import { checkboxStyle } from "./checkbox.style"
 
 const meta = {
   args: { "aria-label": "Send updates" },
   component: Checkbox,
-  title: "Components/Checkbox",
+  title: "Components / Checkbox",
 } satisfies Meta<typeof Checkbox>
 
 export default meta
@@ -13,6 +15,36 @@ export default meta
 type Story = StoryObj<typeof meta>
 
 export const Basic: Story = {}
+
+export const Variant: Story = {
+  render: (args) => (
+    <PropsTable columns={keys(checkboxStyle.variants)} rows={colorSchemes}>
+      {(row, column) => (
+        <Checkbox {...args} colorScheme={row} variant={column} defaultChecked />
+      )}
+    </PropsTable>
+  ),
+}
+
+export const Size: Story = {
+  render: (args) => (
+    <PropsTable variant="stack" rows={keys(checkboxStyle.sizes)}>
+      {(row) => (
+        <Checkbox {...args} size={row} aria-label={row} defaultChecked />
+      )}
+    </PropsTable>
+  ),
+}
+
+export const ColorScheme: Story = {
+  render: (args) => (
+    <PropsTable variant="stack" rows={colorSchemes}>
+      {(row) => (
+        <Checkbox {...args} colorScheme={row} aria-label={row} defaultChecked />
+      )}
+    </PropsTable>
+  ),
+}
 
 export const Checked: Story = { args: { defaultChecked: true } }
 
@@ -25,54 +57,6 @@ export const Mixed: Story = {
     indicatorProps: { title: "Some items selected" },
     labelProps: { title: "Choose all items" },
   },
-}
-
-export const Variants: Story = {
-  render: () => (
-    <div style={{ display: "flex", gap: "1rem" }}>
-      {(["outline", "solid", "subtle", "surface"] as const).map((variant) => (
-        <Checkbox key={variant} variant={variant} defaultChecked shape="square">
-          {variant}
-        </Checkbox>
-      ))}
-    </div>
-  ),
-}
-
-export const Sizes: Story = {
-  render: (args) => (
-    <div style={{ alignItems: "center", display: "flex", gap: "0.75rem" }}>
-      {(["sm", "md", "lg"] as const).map((size) => (
-        <label key={size}>
-          <Checkbox
-            {...args}
-            size={size}
-            aria-label={undefined}
-            defaultChecked
-          />{" "}
-          {size}
-        </label>
-      ))}
-    </div>
-  ),
-}
-
-export const ColorSchemes: Story = {
-  render: (args) => (
-    <div style={{ display: "flex", gap: "0.75rem" }}>
-      {(["primary", "info", "success"] as const).map((colorScheme) => (
-        <label key={colorScheme}>
-          <Checkbox
-            {...args}
-            colorScheme={colorScheme}
-            aria-label={undefined}
-            defaultChecked
-          />{" "}
-          {colorScheme}
-        </label>
-      ))}
-    </div>
-  ),
 }
 
 export const Disabled: Story = {
@@ -88,5 +72,13 @@ export const Invalid: Story = {
     <Field error="Review this choice." label="Send updates" required>
       <Checkbox {...args} aria-label={undefined} />
     </Field>
+  ),
+}
+
+export const Shape: Story = {
+  render: (args) => (
+    <PropsTable variant="stack" rows={keys(checkboxStyle.props.shape)}>
+      {(row) => <Checkbox {...args} defaultChecked shape={row} />}
+    </PropsTable>
   ),
 }

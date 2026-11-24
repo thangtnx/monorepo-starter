@@ -1,11 +1,13 @@
 import type { Meta, StoryObj } from "@storybook/react-vite"
+import { colorSchemes, keys, PropsTable } from "#storybook"
 import { Field } from "../field/field"
 import { Radio } from "./radio"
+import { radioStyle } from "./radio.style"
 
 const meta = {
   args: { "aria-label": "Standard shipping" },
   component: Radio,
-  title: "Components/Radio",
+  title: "Components / Radio",
 } satisfies Meta<typeof Radio>
 
 export default meta
@@ -14,68 +16,41 @@ type Story = StoryObj<typeof meta>
 
 export const Basic: Story = {}
 
+export const Variant: Story = {
+  render: (args) => (
+    <PropsTable columns={keys(radioStyle.variants)} rows={colorSchemes}>
+      {(row, column) => (
+        <Radio {...args} colorScheme={row} variant={column} defaultChecked />
+      )}
+    </PropsTable>
+  ),
+}
+
+export const Size: Story = {
+  render: (args) => (
+    <PropsTable variant="stack" rows={keys(radioStyle.sizes)}>
+      {(row) => <Radio {...args} size={row} aria-label={row} defaultChecked />}
+    </PropsTable>
+  ),
+}
+
+export const ColorScheme: Story = {
+  render: (args) => (
+    <PropsTable variant="stack" rows={colorSchemes}>
+      {(row) => (
+        <Radio {...args} colorScheme={row} aria-label={row} defaultChecked />
+      )}
+    </PropsTable>
+  ),
+}
+
 export const Checked: Story = { args: { defaultChecked: true } }
 
-export const Variants: Story = {
-  render: () => (
-    <div style={{ display: "flex", gap: "1rem" }}>
-      {(["base", "outline", "solid", "subtle", "surface"] as const).map(
-        (variant) => (
-          <Radio key={variant} variant={variant} defaultChecked>
-            {variant}
-          </Radio>
-        ),
-      )}
-    </div>
-  ),
-}
-
-export const Shapes: Story = {
-  render: () => (
-    <div style={{ display: "flex", gap: "1rem" }}>
-      {(["circle", "rounded", "square"] as const).map((shape) => (
-        <Radio
-          key={shape}
-          defaultChecked
-          shape={shape}
-          indicatorProps={{ title: `${shape} indicator` }}
-          labelProps={{ title: shape }}
-        >
-          {shape}
-        </Radio>
-      ))}
-    </div>
-  ),
-}
-
-export const Sizes: Story = {
+export const Shape: Story = {
   render: (args) => (
-    <div style={{ alignItems: "center", display: "flex", gap: "0.75rem" }}>
-      {(["sm", "md", "lg"] as const).map((size) => (
-        <label key={size}>
-          <Radio {...args} size={size} aria-label={undefined} defaultChecked />{" "}
-          {size}
-        </label>
-      ))}
-    </div>
-  ),
-}
-
-export const ColorSchemes: Story = {
-  render: (args) => (
-    <div style={{ display: "flex", gap: "0.75rem" }}>
-      {(["primary", "info", "success"] as const).map((colorScheme) => (
-        <label key={colorScheme}>
-          <Radio
-            {...args}
-            colorScheme={colorScheme}
-            aria-label={undefined}
-            defaultChecked
-          />{" "}
-          {colorScheme}
-        </label>
-      ))}
-    </div>
+    <PropsTable variant="stack" rows={keys(radioStyle.props.shape)}>
+      {(row) => <Radio {...args} defaultChecked shape={row} />}
+    </PropsTable>
   ),
 }
 

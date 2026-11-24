@@ -7,7 +7,7 @@ import { CardHeader } from "./card-header"
 const meta = {
   args: { children: <h2 id="card-header-summary">Summary</h2> },
   component: CardHeader,
-  title: "Components/Card/Header",
+  title: "Components / CardHeader",
 } satisfies Meta<CardHeaderProps>
 
 export default meta

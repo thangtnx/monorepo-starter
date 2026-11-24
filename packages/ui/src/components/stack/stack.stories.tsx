@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react-vite"
+import { PropsTable } from "#storybook"
 import { Button } from "../button/button"
 import { Stack } from "./stack"
 
@@ -12,7 +13,7 @@ const actions = (
 const meta = {
   args: { children: actions },
   component: Stack,
-  title: "Components/Stack",
+  title: "Components / Stack",
 } satisfies Meta<typeof Stack>
 
 export default meta
@@ -28,4 +29,12 @@ export const Horizontal: Story = {
     gap: "2",
     justify: "space-between",
   },
+}
+
+export const Gap: Story = {
+  render: (args) => (
+    <PropsTable variant="stack" rows={["2", "4", "8"] as const}>
+      {(row) => <Stack {...args} gap={row} />}
+    </PropsTable>
+  ),
 }

@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react-vite"
+import { PropsTable } from "#storybook"
 import {
   Check,
   ChevronDown,
@@ -13,12 +14,25 @@ import {
 
 const meta = {
   component: Icon,
-  title: "Components/Icon",
+  title: "Components / Icon",
 } satisfies Meta<typeof Icon>
 
 export default meta
 
 type Story = StoryObj<typeof meta>
+
+export const Basic: Story = {
+  args: { as: Info, "aria-label": "Information" },
+  parameters: { layout: "centered" },
+}
+
+export const Size: Story = {
+  render: () => (
+    <PropsTable variant="stack" rows={["4", "6", "8", "12"] as const}>
+      {(row) => <Icon as={Info} size={row} aria-label="Information" />}
+    </PropsTable>
+  ),
+}
 
 export const Icons: Story = {
   render: () => (

@@ -9,7 +9,7 @@ const meta = {
     label: "Phone number",
   },
   component: Field,
-  title: "Components/Field",
+  title: "Components / Field",
 } satisfies Meta<typeof Field>
 
 export default meta

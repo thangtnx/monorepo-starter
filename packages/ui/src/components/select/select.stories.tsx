@@ -1,6 +1,8 @@
 import type { Meta, StoryObj } from "@storybook/react-vite"
+import { colorSchemes, keys, PropsTable } from "#storybook"
 import { Field } from "../field/field"
 import { Select } from "./index"
+import { selectStyle } from "./select.style"
 
 const items = [
   { label: "Email", value: "email" },
@@ -16,7 +18,7 @@ const meta = {
     placeholder: "Choose a contact method",
   },
   component: Select.Root,
-  title: "Components/Select",
+  title: "Components / Select",
 } satisfies Meta<typeof Select.Root>
 
 export default meta
@@ -25,33 +27,48 @@ type Story = StoryObj<typeof Select.Root>
 
 export const Basic: Story = {}
 
-export const Sizes: Story = {
+export const Variant: Story = {
   render: (args) => (
-    <div style={{ display: "grid", gap: "0.75rem", maxWidth: "24rem" }}>
-      {(["sm", "md", "lg"] as const).map((size) => (
+    <PropsTable columns={keys(selectStyle.variants)} rows={colorSchemes}>
+      {(row, column) => (
         <Select.Root
-          key={size}
           {...args}
-          size={size}
-          aria-label={`Contact method (${size})`}
+          colorScheme={row}
+          variant={column}
+          aria-label={["Contact method", row, column].join(" · ")}
+          defaultValue="email"
         />
-      ))}
-    </div>
+      )}
+    </PropsTable>
   ),
 }
 
-export const Variants: Story = {
+export const Size: Story = {
   render: (args) => (
-    <div style={{ display: "grid", gap: "0.75rem", maxWidth: "24rem" }}>
-      {(["outline", "filled", "flushed"] as const).map((variant) => (
+    <PropsTable variant="stack" rows={keys(selectStyle.sizes)}>
+      {(row) => (
         <Select.Root
-          key={variant}
           {...args}
-          variant={variant}
-          aria-label={`Contact method (${variant})`}
+          size={row}
+          aria-label={"Contact method (" + row + ")"}
         />
-      ))}
-    </div>
+      )}
+    </PropsTable>
+  ),
+}
+
+export const ColorScheme: Story = {
+  render: (args) => (
+    <PropsTable variant="stack" rows={colorSchemes}>
+      {(row) => (
+        <Select.Root
+          {...args}
+          colorScheme={row}
+          aria-label={"Contact method (" + row + ")"}
+          defaultValue="email"
+        />
+      )}
+    </PropsTable>
   ),
 }
 

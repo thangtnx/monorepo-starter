@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react-vite"
 
-const meta = { title: "Theme/Styles/Global style" } satisfies Meta
+const meta = { title: "Theme / Styles / Global style" } satisfies Meta
 
 export default meta
 

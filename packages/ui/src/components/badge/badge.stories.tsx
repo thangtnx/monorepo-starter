@@ -1,14 +1,12 @@
 import type { Meta, StoryObj } from "@storybook/react-vite"
-import { colorSchemes } from "../../theme/semantic-tokens/color-schemes"
+import { colorSchemes, keys, PropsTable } from "#storybook"
 import { Badge } from "./badge"
 import { badgeStyle } from "./badge.style"
-
-const row = { display: "flex", flexWrap: "wrap", gap: "0.75rem" } as const
 
 const meta = {
   args: { children: "Draft" },
   component: Badge,
-  title: "Components/Badge",
+  title: "Components / Badge",
 } satisfies Meta<typeof Badge>
 
 export default meta
@@ -17,46 +15,38 @@ type Story = StoryObj<typeof meta>
 
 export const Basic: Story = {}
 
-export const Variants: Story = {
+export const Variant: Story = {
   render: (args) => (
-    <div style={row}>
-      {Object.keys(badgeStyle.variants).map((variant) => (
-        <Badge
-          key={variant}
-          {...args}
-          variant={variant as keyof typeof badgeStyle.variants}
-        >
-          {variant}
+    <PropsTable columns={keys(badgeStyle.variants)} rows={colorSchemes}>
+      {(row, column) => (
+        <Badge {...args} colorScheme={row} variant={column}>
+          {column}
         </Badge>
-      ))}
-    </div>
+      )}
+    </PropsTable>
   ),
 }
 
-export const ColorSchemes: Story = {
+export const Size: Story = {
   render: (args) => (
-    <div style={row}>
-      {colorSchemes.map((colorScheme) => (
-        <Badge key={colorScheme} {...args} colorScheme={colorScheme}>
-          {colorScheme}
+    <PropsTable variant="stack" rows={keys(badgeStyle.sizes)}>
+      {(row) => (
+        <Badge {...args} size={row}>
+          {row}
         </Badge>
-      ))}
-    </div>
+      )}
+    </PropsTable>
   ),
 }
 
-export const Sizes: Story = {
+export const ColorScheme: Story = {
   render: (args) => (
-    <div style={{ ...row, alignItems: "center" }}>
-      {Object.keys(badgeStyle.sizes).map((size) => (
-        <Badge
-          key={size}
-          {...args}
-          size={size as keyof typeof badgeStyle.sizes}
-        >
-          {size}
+    <PropsTable variant="stack" rows={colorSchemes}>
+      {(row) => (
+        <Badge {...args} colorScheme={row}>
+          {row}
         </Badge>
-      ))}
-    </div>
+      )}
+    </PropsTable>
   ),
 }

@@ -33,13 +33,13 @@ function LoadingControls() {
 
 const meta = {
   component: LoadingProvider,
-  title: "Components/Loading/Provider",
+  title: "Components / LoadingProvider",
 } satisfies Meta<typeof LoadingProvider>
 
 export default meta
 type Story = StoryObj<typeof meta>
 
-export const Modes: Story = {
+export const Basic: Story = {
   render: () => (
     <LoadingProvider
       background={{ loadingScheme: "dots" }}

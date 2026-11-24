@@ -8,7 +8,7 @@ import { CardHeader } from "./card-header"
 const meta = {
   args: { children: <a href="/messages">Read messages</a> },
   component: CardFooter,
-  title: "Components/Card/Footer",
+  title: "Components / CardFooter",
 } satisfies Meta<CardFooterProps>
 
 export default meta

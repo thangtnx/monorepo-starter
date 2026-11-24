@@ -7,7 +7,7 @@ import { CardHeader } from "./card-header"
 const meta = {
   args: { children: <p>Three new messages.</p> },
   component: CardBody,
-  title: "Components/Card/Body",
+  title: "Components / CardBody",
 } satisfies Meta<CardBodyProps>
 
 export default meta

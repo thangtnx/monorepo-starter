@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from "@storybook/react-vite"
 import { StyleSamples } from "../../../.storybook/theme-samples"
 import { layerStyles } from "./layer-styles"
 
-const meta = { title: "Theme/Styles/Layer styles" } satisfies Meta
+const meta = { title: "Theme / Styles / Layer styles" } satisfies Meta
 
 export default meta
 

@@ -1,11 +1,12 @@
 import type { Meta, StoryObj } from "@storybook/react-vite"
+import { keys, PropsTable } from "#storybook"
 import { Input } from "./input"
 import { inputStyle } from "./input.style"
 
 const meta = {
   args: { "aria-label": "Full name", placeholder: "Full name" },
   component: Input,
-  title: "Components/Input",
+  title: "Components / Input",
 } satisfies Meta<typeof Input>
 
 export default meta
@@ -14,19 +15,18 @@ type Story = StoryObj<typeof meta>
 
 export const Basic: Story = {}
 
-export const Sizes: Story = {
+export const Size: Story = {
   render: (args) => (
-    <div style={{ display: "grid", gap: "0.75rem", maxWidth: "24rem" }}>
-      {Object.keys(inputStyle.sizes).map((size) => (
+    <PropsTable variant="stack" rows={keys(inputStyle.sizes)}>
+      {(row) => (
         <Input
-          key={size}
           {...args}
-          size={size as keyof typeof inputStyle.sizes}
-          aria-label={`Size ${size}`}
-          placeholder={size}
+          size={row}
+          aria-label={"Size " + row}
+          placeholder={row}
         />
-      ))}
-    </div>
+      )}
+    </PropsTable>
   ),
 }
 

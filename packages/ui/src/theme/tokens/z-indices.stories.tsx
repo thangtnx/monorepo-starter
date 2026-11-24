@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from "@storybook/react-vite"
 import { StackSample, TokenTable } from "../../../.storybook/theme-samples"
 import { zIndices } from "./z-indices"
 
-const meta = { title: "Theme/Tokens/Z-indices" } satisfies Meta
+const meta = { title: "Theme / Tokens / Z-indices" } satisfies Meta
 
 export default meta
 

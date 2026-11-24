@@ -1,10 +1,10 @@
 import type { Meta, StoryObj } from "@storybook/react-vite"
 import type { CardRootProps } from "./card"
 import { useId } from "react"
+import { colorSchemes, keys, PropsTable } from "#storybook"
 import { Button } from "../button/button"
 import { Heading } from "../heading/heading"
 import { Link } from "../link/link"
-import { VStack } from "../stack/stack-vertical"
 import { Text } from "../text/text"
 import { CardRoot } from "./card"
 import { CardBody } from "./card-body"
@@ -12,87 +12,78 @@ import { CardFooter } from "./card-footer"
 import { CardHeader } from "./card-header"
 import { cardStyle } from "./card.style"
 
-function MessageCard({
-  title = "Messages",
-  ...props
-}: Omit<CardRootProps, "title"> & { title?: string }) {
-  const titleId = useId()
-  const summaryId = useId()
-
+function MessageCard(props: CardRootProps) {
   return (
-    <CardRoot {...props} aria-labelledby={titleId}>
+    <CardRoot {...props}>
       <CardHeader>
-        <Heading id={titleId} as="h2">
-          {title}
+        <Heading as="h2" variant="h4">
+          Messages
         </Heading>
       </CardHeader>
-      <CardBody>
-        <Text id={summaryId}>Three new messages.</Text>
-      </CardBody>
-      <CardFooter>
-        <Link href={`#${summaryId}`}>Jump to summary</Link>
-      </CardFooter>
+      <CardBody>Three unread.</CardBody>
     </CardRoot>
   )
 }
 
 const meta = {
   component: CardRoot,
-  render: (args) => <MessageCard {...args} />,
-  title: "Components/Card",
+  title: "Components / Card",
 } satisfies Meta<typeof CardRoot>
 
 export default meta
 
 type Story = StoryObj<typeof meta>
 
-export const Basic: Story = {}
+export const Basic: Story = {
+  render: function MessageSummary(args) {
+    const titleId = useId()
+    const summaryId = useId()
 
-export const Subtle: Story = { args: { variant: "subtle" } }
+    return (
+      <CardRoot {...args} aria-labelledby={titleId}>
+        <CardHeader>
+          <Heading id={titleId} as="h2">
+            Messages
+          </Heading>
+        </CardHeader>
+        <CardBody>
+          <Text id={summaryId}>Three new messages.</Text>
+        </CardBody>
+        <CardFooter>
+          <Link href={`#${summaryId}`}>Jump to summary</Link>
+        </CardFooter>
+      </CardRoot>
+    )
+  },
+}
 
-export const Variants: Story = {
-  args: { colorScheme: "primary" },
+export const Variant: Story = {
   render: (args) => (
-    <VStack gap="4">
-      {Object.keys(cardStyle.variants).map((variant) => (
-        <MessageCard
-          key={variant}
-          {...args}
-          variant={variant as keyof typeof cardStyle.variants}
-          title={variant}
-        />
-      ))}
-    </VStack>
+    <PropsTable columns={colorSchemes} rows={keys(cardStyle.variants)}>
+      {(row, column) => (
+        <MessageCard {...args} colorScheme={column} variant={row} />
+      )}
+    </PropsTable>
   ),
 }
 
-export const Sizes: Story = {
+export const Size: Story = {
   render: (args) => (
-    <VStack gap="4">
-      {(
-        [
-          ["sm", "Small"],
-          ["md", "Medium"],
-          ["lg", "Large"],
-          ["xl", "Extra large"],
-        ] as const
-      ).map(([size, label]) => (
-        <CardRoot
-          {...args}
-          key={size}
-          size={size}
-          aria-labelledby={`size-${size}`}
-        >
-          <CardHeader id={`size-${size}`}>{label}</CardHeader>
-          <CardBody>Three new messages.</CardBody>
-          <CardFooter>
-            <Link href="/messages">Open inbox</Link>
-          </CardFooter>
-        </CardRoot>
-      ))}
-    </VStack>
+    <PropsTable variant="stack" rows={keys(cardStyle.sizes)}>
+      {(row) => <MessageCard {...args} size={row} />}
+    </PropsTable>
   ),
 }
+
+export const ColorScheme: Story = {
+  render: (args) => (
+    <PropsTable variant="stack" rows={colorSchemes}>
+      {(row) => <MessageCard {...args} colorScheme={row} variant="subtle" />}
+    </PropsTable>
+  ),
+}
+
+export const Subtle: Story = { ...Basic, args: { variant: "subtle" } }
 
 export const Actions: Story = {
   render: (args) => (

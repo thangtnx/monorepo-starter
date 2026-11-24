@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from "@storybook/react-vite"
 import { TokenTable } from "../../../.storybook/theme-samples"
 import { letterSpacings } from "./letter-spacings"
 
-const meta = { title: "Theme/Tokens/Letter spacings" } satisfies Meta
+const meta = { title: "Theme / Tokens / Letter spacings" } satisfies Meta
 
 export default meta
 

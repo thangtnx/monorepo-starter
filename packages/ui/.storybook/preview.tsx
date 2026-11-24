@@ -1,6 +1,6 @@
 /// <reference types="vite/client" />
 
-import type { Decorator, Preview } from "@storybook/react-vite"
+import type { Decorator, Preview, StoryContext } from "@storybook/react-vite"
 import type { ReactNode } from "react"
 import { useLayoutEffect } from "react"
 import { componentStyles } from "../src/component-styles"
@@ -29,35 +29,25 @@ if (import.meta.hot) {
 
 function ModeFrame({
   children,
-  fullscreen,
+  layout,
   mode,
 }: {
   children: ReactNode
-  fullscreen: boolean
   mode: "dark" | "light"
+  layout?: string
 }) {
   useLayoutEffect(() => {
     document.documentElement.dataset.mode = mode
   }, [mode])
 
-  return (
-    <div
-      style={{
-        background: "var(--colors-bg)",
-        color: "var(--colors-fg)",
-        fontFamily: "var(--fonts-body)",
-        minHeight: fullscreen ? "100vh" : undefined,
-        padding: "var(--spaces-6)",
-      }}
-    >
-      {children}
-    </div>
-  )
+  if (!layout || layout === "unstyled") return children
+
+  return <div className={`sb-canvas-${layout}`}>{children}</div>
 }
 
-const withMode: Decorator = (Story, { globals, viewMode }) => (
+const withCanvas: Decorator = (Story, { globals, parameters, viewMode }) => (
   <ModeFrame
-    fullscreen={viewMode === "story"}
+    layout={viewMode === "story" ? parameters.layout : undefined}
     mode={globals.mode === "dark" ? "dark" : "light"}
   >
     <Story />
@@ -65,16 +55,15 @@ const withMode: Decorator = (Story, { globals, viewMode }) => (
 )
 
 const preview: Preview = {
-  decorators: [withMode],
+  decorators: [withCanvas],
   globalTypes: {
     mode: {
       description: "Color mode",
       toolbar: {
         dynamicTitle: true,
-        icon: "mirror",
         items: [
-          { title: "Light", value: "light" },
-          { title: "Dark", value: "dark" },
+          { icon: "sun", title: "Light", value: "light" },
+          { icon: "moon", title: "Dark", value: "dark" },
         ],
       },
     },
@@ -82,9 +71,30 @@ const preview: Preview = {
   initialGlobals: { mode: "light" },
   parameters: {
     a11y: { test: "error" },
+    docs: {
+      codePanel: true,
+      source: {
+        transform: (snippet: string, { parameters }: StoryContext) => {
+          const original: string | undefined =
+            parameters.docs?.source?.originalSource
+          // Serializing React elements loses their render callbacks and can expose minified names.
+          return original && /^\s*render:/m.test(original) ? original : snippet
+        },
+      },
+    },
     layout: "fullscreen",
+    options: {
+      storySort: {
+        includeNames: true,
+        method: "alphabetical",
+        order: [
+          "Theme",
+          "Components",
+          ["*", ["Basic", "Variant", "Size", "Color Scheme", "*", "Docs"]],
+        ],
+      },
+    },
   },
-  tags: ["autodocs"],
 }
 
 export default preview

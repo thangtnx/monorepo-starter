@@ -5,7 +5,7 @@ import { VisuallyHidden } from "./visually-hidden"
 const meta = {
   args: { children: "Close" },
   component: VisuallyHidden,
-  title: "Components/VisuallyHidden",
+  title: "Components / VisuallyHidden",
 } satisfies Meta<typeof VisuallyHidden>
 
 export default meta
@@ -13,7 +13,7 @@ export default meta
 type Story = StoryObj<typeof meta>
 
 /** The button below has no visible text; screen readers announce "Close". */
-export const InsideButton: Story = {
+export const Basic: Story = {
   render: (args) => (
     <Button variant="outline">
       <span aria-hidden="true">✕</span>

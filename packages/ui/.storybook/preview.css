@@ -3,6 +3,70 @@
   color: var(--colors-fg);
 }
 
+.sb-canvas-fullscreen,
+.sb-canvas-centered {
+  padding: var(--spaces-6);
+}
+
+.sb-canvas-centered {
+  margin: auto;
+  max-inline-size: 100%;
+}
+
+.sb-props-table {
+  overflow: auto;
+  border: 1px solid var(--colors-border);
+  border-radius: var(--radii-lg);
+}
+
+.sb-props-table table {
+  inline-size: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+}
+
+.sb-props-table :is(th, td) {
+  padding: var(--spaces-3) var(--spaces-4);
+  vertical-align: middle;
+}
+
+.sb-props-table th {
+  background: var(--colors-bg-subtle);
+  color: var(--colors-fg-muted);
+  font-size: var(--font-sizes-sm);
+  font-weight: var(--font-weights-medium);
+  text-transform: capitalize;
+  white-space: nowrap;
+}
+
+.sb-props-table tbody th {
+  inline-size: 1%;
+  text-align: start;
+}
+
+.sb-props-table tr > :not(:first-child) {
+  border-inline-start: 1px solid var(--colors-border);
+}
+
+.sb-props-table thead > tr > *,
+.sb-props-table tbody > tr:not(:last-child) > * {
+  border-block-end: 1px solid var(--colors-border);
+}
+
+.sb-props-table table:not(.sb-props-stack) thead td {
+  background: var(--colors-bg-subtle);
+}
+
+.sb-props-table table:not(.sb-props-stack) tbody td {
+  min-inline-size: var(--spaces-24);
+}
+
+.sb-props-cell {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
 .theme-motion-sample:hover span,
 .theme-motion-sample:focus-visible span {
   transform: translateX(var(--spaces-12));

@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react-vite"
+import { PropsTable } from "#storybook"
 import { CardRoot } from "../card/card"
 import { CardBody } from "../card/card-body"
 import { Heading } from "../heading/heading"
@@ -17,25 +18,25 @@ const meta = {
     ),
   },
   component: Container,
-  title: "Components/Container",
+  title: "Components / Container",
 } satisfies Meta<typeof Container>
 
 export default meta
 
 type Story = StoryObj<typeof meta>
 
-export const Basic: Story = {}
+export const Basic: Story = { parameters: { layout: "unstyled" } }
 
-export const Sizes: Story = {
+export const Size: Story = {
   render: (args) => (
-    <>
-      {(["sm", "md", "lg", "full"] as const).map((size) => (
-        <Container {...args} key={size} size={size}>
+    <PropsTable variant="stack" rows={["sm", "md", "lg", "full"] as const}>
+      {(row) => (
+        <Container {...args} size={row}>
           <CardRoot>
-            <CardBody>Container size: {size}</CardBody>
+            <CardBody>Account overview</CardBody>
           </CardRoot>
         </Container>
-      ))}
-    </>
+      )}
+    </PropsTable>
   ),
 }

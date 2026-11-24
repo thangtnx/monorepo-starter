@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from "@storybook/react-vite"
 import { Swatch, TokenTable } from "../../../.storybook/theme-samples"
 import { colors } from "./colors"
 
-const meta = { title: "Theme/Tokens/Colors" } satisfies Meta
+const meta = { title: "Theme / Tokens / Colors" } satisfies Meta
 
 export default meta
 

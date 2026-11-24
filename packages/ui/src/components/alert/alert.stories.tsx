@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react-vite"
+import { colorSchemes, keys, PropsTable } from "#storybook"
 import {
   Check,
   CircleAlert,
@@ -8,17 +9,18 @@ import {
   TriangleAlert,
   X,
 } from "../icon"
+import { alertStyle } from "./alert.style"
 import { Alert } from "./index"
 const meta = {
   component: Alert.Root,
-  title: "Components/Alert",
+  title: "Components / Alert",
 } satisfies Meta<typeof Alert.Root>
 
 export default meta
 
 type Story = StoryObj<typeof meta>
 
-const variants = ["island", "plain", "solid", "subtle", "surface"] as const
+const variants = keys(alertStyle.variants)
 const statuses = [
   "info",
   "success",
@@ -28,24 +30,36 @@ const statuses = [
   "loading",
 ] as const
 
-export const VariantsAndStatuses: Story = {
-  render: () => (
-    <div style={{ display: "grid", gap: "var(--spaces-3)" }}>
-      {variants.map((variant) => (
-        <section
-          key={variant}
-          style={{ display: "grid", gap: "var(--spaces-2)" }}
-        >
-          <h3>{variant}</h3>
-          {statuses.map((status) => (
-            <Alert.Root key={status} variant={variant} status={status}>
-              <Alert.Title>{status}</Alert.Title>
-              <Alert.Description>Check your sync settings.</Alert.Description>
-            </Alert.Root>
-          ))}
-        </section>
-      ))}
-    </div>
+export const Basic: Story = {
+  render: (args) => (
+    <Alert.Root {...args}>
+      <Alert.Title>Workspace sync</Alert.Title>
+      <Alert.Description>Check your sync settings.</Alert.Description>
+    </Alert.Root>
+  ),
+}
+
+export const Variant: Story = {
+  render: (args) => (
+    <PropsTable columns={variants} rows={colorSchemes}>
+      {(row, column) => (
+        <Alert.Root {...args} colorScheme={row} variant={column}>
+          <Alert.Title>Workspace sync</Alert.Title>
+        </Alert.Root>
+      )}
+    </PropsTable>
+  ),
+}
+
+export const ColorScheme: Story = {
+  render: (args) => (
+    <PropsTable variant="stack" rows={colorSchemes}>
+      {(row) => (
+        <Alert.Root {...args} colorScheme={row} variant="subtle">
+          <Alert.Title>Workspace sync</Alert.Title>
+        </Alert.Root>
+      )}
+    </PropsTable>
   ),
 }
 
@@ -87,11 +101,23 @@ export const StatusIcons: Story = {
   },
 }
 
-export const Pending: Story = {
+export const Loading: Story = {
   render: () => (
     <Alert.Root variant="island" aria-busy="true">
       <Alert.Loading loadingScheme="dots" />
       <Alert.Title>Checking for updates</Alert.Title>
     </Alert.Root>
+  ),
+}
+
+export const Status: Story = {
+  render: (args) => (
+    <PropsTable variant="stack" rows={statuses}>
+      {(row) => (
+        <Alert.Root {...args} status={row}>
+          <Alert.Title>Workspace sync</Alert.Title>
+        </Alert.Root>
+      )}
+    </PropsTable>
   ),
 }

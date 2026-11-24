@@ -1,8 +1,10 @@
 import type { Meta, StoryObj } from "@storybook/react-vite"
+import { colorSchemes, PropsTable } from "#storybook"
 import { CircleProgress } from "./index"
 const meta = {
+  args: { "aria-label": "Upload progress", value: 60 },
   component: CircleProgress.Root,
-  title: "Components/CircleProgress",
+  title: "Components / CircleProgress",
 } satisfies Meta<typeof CircleProgress.Root>
 
 export default meta
@@ -11,20 +13,31 @@ type Story = StoryObj<typeof meta>
 
 const sizes = ["xs", "sm", "md", "lg", "xl"] as const
 
-export const Sizes: Story = {
-  render: () => (
-    <div
-      style={{ alignItems: "center", display: "flex", gap: "var(--spaces-3)" }}
-    >
-      {sizes.map((size) => (
-        <CircleProgress.Root
-          key={size}
-          size={size}
-          aria-label={`Upload, ${size}`}
-          value={60}
-        />
-      ))}
-    </div>
+export const Basic: Story = {}
+
+export const Variant: Story = {
+  render: (args) => (
+    <PropsTable columns={["outline", "subtle"] as const} rows={colorSchemes}>
+      {(row, column) => (
+        <CircleProgress.Root {...args} colorScheme={row} variant={column} />
+      )}
+    </PropsTable>
+  ),
+}
+
+export const Size: Story = {
+  render: (args) => (
+    <PropsTable variant="stack" rows={sizes}>
+      {(row) => <CircleProgress.Root {...args} size={row} />}
+    </PropsTable>
+  ),
+}
+
+export const ColorScheme: Story = {
+  render: (args) => (
+    <PropsTable variant="stack" rows={colorSchemes}>
+      {(row) => <CircleProgress.Root {...args} colorScheme={row} />}
+    </PropsTable>
   ),
 }
 
@@ -50,4 +63,12 @@ export const CustomGeometry: Story = {
     trackColor: "success.muted",
     value: 65,
   },
+}
+
+export const Shape: Story = {
+  render: (args) => (
+    <PropsTable variant="stack" rows={["rounded", "square"] as const}>
+      {(row) => <CircleProgress.Root {...args} shape={row} />}
+    </PropsTable>
+  ),
 }

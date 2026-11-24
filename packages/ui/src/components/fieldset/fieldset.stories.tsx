@@ -1,5 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react-vite"
 import { useId } from "react"
+import { PropsTable } from "#storybook"
 import { Checkbox } from "../checkbox/checkbox"
 import { Fieldset } from "./fieldset"
 
@@ -25,7 +26,7 @@ const meta = {
     legend: "Contact preferences",
   },
   component: Fieldset,
-  title: "Components/Fieldset",
+  title: "Components / Fieldset",
 } satisfies Meta<typeof Fieldset>
 
 export default meta
@@ -34,18 +35,17 @@ type Story = StoryObj<typeof meta>
 
 export const Basic: Story = {}
 
-export const Sizes: Story = {
+export const Size: Story = {
   render: (args) => (
-    <>
-      {(["sm", "md", "lg"] as const).map((size) => (
+    <PropsTable variant="stack" rows={["sm", "md", "lg"] as const}>
+      {(row) => (
         <Fieldset
-          key={size}
           {...args}
-          size={size}
-          legend={`Contact preferences (${size})`}
+          size={row}
+          legend={"Contact preferences (" + row + ")"}
         />
-      ))}
-    </>
+      )}
+    </PropsTable>
   ),
 }
 

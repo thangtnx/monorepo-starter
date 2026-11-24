@@ -3,7 +3,7 @@ import { Swatch } from "../../../.storybook/theme-samples"
 import { colorSchemeVar } from "../../core/tokens"
 import { colorSchemeRoles, colorSchemes } from "./color-schemes"
 
-const meta = { title: "Theme/Semantic tokens/Color schemes" } satisfies Meta
+const meta = { title: "Theme / Semantic tokens / Color schemes" } satisfies Meta
 
 export default meta
 

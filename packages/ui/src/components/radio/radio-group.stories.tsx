@@ -1,7 +1,9 @@
 import type { Meta, StoryObj } from "@storybook/react-vite"
 import { useId, useState } from "react"
+import { colorSchemes, keys, PropsTable } from "#storybook"
 import { Radio } from "./radio"
 import { RadioGroup } from "./radio-group"
+import { radioStyle } from "./radio.style"
 
 function ShippingOptions({ selected = true }: { selected?: boolean }) {
   const id = useId()
@@ -32,7 +34,7 @@ const meta = {
       },
     },
   },
-  title: "Components/RadioGroup",
+  title: "Components / RadioGroup",
 } satisfies Meta<typeof RadioGroup>
 
 export default meta
@@ -40,6 +42,44 @@ export default meta
 type Story = StoryObj<typeof meta>
 
 export const Basic: Story = {}
+
+export const Variant: Story = {
+  render: (args) => (
+    <PropsTable columns={keys(radioStyle.variants)} rows={colorSchemes}>
+      {(row, column) => (
+        <RadioGroup {...args} colorScheme={row} variant={column} />
+      )}
+    </PropsTable>
+  ),
+}
+
+export const Size: Story = {
+  render: (args) => (
+    <PropsTable variant="stack" rows={keys(radioStyle.sizes)}>
+      {(row) => (
+        <RadioGroup
+          {...args}
+          size={row}
+          legend={["Shipping speed", row].join(" · ")}
+        />
+      )}
+    </PropsTable>
+  ),
+}
+
+export const ColorScheme: Story = {
+  render: (args) => (
+    <PropsTable variant="stack" rows={colorSchemes}>
+      {(row) => (
+        <RadioGroup
+          {...args}
+          colorScheme={row}
+          legend={["Shipping speed", row].join(" · ")}
+        />
+      )}
+    </PropsTable>
+  ),
+}
 
 export const Items: Story = {
   render: () => (
@@ -70,36 +110,6 @@ export const Controlled: Story = {
   },
 }
 
-export const Sizes: Story = {
-  render: (args) => (
-    <div style={{ display: "flex", gap: "1rem" }}>
-      {(["sm", "md", "lg"] as const).map((size) => (
-        <RadioGroup
-          key={size}
-          {...args}
-          size={size}
-          legend={`Shipping speed (${size})`}
-        />
-      ))}
-    </div>
-  ),
-}
-
-export const ColorSchemes: Story = {
-  render: (args) => (
-    <div style={{ display: "flex", gap: "1rem" }}>
-      {(["primary", "info", "success"] as const).map((colorScheme) => (
-        <RadioGroup
-          key={colorScheme}
-          {...args}
-          colorScheme={colorScheme}
-          legend={`Shipping speed (${colorScheme})`}
-        />
-      ))}
-    </div>
-  ),
-}
-
 export const Disabled: Story = { args: { disabled: true } }
 
 export const ReadOnly: Story = { args: { readOnly: true } }
@@ -117,3 +127,5 @@ export const Invalid: Story = {
     )
   },
 }
+
+export const Required: Story = { args: { required: true } }
