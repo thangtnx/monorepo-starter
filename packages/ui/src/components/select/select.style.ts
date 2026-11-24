@@ -12,4 +12,8 @@ export const selectStyle = defineComponentStyle({
     appearance: "auto",
     _invalid: { ...inputStyle.base._invalid, borderStyle: "dashed" },
   },
+  sizes: {
+    ...inputStyle.sizes,
+    lg: { ...inputStyle.sizes.lg, minHeight: "11" },
+  },
 })

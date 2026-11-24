@@ -20,7 +20,17 @@ export const checkboxStyle = defineComponentStyle({
   sizes: {
     sm: { height: "4", width: "4" },
     md: { height: "5", width: "5" },
-    lg: { height: "6", width: "6" },
+    lg: {
+      height: "11",
+      // Large labels need a box that can honor the minimum height.
+      "label:has(&), label[for]:has(+ &), & + label[for]": {
+        alignItems: "center",
+        columnGap: "2",
+        display: "inline-flex",
+        minHeight: "11",
+      },
+      width: "6",
+    },
   },
 
   defaultProps: { size: "md" },

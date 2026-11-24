@@ -36,7 +36,11 @@ export const switchStyle = defineComponentStyle({
   sizes: {
     sm: { "--switch-height": "{sizes.4}", height: "4", width: "7" },
     md: { "--switch-height": "{sizes.5}", height: "5", width: "9" },
-    lg: { "--switch-height": "{sizes.6}", height: "6", width: "11" },
+    lg: {
+      ...checkboxStyle.sizes.lg,
+      "--switch-height": "{sizes.11}",
+      width: "20",
+    },
   },
   defaultProps: { size: "md" },
 })
