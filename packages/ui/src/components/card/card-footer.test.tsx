@@ -11,7 +11,7 @@ describe("<CardFooter />", () => {
 
     expect(
       screen.getByRole("link", { name: "Read messages" }).parentElement,
-    ).toHaveClass("ui-card-footer")
+    ).toHaveClass("ui-card__footer")
     await a11y(container)
   })
 })

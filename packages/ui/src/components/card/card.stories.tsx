@@ -69,16 +69,21 @@ export const Variants: Story = {
 export const Sizes: Story = {
   render: (args) => (
     <VStack gap="4">
-      {(["sm", "md", "lg"] as const).map((size) => (
+      {(
+        [
+          ["sm", "Small"],
+          ["md", "Medium"],
+          ["lg", "Large"],
+          ["xl", "Extra large"],
+        ] as const
+      ).map(([size, label]) => (
         <CardRoot
           {...args}
           key={size}
           size={size}
           aria-labelledby={`size-${size}`}
         >
-          <CardHeader id={`size-${size}`}>
-            {size === "sm" ? "Small" : size === "md" ? "Medium" : "Large"}
-          </CardHeader>
+          <CardHeader id={`size-${size}`}>{label}</CardHeader>
           <CardBody>Three new messages.</CardBody>
           <CardFooter>
             <Link href="/messages">Open inbox</Link>

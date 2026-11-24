@@ -1,15 +1,8 @@
+"use client"
+
 import type { ComponentProps } from "react"
-import { splitStyleProps } from "../../core/split-style-props"
-import { cardHeaderStyle } from "./card-header.style"
+import { withCardContext } from "./card"
 
 export interface CardHeaderProps extends ComponentProps<"header"> {}
 
-export function CardHeader(props: CardHeaderProps) {
-  const [styleAttributes, rest] = splitStyleProps(
-    "card-header",
-    cardHeaderStyle,
-    props,
-  )
-
-  return <header {...styleAttributes} {...rest} />
-}
+export const CardHeader = withCardContext("header", "header")()

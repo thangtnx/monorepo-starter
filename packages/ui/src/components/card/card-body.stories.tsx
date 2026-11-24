@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react-vite"
+import type { CardBodyProps } from "./card-body"
 import { CardRoot } from "./card"
 import { CardBody } from "./card-body"
 import { CardHeader } from "./card-header"
@@ -7,7 +8,7 @@ const meta = {
   args: { children: <p>Three new messages.</p> },
   component: CardBody,
   title: "Components/Card/Body",
-} satisfies Meta<typeof CardBody>
+} satisfies Meta<CardBodyProps>
 
 export default meta
 

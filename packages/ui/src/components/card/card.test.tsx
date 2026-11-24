@@ -2,7 +2,7 @@ import { a11y, render, screen } from "#test"
 import { createCss } from "../../core"
 import { theme } from "../../theme"
 import { cardStyle } from "./card.style"
-import { Card } from "./index"
+import { Card, CardPropsContext, useCardPropsContext } from "./index"
 
 const css = createCss(theme, { card: cardStyle })
 
@@ -37,11 +37,11 @@ describe("<Card />", () => {
     const footer = screen.getByRole("link", {
       name: "Read messages",
     }).parentElement
-    expect(header).toHaveClass("ui-card-header")
+    expect(header).toHaveClass("ui-card__header")
     expect(header?.tagName).toBe("HEADER")
-    expect(body).toHaveClass("ui-card-body")
+    expect(body).toHaveClass("ui-card__body")
     expect(body?.tagName).toBe("DIV")
-    expect(footer).toHaveClass("ui-card-footer")
+    expect(footer).toHaveClass("ui-card__footer")
     expect(footer?.tagName).toBe("FOOTER")
   })
 
@@ -65,6 +65,7 @@ describe("<Card />", () => {
     ["sm", "3", "2", "lg"],
     ["md", "4", "3", "xl"],
     ["lg", "6", "5", "2xl"],
+    ["xl", "8", "7", "2xl"],
   ] as const)(
     "compiles the %s part spacing and header font size",
     (size, space, block, font) => {
@@ -80,9 +81,100 @@ describe("<Card />", () => {
     },
   )
 
+  test.each(["panel", "elevated"])(
+    "sets the default foreground color on the %s card",
+    (variant) => {
+      expect(css).toMatch(
+        new RegExp(
+          `\\.ui-card\\[data-variant="${variant}"\\] \\{[^}]*\\scolor: var\\(--colors-fg\\);`,
+        ),
+      )
+    },
+  )
+
+  test("resolves styles independently for nested cards", () => {
+    render(
+      <Card.Root
+        colorScheme="primary"
+        size="xl"
+        variant="solid"
+        aria-label="Outer"
+      >
+        <Card.Header>Outer header</Card.Header>
+        <Card.Body>
+          <Card.Root aria-label="Inner">
+            <Card.Header>Inner header</Card.Header>
+            <Card.Body>Inner body</Card.Body>
+            <Card.Footer>Inner footer</Card.Footer>
+          </Card.Root>
+        </Card.Body>
+        <Card.Footer>Outer footer</Card.Footer>
+      </Card.Root>,
+    )
+
+    const outer = screen.getByRole("article", { name: "Outer" })
+    const inner = screen.getByRole("article", { name: "Inner" })
+    for (const slot of [
+      outer,
+      screen.getByText("Outer header"),
+      inner.parentElement,
+      screen.getByText("Outer footer"),
+    ]) {
+      expect(slot).toHaveAttribute("data-size", "xl")
+      expect(slot).toHaveAttribute("data-variant", "solid")
+      expect(slot).toHaveAttribute("data-scheme", "primary")
+    }
+    for (const slot of [
+      inner,
+      screen.getByText("Inner header"),
+      screen.getByText("Inner body"),
+      screen.getByText("Inner footer"),
+    ]) {
+      expect(slot).toHaveAttribute("data-size", "md")
+      expect(slot).toHaveAttribute("data-variant", "panel")
+      expect(slot).toHaveAttribute("data-scheme", "neutral")
+    }
+  })
+
+  test("reads PropsContext defaults and gives explicit root props precedence", () => {
+    function ContextSize() {
+      return <Card.Header>{Card.usePropsContext()?.size}</Card.Header>
+    }
+
+    expect(Card.PropsContext).toBe(CardPropsContext)
+    expect(Card.usePropsContext).toBe(useCardPropsContext)
+
+    render(
+      <Card.PropsContext
+        value={{ colorScheme: "primary", size: "lg", variant: "outline" }}
+      >
+        <Card.Root aria-label="With defaults">
+          <ContextSize />
+        </Card.Root>
+        <Card.Root size="sm" aria-label="With override">
+          <Card.Body>Additional information</Card.Body>
+        </Card.Root>
+      </Card.PropsContext>,
+    )
+
+    const root = screen.getByRole("article", { name: "With defaults" })
+    expect(root).toHaveAttribute("data-variant", "outline")
+    expect(root).toHaveAttribute("data-scheme", "primary")
+    expect(root).toHaveAttribute("data-size", "lg")
+    expect(screen.getByText("lg")).toHaveAttribute("data-size", "lg")
+    const override = screen.getByRole("article", { name: "With override" })
+    expect(override).toHaveAttribute("data-size", "sm")
+    expect(override).toHaveAttribute("data-variant", "outline")
+    expect(override).toHaveAttribute("data-scheme", "primary")
+    expect(screen.getByText("Additional information")).toHaveAttribute(
+      "data-size",
+      "sm",
+    )
+  })
+
   test("keeps links on solid cards in the card's contrast color", () => {
     expect(css).toMatch(
-      /\.ui-card\[data-variant="solid"\] \.ui-link \{\s*color: inherit;\s*\}/,
+      /@scope \(\.ui-card\) to \(\.ui-card\) \{\s*:scope:is\(\.ui-card\[data-variant="solid"\]\) :is\(a, \.ui-link\) \{\s*color: inherit;/,
     )
   })
 

@@ -1,15 +1,8 @@
+"use client"
+
 import type { ComponentProps } from "react"
-import { splitStyleProps } from "../../core/split-style-props"
-import { cardBodyStyle } from "./card-body.style"
+import { withCardContext } from "./card"
 
 export interface CardBodyProps extends ComponentProps<"div"> {}
 
-export function CardBody(props: CardBodyProps) {
-  const [styleAttributes, rest] = splitStyleProps(
-    "card-body",
-    cardBodyStyle,
-    props,
-  )
-
-  return <div {...styleAttributes} {...rest} />
-}
+export const CardBody = withCardContext("div", "body")()

@@ -1,49 +1,108 @@
-import { defineComponentStyle } from "../../core/define"
+import { defineComponentSlotStyle } from "../../core/define"
 
-export const cardStyle = defineComponentStyle({
+export const cardStyle = defineComponentSlotStyle({
   base: {
-    borderRadius: "lg",
-    display: "flex",
-    flexDirection: "column",
-    overflowWrap: "break-word",
+    body: {
+      alignItems: "flex-start",
+      display: "flex",
+      flex: "1",
+      flexDirection: "column",
+      gap: "var(--card-space, {spaces.4})",
+      paddingBlock: "var(--card-inset-block, {spaces.3})",
+      paddingInline: "var(--card-space, {spaces.4})",
+    },
+    footer: {
+      alignItems: "center",
+      display: "flex",
+      gap: "var(--card-space, {spaces.4})",
+      justifyContent: "start",
+      paddingBlockEnd: "var(--card-inset-block, {spaces.3})",
+      paddingInline: "var(--card-space, {spaces.4})",
+    },
+    header: {
+      alignItems: "center",
+      display: "flex",
+      fontSize: "var(--card-header-font-size, {fontSizes.xl})",
+      gap: "var(--card-space, {spaces.4})",
+      justifyContent: "start",
+      paddingBlockStart: "var(--card-inset-block, {spaces.3})",
+      paddingInline: "var(--card-space, {spaces.4})",
+    },
+    root: {
+      borderRadius: "lg",
+      display: "flex",
+      flexDirection: "column",
+      overflowWrap: "break-word",
+      width: "full",
+    },
   },
   sizes: {
     sm: {
-      "--card-header-font-size": "{fontSizes.lg}",
-      "--card-inset-block": "{spaces.2}",
-      "--card-space": "{spaces.3}",
+      root: {
+        "--card-header-font-size": "{fontSizes.lg}",
+        "--card-inset-block": "{spaces.2}",
+        "--card-space": "{spaces.3}",
+      },
     },
     md: {
-      "--card-header-font-size": "{fontSizes.xl}",
-      "--card-inset-block": "{spaces.3}",
-      "--card-space": "{spaces.4}",
+      root: {
+        "--card-header-font-size": "{fontSizes.xl}",
+        "--card-inset-block": "{spaces.3}",
+        "--card-space": "{spaces.4}",
+      },
     },
     lg: {
-      "--card-header-font-size": "{fontSizes.2xl}",
-      "--card-inset-block": "{spaces.5}",
-      "--card-space": "{spaces.6}",
+      root: {
+        "--card-header-font-size": "{fontSizes.2xl}",
+        "--card-inset-block": "{spaces.5}",
+        "--card-space": "{spaces.6}",
+      },
+    },
+    xl: {
+      root: {
+        "--card-header-font-size": "{fontSizes.2xl}",
+        "--card-inset-block": "{spaces.7}",
+        "--card-space": "{spaces.8}",
+      },
     },
   },
   variants: {
-    elevated: { background: "bg.panel", boxShadow: "md" },
-    outline: { borderColor: "border", borderWidth: "1px" },
+    elevated: {
+      root: { background: "bg.panel", boxShadow: "md", color: "fg" },
+    },
+    outline: { root: { borderColor: "border", borderWidth: "1px" } },
     panel: {
-      background: "bg.panel",
-      borderColor: "border",
-      borderWidth: "1px",
+      root: {
+        background: "bg.panel",
+        borderColor: "border",
+        borderWidth: "1px",
+        color: "fg",
+      },
     },
     solid: {
-      "& .ui-link": { color: "inherit" },
-      background: "colorScheme.solid",
-      color: "colorScheme.contrast",
+      root: {
+        "@scope (.ui-card) to (.ui-card)": {
+          ":scope:is(&) :is(a, .ui-link)": { color: "inherit" },
+        },
+        background: "colorScheme.solid",
+        color: "colorScheme.contrast",
+      },
     },
-    subtle: { background: "colorScheme.subtle", color: "colorScheme.fg" },
+    subtle: {
+      root: { background: "colorScheme.subtle", color: "colorScheme.fg" },
+    },
     surface: {
-      background: "colorScheme.subtle",
-      borderColor: "colorScheme.muted",
-      borderWidth: "1px",
-      color: "colorScheme.fg",
+      root: {
+        background: "colorScheme.subtle",
+        borderColor: "colorScheme.muted",
+        borderWidth: "1px",
+        color: "colorScheme.fg",
+      },
     },
   },
-  defaultProps: { colorScheme: "neutral", size: "md", variant: "panel" },
+  defaultProps: {
+    root: { colorScheme: "neutral", size: "md", variant: "panel" },
+  },
 })
+
+export type CardStyle = typeof cardStyle

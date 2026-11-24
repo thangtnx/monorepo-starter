@@ -1,4 +1,8 @@
-export { CardRoot as Root } from "./card"
+export {
+  CardPropsContext as PropsContext,
+  CardRoot as Root,
+  useCardPropsContext as usePropsContext,
+} from "./card"
 export type { CardRootProps as RootProps } from "./card"
 export { CardBody as Body } from "./card-body"
 export type { CardBodyProps as BodyProps } from "./card-body"

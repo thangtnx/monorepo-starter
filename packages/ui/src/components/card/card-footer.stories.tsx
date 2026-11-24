@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react-vite"
+import type { CardFooterProps } from "./card-footer"
 import { CardRoot } from "./card"
 import { CardBody } from "./card-body"
 import { CardFooter } from "./card-footer"
@@ -8,7 +9,7 @@ const meta = {
   args: { children: <a href="/messages">Read messages</a> },
   component: CardFooter,
   title: "Components/Card/Footer",
-} satisfies Meta<typeof CardFooter>
+} satisfies Meta<CardFooterProps>
 
 export default meta
 

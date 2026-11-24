@@ -11,7 +11,7 @@ describe("<CardHeader />", () => {
 
     expect(
       screen.getByRole("heading", { name: "Summary" }).parentElement,
-    ).toHaveClass("ui-card-header")
+    ).toHaveClass("ui-card__header")
     await a11y(container)
   })
 })

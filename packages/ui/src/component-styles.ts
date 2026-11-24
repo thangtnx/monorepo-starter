@@ -6,9 +6,6 @@ import { alertTitleStyle } from "./components/alert/alert-title.style"
 import { alertStyle } from "./components/alert/alert.style"
 import { badgeStyle } from "./components/badge/badge.style"
 import { buttonStyle } from "./components/button/button.style"
-import { cardBodyStyle } from "./components/card/card-body.style"
-import { cardFooterStyle } from "./components/card/card-footer.style"
-import { cardHeaderStyle } from "./components/card/card-header.style"
 import { cardStyle } from "./components/card/card.style"
 import { checkableGroupStyle } from "./components/checkbox/checkable-group.style"
 import { checkableStyle } from "./components/checkbox/checkable.style"
@@ -61,9 +58,6 @@ export const componentStyles: { [key: string]: ComponentRecipe } = {
   badge: badgeStyle,
   button: buttonStyle,
   card: cardStyle,
-  "card-body": cardBodyStyle,
-  "card-footer": cardFooterStyle,
-  "card-header": cardHeaderStyle,
   checkable: checkableStyle,
   "checkable-group": checkableGroupStyle,
   checkbox: checkboxStyle,

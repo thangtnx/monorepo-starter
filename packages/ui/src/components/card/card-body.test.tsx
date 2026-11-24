@@ -10,7 +10,7 @@ describe("<CardBody />", () => {
     )
 
     expect(screen.getByRole("paragraph").parentElement).toHaveClass(
-      "ui-card-body",
+      "ui-card__body",
     )
     await a11y(container)
   })
