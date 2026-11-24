@@ -9,15 +9,17 @@
   ],
   "exports": {
     ".": "./src/index.ts",
-    "./styles.css": "./src/styles.gen.css"
+    "./styles.css": "./dist/styles.css"
   },
   "imports": {
     "#test": "./test/index.ts"
   },
   "scripts": {
     "clean": "rimraf node_modules dist trace coverage .turbo storybook-static",
-    "generate": "node --import ./scripts/resolve-ts.ts scripts/generate.ts",
+    "build": "node --import ./scripts/resolve-ts.ts scripts/build.ts",
+    "prestorybook": "pnpm build",
     "storybook": "storybook dev -p 6006",
+    "prebuild:storybook": "pnpm build",
     "build:storybook": "storybook build -o storybook-static",
     "test": "vitest",
     "test:coverage": "vitest run --coverage",

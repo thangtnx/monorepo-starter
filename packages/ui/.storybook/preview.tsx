@@ -1,5 +1,5 @@
 import type { Decorator, Preview } from "@storybook/react-vite"
-import "../src/styles.gen.css"
+import "../dist/styles.css"
 
 // The stories read the same generated stylesheet the app ships; `data-mode`
 // on the wrapper switches the semantic tokens like it does on `<html>`.

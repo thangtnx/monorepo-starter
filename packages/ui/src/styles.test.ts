@@ -1,17 +1,12 @@
-import { readdirSync, readFileSync } from "node:fs"
+import { readdirSync } from "node:fs"
 import { join } from "node:path"
 import { componentStyles } from "./component-styles"
 import { createCss } from "./core"
 import { theme } from "./theme"
 
-const css = readFileSync(join(import.meta.dirname, "styles.gen.css"), "utf8")
+const css = createCss(theme, componentStyles)
 
-describe("styles.gen.css", () => {
-  test("matches the theme and component styles", () => {
-    // Run `pnpm ui generate` when this fails.
-    expect(css).toBe(createCss(theme, componentStyles))
-  })
-
+describe("compiled stylesheet", () => {
   test("registers every component style under its folder name", async () => {
     const folders = readdirSync(join(import.meta.dirname, "components"), {
       withFileTypes: true,
@@ -41,6 +36,6 @@ describe("styles.gen.css", () => {
   })
 
   test("stays within its size budget", () => {
-    expect(css.length).toBeLessThan(64_000)
+    expect(Buffer.byteLength(css)).toBeLessThan(64_000)
   })
 })
