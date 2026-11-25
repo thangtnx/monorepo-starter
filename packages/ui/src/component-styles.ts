@@ -33,12 +33,14 @@ import { loadingLayerStyle } from "./components/loading/loading-layer.style"
 import { loadingRegionStyle } from "./components/loading/loading-region.style"
 import { loadingSuspenseStyle } from "./components/loading/loading-suspense.style"
 import { loadingStyle } from "./components/loading/loading.style"
+import { menuStyle } from "./components/menu/menu.style"
 import { motionStyle } from "./components/motion/motion.style"
 import { noticeCloseButtonStyle } from "./components/notice/notice-close-button.style"
 import { noticeContentStyle } from "./components/notice/notice-content.style"
 import { noticeItemStyle } from "./components/notice/notice-item.style"
 import { noticeStyle } from "./components/notice/notice.style"
 import { paginationStyle } from "./components/pagination/pagination.style"
+import { popoverStyle } from "./components/popover/popover.style"
 import { progressPaintStyle } from "./components/progress/progress-paint.style"
 import { progressStyle } from "./components/progress/progress.style"
 import { radioStyle } from "./components/radio/radio.style"
@@ -54,6 +56,8 @@ import { tableStyle } from "./components/table/table.style"
 import { tabsStyle } from "./components/tabs/tabs.style"
 import { textStyle } from "./components/text/text.style"
 import { textareaStyle } from "./components/textarea/textarea.style"
+import { toastStyle } from "./components/toast/toast.style"
+import { tooltipStyle } from "./components/tooltip/tooltip.style"
 import { visuallyHiddenStyle } from "./components/visually-hidden/visually-hidden.style"
 
 /** Every component style compiled into the stylesheet, keyed by folder name. */
@@ -92,12 +96,14 @@ export const componentStyles: { [key: string]: ComponentRecipe } = {
   "loading-layer": loadingLayerStyle,
   "loading-region": loadingRegionStyle,
   "loading-suspense": loadingSuspenseStyle,
+  menu: menuStyle,
   motion: motionStyle,
   notice: noticeStyle,
   "notice-close-button": noticeCloseButtonStyle,
   "notice-content": noticeContentStyle,
   "notice-item": noticeItemStyle,
   pagination: paginationStyle,
+  popover: popoverStyle,
   progress: progressStyle,
   "progress-paint": progressPaintStyle,
   radio: radioStyle,
@@ -113,5 +119,7 @@ export const componentStyles: { [key: string]: ComponentRecipe } = {
   tabs: tabsStyle,
   text: textStyle,
   textarea: textareaStyle,
+  toast: toastStyle,
+  tooltip: tooltipStyle,
   "visually-hidden": visuallyHiddenStyle,
 }
