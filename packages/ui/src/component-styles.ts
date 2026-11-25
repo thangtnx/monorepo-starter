@@ -36,6 +36,7 @@ import { noticeCloseButtonStyle } from "./components/notice/notice-close-button.
 import { noticeContentStyle } from "./components/notice/notice-content.style"
 import { noticeItemStyle } from "./components/notice/notice-item.style"
 import { noticeStyle } from "./components/notice/notice.style"
+import { paginationStyle } from "./components/pagination/pagination.style"
 import { progressPaintStyle } from "./components/progress/progress-paint.style"
 import { progressStyle } from "./components/progress/progress.style"
 import { radioStyle } from "./components/radio/radio.style"
@@ -47,6 +48,7 @@ import { skeletonTextStyle } from "./components/skeleton/skeleton-text.style"
 import { skeletonStyle } from "./components/skeleton/skeleton.style"
 import { stackStyle } from "./components/stack/stack.style"
 import { switchStyle } from "./components/switch/switch.style"
+import { tableStyle } from "./components/table/table.style"
 import { tabsStyle } from "./components/tabs/tabs.style"
 import { textStyle } from "./components/text/text.style"
 import { textareaStyle } from "./components/textarea/textarea.style"
@@ -91,6 +93,7 @@ export const componentStyles: { [key: string]: ComponentRecipe } = {
   "notice-close-button": noticeCloseButtonStyle,
   "notice-content": noticeContentStyle,
   "notice-item": noticeItemStyle,
+  pagination: paginationStyle,
   progress: progressStyle,
   "progress-paint": progressPaintStyle,
   radio: radioStyle,
@@ -102,6 +105,7 @@ export const componentStyles: { [key: string]: ComponentRecipe } = {
   "skeleton-text": skeletonTextStyle,
   stack: stackStyle,
   switch: switchStyle,
+  table: tableStyle,
   tabs: tabsStyle,
   text: textStyle,
   textarea: textareaStyle,
