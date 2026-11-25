@@ -13,6 +13,8 @@ import { checkboxStyle } from "./components/checkbox/checkbox.style"
 import { circleProgressLabelStyle } from "./components/circle-progress/circle-progress-label.style"
 import { circleProgressStyle } from "./components/circle-progress/circle-progress.style"
 import { containerStyle } from "./components/container/container.style"
+import { dialogStyle } from "./components/dialog/dialog.style"
+import { drawerStyle } from "./components/drawer/drawer.style"
 import { emptyStateActionsStyle } from "./components/empty-state/empty-state-actions.style"
 import { emptyStateContentStyle } from "./components/empty-state/empty-state-content.style"
 import { emptyStateDescriptionStyle } from "./components/empty-state/empty-state-description.style"
@@ -70,6 +72,8 @@ export const componentStyles: { [key: string]: ComponentRecipe } = {
   "circle-progress": circleProgressStyle,
   "circle-progress-label": circleProgressLabelStyle,
   container: containerStyle,
+  dialog: dialogStyle,
+  drawer: drawerStyle,
   "empty-state": emptyStateStyle,
   "empty-state-actions": emptyStateActionsStyle,
   "empty-state-content": emptyStateContentStyle,
