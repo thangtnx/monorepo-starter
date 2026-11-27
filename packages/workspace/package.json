@@ -20,12 +20,12 @@
     "./vitest/*": "./src/vitest/*.ts"
   },
   "dependencies": {
-    "@cspell/eslint-plugin": "^10.4.0",
+    "@cspell/eslint-plugin": "^10.5.2",
     "@limegrass/eslint-plugin-import-alias": "^1.6.1",
     "@stylistic/eslint-plugin": "^5.10.0",
     "@testing-library/jest-dom": "^6.9.1",
     "@typescript/native-preview": "catalog:",
-    "eslint-plugin-perfectionist": "^5.13.0",
+    "eslint-plugin-perfectionist": "^5.14.0",
     "eslint-plugin-testing-library": "^7.16.2",
     "eslint-plugin-unused-imports": "catalog:",
     "oxfmt": "catalog:",
