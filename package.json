@@ -29,7 +29,7 @@
     "oxlint": "catalog:",
     "oxlint-tsgolint": "catalog:",
     "rimraf": "catalog:",
-    "turbo": "^2.11.10",
+    "turbo": "^2.11.13",
     "typescript": "catalog:",
     "vitest": "catalog:"
   }
